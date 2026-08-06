@@ -244,3 +244,49 @@ footer { background-color: var(--marrom-luxo); color: #e2dcd9; padding: 40px 10%
     50% { box-shadow: 0 4px 25px rgba(37, 211, 102, 0.7); }
     100% { box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
 }
+
+/* ALINHAMENTO DEFINITIVO DA VITRINE CEGONHA */
+.grade-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.produto-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Força o botão a ir para o final */
+    height: 100%; /* Deixa todos os cartões com o mesmo tamanho */
+}
+
+.produto-imagem {
+    width: 100%;
+    height: 280px; /* Altura padrão fixa para todas as fotos */
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    background-color: #fcf8f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.produto-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Corta as bordas sem amassar ou distorcer o look */
+    display: block;
+}
+
+.produto-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: flex-end;
+}
