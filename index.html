@@ -11,12 +11,10 @@
 </head>
 <body>
 
-    <!-- Faixa Promocional de Luxo -->
     <div class="topo-alerta">
         🎉 FRETE GRÁTIS em compras acima de R$ 199 | Até 6x sem juros no cartão!
     </div>
 
-    <!-- Cabeçalho / Menu Superior -->
     <header>
         <div class="logo-container">
             <img src="./logo.jpg" alt="Cegonha Baby Store" class="logo-img">
@@ -24,14 +22,13 @@
         <nav>
             <a href="#" class="ativo" onclick="gerenciarMenuAtivo(this)">Início</a>
             <a href="#produtos" onclick="gerenciarMenuAtivo(this)">Novidades</a>
-            <a href="#personalizados">Bordados ✨</a>
+            <a href="#personalizados" onclick="gerenciarMenuAtivo(this)">Escolha seu estilo</a>
         </nav>
         <div class="carrinho" onclick="alternarCarrinho(true)">
             🛍️ Sacola (<span id="contador-carrinho">0</span>)
         </div>
     </header>
 
-    <!-- Sacola Lateral Deslizante (Carrinho) -->
     <div id="carrinho-lateral" class="carrinho-lateral">
         <div class="carrinho-cabecalho">
             <h3>Sua Sacola 🛍️</h3>
@@ -45,18 +42,16 @@
                 <span>Total:</span>
                 <span id="carrinho-total">R$ 0,00</span>
             </div>
-            <!-- LINHA DA SACOLA AUTOMATIZADA CONECTADA COM O SCRIPT -->
-            <a href="https://wa.me/5597984154273" id="botao-finalizar-link" target="_blank" class="btn-finalizar" onclick="enviarPedidoWhatsApp(event)" style="text-decoration: none; display: block; text-align: center;">Finalizar Pedido via WhatsApp 💬</a>
+            <a href="https://wa.me/5597984154273?text=Olá " id="botao-finalizar-link" target="_blank" class="btn-finalizar" style="text-decoration: Qual seu pedido; display: block; text-align: center;">Finalizar Pedido via WhatsApp 💬</a>
         </div>
     </div>
     <div id="carrinho-overlay" class="carrinho-overlay" onclick="alternarCarrinho(false)"></div>
 
-    <!-- Banner Principal -->
     <section class="hero">
         <div class="hero-container">
             <div class="hero-texto">
                 <h1>O conforto que seu pequeno merece, com o estilo que você ama!</h1>
-                <p>Roupas infantis premium feitas com algodão 100% hipoalergênico. Peças duráveis, macias e cheias de afeto para acompanhar todas as descobertas.</p>
+                <p>Roupas infantis premium. Peças duráveis, macias e cheias de afeto para acompanhar todas as descobertas.</p>
                 <div class="hero-botoes">
                     <a href="#produtos" class="btn-principal">Ver Coleção</a>
                 </div>
@@ -64,97 +59,127 @@
         </div>
     </section>
 
-    <!-- Barra de Filtros Sofisticados -->
     <section class="filtros-secao">
         <button class="btn-filtro ativo" onclick="filtrarProdutos('todos')">Todos os Looks</button>
         <button class="btn-filtro" onclick="filtrarProdutos('bebe')">Bebês</button>
         <button class="btn-filtro" onclick="filtrarProdutos('menina')">Meninas</button>
         <button class="btn-filtro" onclick="filtrarProdutos('menino')">Meninos</button>
     </section>
-
-    <!-- Vitrine de Produtos -->
     <main id="produtos" class="vitrine-container">
         <div class="secao-cabecalho">
             <h2>Destaques Imperdíveis ✨</h2>
             <p>Looks selecionados com amor para todas as ocasiões</p>
         </div>
         
-        <div class="grade-produtos">
+                          <div class="grade-produtos">
             <!-- PRODUTO 1: Seu Conjunto de Pijama Masculino (Menino) -->
             <div class="produto-card" data-categoria="menino">
                 <div class="produto-badge-desconto">15% OFF</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(1, 'Conjunto Pijama Infantil Masculino', 'R$ 89,90', './fotovitrine1m.jpeg', 'Conjunto de pijama masculino infantil confeccionado em algodão premium extremamente macio e confortável. Ideal para noites de sono tranquilas e aconchegantes.')">
+                <div class="produto-imagem" onclick="abrirDetalhes(1, 'Conjunto Pijama Infantil Masculino', 'R$ 89,90', './fotovitrine1m.jpeg', 'Conjunto de pijama masculino infantil confeccionado em algodão premium extremamente macio e confortável.')">
                     <img src="./fotovitrine1m.jpeg" alt="Conjunto Pijama Infantil Masculino">
                 </div>
                 <div class="produto-info">
                     <span class="produto-categoria">Menino</span>
                     <h3>Conjunto Pijama Infantil Masculino</h3>
                     <div class="produto-estrelas">⭐⭐⭐⭐⭐ (24)</div>
-                    <div class="produto-preco-bloco">
-                        <span class="preco-atual">R$ 89,90</span>
-                    </div>
-                    <button class="btn-comprar" onclick="adicionarProduto(1, 'Conjunto Pijama Infantil Masculino', 89.90, './fotovitrine1m.jpeg')">Adicionar à Sacola</button>
+                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 89,90</span></div>
+                    <!-- LINK ATUALIZADO PRODUTO 1 -->
+                    <a href="https://wa.me/5597984154273" target="_blank" class="btn-comprar" style="text-decoration: none; display: block; text-align: center; margin-top: 10px;">Comprar via WhatsApp 💬</a>
                 </div>
             </div>
 
             <!-- PRODUTO 2: Body Feminino Laranja (Bebê) -->
             <div class="produto-card" data-categoria="bebe">
                 <div class="produto-badge-novidade">Destaque ✨</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(2, 'Body Feminino Laranja Premium', 'R$ 68,90', './body feminino laranja.jpeg', 'Lindo body feminino na cor laranja vibrante, confeccionado em algodão de toque ultra macio e hipoalergênico. Possui costuras confortáveis que não incomodam e excelente caimento para manter sua princesinha fresquinha o dia todo.')">
+                <div class="produto-imagem" onclick="abrirDetalhes(2, 'Body Feminino Laranja Premium', 'R$ 68,90', './body feminino laranja.jpeg', 'Lindo body feminino na cor laranja vibrante, confeccionado em algodão de toque ultra macio e hipoalergênico.')">
                     <img src="./body feminino laranja.jpeg" alt="Body Feminino Laranja Premium">
                 </div>
                 <div class="produto-info">
                     <span class="produto-categoria">Bebês</span>
                     <h3>Body Feminino Laranja Premium</h3>
                     <div class="produto-estrelas">⭐⭐⭐⭐⭐ (14)</div>
-                    <div class="produto-preco-bloco">
-                        <span class="preco-atual">R$ 68,90</span>
-                    </div>
-                    <button class="btn-comprar" onclick="adicionarProduto(2, 'Body Feminino Laranja Premium', 68.90, './body feminino laranja.jpeg')">Adicionar à Sacola</button>
+                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 68,90</span></div>
+                    <!-- LINK ATUALIZADO PRODUTO 2 -->
+                    <a href="https://wa.me" target="_blank" class="btn-comprar" style="text-decoration: none; display: block; text-align: center; margin-top: 10px;">Comprar via WhatsApp 💬</a>
                 </div>
             </div>
 
             <!-- PRODUTO 3: Macacão Rosa com Corações (Menina) -->
             <div class="produto-card" data-categoria="menina">
                 <div class="produto-badge-novidade">Fofura 💕</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(3, 'Pijama Macacão Plush Corações', 'R$ 129,90', './macacão rosa com corações.jpeg', 'Aconchegante macacão longo infantil, perfeito para os dias mais amenos. Confeccionado em tecido plush/fleece macio de altíssima qualidade com estampa de corações delicados e abertura frontal prática por botões de pressão.')">
+                <div class="produto-imagem" onclick="abrirDetalhes(3, 'Pijama Macacão Plush Corações', 'R$ 129,90', './macacão rosa com corações.jpeg', 'Aconchegante macacão longo infantil, confeccionado em tecido macio de alta qualidade.')">
                     <img src="./macacão rosa com corações.jpeg" alt="Pijama Macacão Plush Corações">
                 </div>
                 <div class="produto-info">
                     <span class="produto-categoria">Menina</span>
                     <h3>Pijama Macacão Plush Corações</h3>
                     <div class="produto-estrelas">⭐⭐⭐⭐⭐ (28)</div>
-                    <div class="produto-preco-bloco">
-                        <span class="preco-atual">R$ 129,90</span>
-                    </div>
-                    <button class="btn-comprar" onclick="adicionarProduto(3, 'Pijama Macacão Plush Corações', 129.90, './macacão rosa com corações.jpeg')">Adicionar à Sacola</button>
+                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 129,90</span></div>
+                    <!-- LINK ATUALIZADO PRODUTO 3 -->
+                    <a href="https://wa.me/5597984154273" target="_blank" class="btn-comprar" style="text-decoration: none; display: block; text-align: center; margin-top: 10px;">Comprar via WhatsApp 💬</a>
                 </div>
             </div>
 
             <!-- PRODUTO 4: Macacão Feminino Bege (Bebê) -->
             <div class="produto-card" data-categoria="bebe">
                 <div class="produto-badge-novidade">Novo 🧸</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(4, 'Macacão Infantil Feminino Bege', 'R$ 115,00', './macacao bege.jpeg', 'Elegante macacão infantil feminino confeccionado em malha premium de toque sedoso e suave. Um modelo em tom neutro e estilo minimalista sofisticado para manter o seu bebê muito confortável e charmoso.')">
+                <div class="produto-imagem" onclick="abrirDetalhes(4, 'Macacão Infantil Feminino Bege', 'R$ 115,00', './macacao-bege.jpeg', 'Elegante macacão infantil feminino confeccionado em malha premium de toque sedoso e suave.')">
                     <img src="./macacao-bege.jpeg" alt="Macacão Infantil Feminino Bege">
                 </div>
                 <div class="produto-info">
                     <span class="produto-categoria">Bebês</span>
                     <h3>Macacão Infantil Feminino Bege</h3>
                     <div class="produto-estrelas">⭐⭐⭐⭐⭐ (19)</div>
-                    <div class="produto-preco-bloco">
-                        <span class="preco-atual">R$ 115,00</span>
-                    </div>
-                    <button class="btn-comprar" onclick="adicionarProduto(4, 'Macacão Infantil Feminino Bege', 115.00, './macacao-bege.jpeg')">Adicionar à Sacola</button>
+                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 115,00</span></div>
+                    <!-- LINK ATUALIZADO PRODUTO 4 -->
+                    <a href="https://wa.me/5597984154273" target="_blank" class="btn-comprar" style="text-decoration: none; display: block; text-align: center; margin-top: 10px;">Comprar via WhatsApp 💬</a>
                 </div>
             </div>
         </div>
-    </main>
 
-    <!-- Seção de Bordados Personalizados -->
+    </main>
+    <!-- SEÇÃO: ENCOMENDAS E BORDADOS PERSONALIZADOS -->
     <section id="personalizados" class="personalizados-secao" style="background-color: #fcf8f5; padding: 60px 20px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 1200px; border: 1px dashed #e6ccb2;">
         <div style="max-width: 800px; margin: 0 auto;">
             <span style="font-size: 24px;">🪡✨</span>
             <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; color: #4a3e3d; font-size: 28px; margin-top: 10px; margin-bottom: 15px; font-weight: 700;">Peças Bordadas & Personalizadas</h2>
             <p style="font-family: 'Plus Jakarta Sans', sans-serif; color: #6e5a58; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
                 Quer deixar o enxoval do seu pequeno ainda mais exclusivo? Nós produzimos mantas, bodys, rompers e fraldinhas com o nome do bebê ou o desenho que você escolher! Nossos bordados são feitos com linhas macias que não arranham a pele sensível do bebê.
-            </p>Encomendar Peça Personalizada via WhatsApp 💬
+            </p>
+            
+            <!-- Botão Direto para o seu WhatsApp com Texto Customizado -->
+            <a href="https://wa.me/5597984154273" 
+               target="_blank" 
+               style="display: inline-block; background-color: #d4a373; color: white; padding: 15px 35px; font-size: 16px; font-weight: 600; text-decoration: óla quero encomendar uma peça personalizada; border-radius: 50px; box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3); transition: all 0.3s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
+               Encomendar Peça Personalizada via WhatsApp 💬
+            </a>
+        </div>
+    </section>
+
+    <div id="modal-detalhes" class="modal-detalhes">
+        <div class="modal-conteudo">
+            <button class="btn-fechar-modal" onclick="fecharDetalhes()">✕</button>
+            <div class="modal-foto-bloco"><img id="modal-img" src="" alt="Produto Expandido"></div>
+            <div class="modal-info-bloco">
+                <h2 id="modal-titulo">Nome do Produto</h2>
+                <div id="modal-preco" class="modal-preco">R$ 0,00</div>
+                <p id="modal-descricao" class="modal-descricao">Descrição...</p>
+                <button id="modal-btn-comprar" class="btn-comprar">Adicionar à Sacola</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="./script.js"></script>
+        <!-- BOTÃO FLUTUANTE PREMIUM DO WHATSAPP -->
+    <a href="https://wa.me/5597984154273" target="_blank" class="whatsapp-flutuante" aria-label="WhatsApp"></a>
+
+
+  
+
+
+</body>
+</html>
