@@ -246,47 +246,107 @@ footer { background-color: var(--marrom-luxo); color: #e2dcd9; padding: 40px 10%
 }
 
 /* ALINHAMENTO DEFINITIVO DA VITRINE CEGONHA */
+/* RESOLUÇÃO COMPLETA DA VITRINE CEGONHA */
 .grade-produtos {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
     padding: 20px 0;
 }
 
 .produto-card {
     position: relative;
     background: #ffffff;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 18px rgba(74, 62, 61, 0.04);
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Força o botão a ir para o final */
-    height: 100%; /* Deixa todos os cartões com o mesmo tamanho */
+    height: auto; /* TIRA A ALTURA FIXA QUE QUEBROU O SITE */
+    border: 1px solid #f5ebe6;
 }
 
 .produto-imagem {
     width: 100%;
-    height: 280px; /* Altura padrão fixa para todas as fotos */
+    height: 320px; /* Mantém uma altura perfeita para a roupinha aparecer inteira */
     overflow: hidden;
-    border-radius: 10px;
-    margin-bottom: 15px;
+    border-radius: 12px;
     background-color: #fcf8f5;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 12px;
 }
 
 .produto-imagem img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Corta as bordas sem amassar ou distorcer o look */
-    display: block;
+    object-fit: contain; /* ALTERADO: Mostra a foto inteira sem cortar os lados e sem amassar */
+    background-color: #ffffff;
 }
 
 .produto-info {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    justify-content: flex-end;
+    justify-content: space-between; /* Alinha o título no topo e o botão na base do card */
+}
+
+.produto-info h3 {
+    font-size: 15px;
+    color: #4a3e3d;
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.produto-preco-bloco {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.btn-comprar {
+    background-color: #4a3e3d;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+.btn-comprar:hover {
+    background-color: #d4a373;
+}
+
+/* RESPONSIVIDADE PARA CELULARES */
+@media (max-width: 768px) {
+    .grade-produtos {
+        grid-template-columns: repeat(2, 1fr); /* Força 2 produtos por linha no celular, sem sumir */
+        gap: 12px;
+        padding: 10px;
+    }
+    .produto-card {
+        padding: 10px;
+    }
+    .produto-imagem {
+        height: 200px; /* Altura menor para caber duas fotos na tela do celular */
+    }
+    .produto-info h3 {
+        font-size: 13px;
+    }
+    .preco-atual {
+        font-size: 15px;
+    }
+    .btn-comprar {
+        padding: 10px 5px;
+        font-size: 12px;
+    }
 }
