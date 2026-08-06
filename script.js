@@ -85,6 +85,33 @@ function filtrarProdutos(categoria) {
     });
 }
 
+function enviarPedidoWhatsApp(event) {
+    if (carrinho.length === 0) {
+        if (event) event.preventDefault();
+        alert("Sua sacola está vazia!");
+        return;
+    }
+
+    const numeroWhatsApp = "5597984154273"; 
+    let texto = "👶 *Novo Pedido - Cegonha Baby Store*\n\nOlá! Gostaria de encomendar as seguintes peças:\n\n";
+
+    let total = 0;
+    carrinho.forEach(item => {
+        texto += `• *${item.quantidade}x* ${item.nome} (R$ ${item.preco.toFixed(2).replace('.', ',')})\n`;
+        total += item.preco * item.quantidade;
+    });
+
+    texto += `\n💰 *Total do Pedido:* R$ ${total.toFixed(2).replace('.', ',')}`;
+    texto += `\n\n_Aguardo instruções para o fechamento!_ ✨`;
+    
+    // FORMATO ATUALIZADO DA API OFICIAL PARA REDIRECIONAR SEM ERROS NO MOBILE
+    const linkFinal = "https://whatsapp.com" + numeroWhatsApp + "&text=" + encodeURIComponent(texto);
+    const botaoLink = document.getElementById('botao-finalizar-link');
+    if (botaoLink) {
+        botaoLink.href = linkFinal;
+    }
+}
+
 function abrirDetalhes(id, nome, precoTexto, imagem, descricao) {
     const modal = document.getElementById('modal-detalhes');
     if (modal) {
