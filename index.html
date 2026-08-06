@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cegonha Baby Store | Moda Infantil Premium</title>
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <div class="topo-alerta">
+        🎉 FRETE GRÁTIS em compras acima de R$ 199 | Até 6x sem juros no cartão!
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <img src="./logo.jpg" alt="Cegonha Baby Store" class="logo-img">
+        </div>
+        <nav>
+            <a href="#" class="ativo" onclick="gerenciarMenuAtivo(this)">Início</a>
+            <a href="#produtos" onclick="gerenciarMenuAtivo(this)">Novidades</a>
+            <a href="#depoimentos" onclick="gerenciarMenuAtivo(this)">Quem Compra Ama</a>
+        </nav>
+        <div class="carrinho" onclick="alternarCarrinho(true)">
+            🛍️ Sacola (<span id="contador-carrinho">0</span>)
+        </div>
+    </header>
+
+    <div id="carrinho-lateral" class="carrinho-lateral">
+        <div class="carrinho-cabecalho">
+            <h3>Sua Sacola 🛍️</h3>
+            <button class="btn-fechar" onclick="alternarCarrinho(false)">✕</button>
+        </div>
+        <div id="carrinho-itens" class="carrinho-itens">
+            <p class="carrinho-vazio">Sua sacola está vazia... 🥺</p>
+        </div>
+        <div class="carrinho-rodape">
+            <div class="total-bloco">
+                <span>Total:</span>
+                <span id="carrinho-total">R$ 0,00</span>
+            </div>
+            <a href="https://wa.me" id="botao-finalizar-link" target="_blank" class="btn-finalizar" onclick="enviarPedidoWhatsApp(event)" style="text-decoration: none; display: block; text-align: center;">Finalizar Pedido via WhatsApp 💬</a>
+        </div>
+    </div>
+    <div id="carrinho-overlay" class="carrinho-overlay" onclick="alternarCarrinho(false)"></div>
+
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-texto">
+                <h1>O conforto que seu pequeno merece, com o estilo que você ama!</h1>
+                <p>Roupas infantis premium feitas com algodão 100% hipoalergênico. Peças duráveis, macias e cheias de afeto para acompanhar todas as descobertas.</p>
+                <div class="hero-botoes">
+                    <a href="#produtos" class="btn-principal">Ver Coleção</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="filtros-secao">
+        <button class="btn-filtro ativo" onclick="filtrarProdutos('todos')">Todos os Looks</button>
+        <button class="btn-filtro" onclick="filtrarProdutos('bebe')">Bebês</button>
+        <button class="btn-filtro" onclick="filtrarProdutos('menina')">Meninas</button>
+        <button class="btn-filtro" onclick="filtrarProdutos('menino')">Meninos</button>
+    </section>
+    <main id="produtos" class="vitrine-container">
+        <div class="secao-cabecalho">
+            <h2>Destaques Imperdíveis ✨</h2>
+            <p>Looks selecionados com amor para todas as ocasiões</p>
+        </div>
+        
+        <div class="grade-produtos">
+            <div class="produto-card" data-categoria="menino">
+                <div class="produto-badge-desconto">15% OFF</div>
+                <div class="produto-imagem" onclick="abrirDetalhes(1, 'Conjunto Pijama Infantil Masculino', 'R$ 89,90', './fotovitrine1m.jpeg', 'Conjunto de pijama masculino infantil confeccionado em algodão premium extremamente macio e confortável.')">
+                    <img src="./fotovitrine1m.jpeg" alt="Conjunto Pijama Infantil Masculino">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-categoria">Menino</span>
+                    <h3>Conjunto Pijama Infantil Masculino</h3>
+                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (24)</div>
+                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 89,90</span></div>
+                    <button class="btn-comprar" onclick="adicionarProduto(1, 'Conjunto Pijama Infantil Masculino', 89.90, './fotovitrine1m.jpeg')">Adicionar à Sacola</button>
+                </div>
+            </div>
+
+            <div class="produto-card" data-categoria="bebe">
+                <div class="produto-badge-novidade">Destaque ✨</div>
+                <div class="produto-imagem" onclick="abrirDetalhes(2, 'Body Feminino Laranja Premium', 'R$ 68,90', './body feminino laranja.jpeg', 'Lindo body feminino na cor laranja vibrante, confeccionado em algodão de toque ultra macio e hipoalergênico.')">
+                    <img src="./body feminino laranja.jpeg" alt="Body Feminino Laranja Premium">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-categoria">Bebês</span>
+                    <h3>Body Feminino Laranja Premium</h3>
+                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (14)</div>
+                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 68,90</span></div>
+                    <button class="btn-comprar" onclick="adicionarProduto(2, 'Body Feminino Laranja Premium', 68.90, './body feminino laranja.jpeg')">Adicionar à Sacola</button>
+                </div>
+            </div>
+
+            <div class="produto-card" data-categoria="menina">
+                <div class="produto-badge-novidade">Fofura 💕</div>
+                <div class="produto-imagem" onclick="abrirDetalhes(3, 'Pijama Macacão Plush Corações', 'R$ 129,90', './macacão rosa com corações.jpeg', 'Aconchegante macacão longo infantil, perfeito para os dias mais amenos. Confeccionado em tecido plush/fleece macio.')">
+                    <img src="./macacão rosa com corações.jpeg" alt="Pijama Macacão Plush Corações">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-categoria">Menina</span>
+                    <h3>Pijama Macacão Plush Corações</h3>
+                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (28)</div>
+                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 129,90</span></div>
+                    <button class="btn-comprar" onclick="adicionarProduto(3, 'Pijama Macacão Plush Corações', 129.90, './macacão rosa com corações.jpeg')">Adicionar à Sacola</button>
+                </div>
+            </div>
+
+            <div class="produto-card" data-categoria="bebe">
+                <div class="produto-badge-novidade">Novo 🧸</div>
+                <div class="produto-imagem" onclick="abrirDetalhes(4, 'Macacão Infantil Feminino Bege', 'R$ 115,00', './macação feminino bege.jpeg', 'Elegante macacão infantil feminino confeccionado em malha premium de toque sedoso e suave.')">
+                    <img src="./macação feminino bege.jpeg" alt="Macacão Infantil Feminino Bege">
+                </div>
+                <div class="produto-info">
+                    <span class="produto-categoria">Bebês</span>
+                    <h3>Macacão Infantil Feminino Bege</h3>
+                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (19)</div>
+                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 115,00</span></div>
+                    <button class="btn-comprar" onclick="adicionarProduto(4, 'Macacão Infantil Feminino Bege', 115.00, './macação feminino bege.jpeg')">Adicionar à Sacola</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modal-detalhes" class="modal-detalhes">
+        <div class="modal-conteudo">
+            <button class="btn-fechar-modal" onclick="fecharDetalhes()">✕</button>
+            <div class="modal-foto-bloco"><img id="modal-img" src="" alt="Produto Expandido"></div>
+            <div class="modal-info-bloco">
+                <h2 id="modal-titulo">Nome do Produto</h2>
+                <div id="modal-preco" class="modal-preco">R$ 0,00</div>
+                <p id="modal-descricao" class="modal-descricao">Descrição...</p>
+                <button id="modal-btn-comprar" class="btn-comprar">Adicionar à Sacola</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
