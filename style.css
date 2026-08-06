@@ -113,16 +113,41 @@ nav a:hover::after, nav a.ativo::after { width: 100%; }
 .vitrine-container { padding: 0 10%; }
 .grade-produtos { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px; }
 
-.produto-card { background-color: var(--branco-puro); border-radius: 28px; overflow: hidden; position: relative; border: 1px solid rgba(74, 55, 40, 0.02); box-shadow: var(--sombra-premium); transition: all 0.4s ease; }
-.produto-card:hover { transform: translateY(-8px); box-shadow: 0 30px 60px rgba(74, 55, 40, 0.08); }
+.produto-card {
+    position: relative; /* ISSO FIXA O ADESIVO NO LUGAR CERTO */
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
 
 .produto-imagem { width: 100%; height: 340px; overflow: hidden; position: relative; cursor: zoom-in; }
 .produto-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s cubic-bezier(0.15, 0.75, 0.5, 1); }
 .produto-imagem:hover img { transform: scale(1.3); } 
 
-.produto-badge-desconto, .produto-badge-novidade { position: absolute; top: 20px; left: 20px; color: var(--marrom-luxo); padding: 6px 16px; border-radius: 100px; font-size: 11px; font-weight: 600; text-transform: uppercase; z-index: 5; }
-.produto-badge-desconto { background-color: var(--amarelo-logo); }
-.produto-badge-novidade { background-color: var(--lilas-logo); }
+/* ESTILIZAÇÃO DOS ADESIVOS DA VITRINE */
+.produto-badge-desconto, 
+.produto-badge-novidade {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #d4a373; /* Cor elegante de boutique */
+    color: white;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 20px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Se quiser o desconto em vermelho/rosa para destacar */
+.produto-badge-desconto {
+    background-color: #e29578;
+}
 
 .produto-info { padding: 28px; text-align: center; }
 .produto-categoria { font-size: 11px; text-transform: uppercase; font-weight: 600; color: var(--marrom-suave); letter-spacing: 1px; }
