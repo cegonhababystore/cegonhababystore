@@ -104,7 +104,6 @@ function enviarPedidoWhatsApp(event) {
     texto += `\n💰 *Total do Pedido:* R$ ${total.toFixed(2).replace('.', ',')}`;
     texto += `\n\n_Aguardo instruções para o fechamento!_ ✨`;
     
-    // FORMATO ATUALIZADO DA API OFICIAL PARA REDIRECIONAR SEM ERROS NO MOBILE
     const linkFinal = "https://whatsapp.com" + numeroWhatsApp + "&text=" + encodeURIComponent(texto);
     const botaoLink = document.getElementById('botao-finalizar-link');
     if (botaoLink) {
