@@ -169,7 +169,7 @@ header nav a.ativo, header nav a:hover {
     padding: 16px;
     box-shadow: 0 4px 18px rgba(74, 62, 61, 0.04);
     display: flex;
-    flex-direction: column;
+    flex-direction: inline-block;
     justify-content: space-between;
     height: auto; /* IMPORTANTE: Deixa o tamanho esticar livre sem encavalar */
     min-height: 480px; /* Garante tamanho mínimo no PC */
