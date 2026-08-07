@@ -1,12 +1,15 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a3728">
     <title>Cegonha Baby Store | Moda Infantil Premium</title>
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css?v=4">
 </head>
 <body>
 
@@ -15,170 +18,155 @@
     </div>
 
     <header>
-        <div class="logo-container">
+        <a class="logo-container" href="#inicio" aria-label="Ir para o início">
             <img src="./logo.jpg" alt="Cegonha Baby Store" class="logo-img">
-        </div>
-        <nav>
-            <a href="#" class="ativo" onclick="gerenciarMenuAtivo(this)">Início</a>
+        </a>
+
+        <nav aria-label="Menu principal">
+            <a href="#inicio" class="ativo" onclick="gerenciarMenuAtivo(this)">Início</a>
             <a href="#produtos" onclick="gerenciarMenuAtivo(this)">Novidades</a>
-            <a href="#personalizados" onclick="gerenciarMenuAtivo(this)">Escolha seu estilo</a>
+            <a href="#personalizados" onclick="gerenciarMenuAtivo(this)">Personalizados</a>
         </nav>
-        <div class="carrinho" onclick="alternarCarrinho(true)">
+
+        <button class="carrinho" type="button" onclick="alternarCarrinho(true)" aria-label="Abrir sacola">
             🛍️ Sacola (<span id="contador-carrinho">0</span>)
-        </div>
+        </button>
     </header>
 
-    <div id="carrinho-lateral" class="carrinho-lateral">
+    <aside id="carrinho-lateral" class="carrinho-lateral" aria-label="Sacola de compras">
         <div class="carrinho-cabecalho">
             <h3>Sua Sacola 🛍️</h3>
-            <button class="btn-fechar" onclick="alternarCarrinho(false)">✕</button>
+            <button class="btn-fechar" type="button" onclick="alternarCarrinho(false)" aria-label="Fechar sacola">✕</button>
         </div>
+
         <div id="carrinho-itens" class="carrinho-itens">
             <p class="carrinho-vazio">Sua sacola está vazia... 🥺</p>
         </div>
+
         <div class="carrinho-rodape">
             <div class="total-bloco">
                 <span>Total:</span>
                 <span id="carrinho-total">R$ 0,00</span>
             </div>
-            <a href="https://wa.me/5597984154273?text=Olá queria fazer a compra selecionada no meu carrinho " id="botao-finalizar-link" target="_blank" class="btn-finalizar" style="text-decoration: Qual seu pedido; display: block; text-align: center;">Finalizar Pedido via WhatsApp 💬</a>
-        </div>
-    </div>
-    <div id="carrinho-overlay" class="carrinho-overlay" onclick="alternarCarrinho(false)"></div>
-
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-texto">
-                <h1>O conforto que seu pequeno merece, com o estilo que você ama!</h1>
-                <p>Roupas infantis premium. Peças duráveis, macias e cheias de afeto para acompanhar todas as descobertas.</p>
-                <div class="hero-botoes">
-                    <a href="#produtos" class="btn-principal">Ver Coleção</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="filtros-secao">
-        <button class="btn-filtro ativo" onclick="filtrarProdutos('todos')">Todos os Looks</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('bebe')">Bebês</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('menina')">Meninas</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('menino')">Meninos</button>
-    </section>
-    <main id="produtos" class="vitrine-container">
-        <div class="secao-cabecalho">
-            <h2>Destaques Imperdíveis ✨</h2>
-            <p>Looks selecionados com amor para todas as ocasiões</p>
-        </div>
-        
-                          <div class="grade-produtos">
-            <!-- PRODUTO 1: Seu Conjunto de Pijama Masculino (Menino) -->
-            <div class="produto-card" data-categoria="menino">
-                <div class="produto-badge-desconto">15% OFF</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(1, 'Conjunto Pijama Infantil Masculino', 'R$ 89,90', './fotovitrine1m.jpeg', 'Conjunto de pijama masculino infantil confeccionado em algodão premium extremamente macio e confortável.')">
-                    <img src="./fotovitrine1m.jpeg" alt="Conjunto Pijama Infantil Masculino">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Menino</span>
-                    <h3>Conjunto Pijama Infantil Masculino</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (24)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 89,90</span></div>
-                    <!-- LINK ATUALIZADO PRODUTO 1 -->
-                    <a href="https://wa.me/5597984154273?text=ÓLA, Queria mais informações sobre conjunto pijama infantil masculino" target="_blank" class="btn-comprar" style="text-decoration: none; display: block; text-align: center; margin-top: 10px;">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 2: Body Feminino Laranja (Bebê) -->
-            <div class="produto-card" data-categoria="bebe">
-                <div class="produto-badge-novidade">Destaque ✨</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(2, 'Body Feminino Laranja Premium', 'R$ 68,90', './body feminino laranja.jpeg', 'Lindo body feminino na cor laranja vibrante, confeccionado em algodão de toque ultra macio e hipoalergênico.')">
-                    <img src="./body feminino laranja.jpeg" alt="Body Feminino Laranja Premium">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Bebês</span>
-                    <h3>Body Feminino Laranja Premium</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (14)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 68,90</span></div>
-                    <!-- LINK ATUALIZADO PRODUTO 2 -->
-                    <a href="https://wa.me/5597984154273?text=Queria saber sobre o Body feminino laranja" target="_blank" class="btn-comprar" style="text-decoration: none; display: block; text-align: center; margin-top: 10px;">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 3: Macacão Rosa com Corações (Menina) -->
-            <div class="produto-card" data-categoria="menina">
-                <div class="produto-badge-novidade">Fofura 💕</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(3, 'Pijama Macacão Plush Corações', 'R$ 129,90', './macacão rosa com corações.jpeg', 'Aconchegante macacão longo infantil, confeccionado em tecido macio de alta qualidade.')">
-                    <img src="./macacão rosa com corações.jpeg" alt="Pijama Macacão Plush Corações">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Menina</span>
-                    <h3>Pijama Macacão Plush Corações</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (28)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 129,90</span></div>
-                    <!-- LINK ATUALIZADO PRODUTO 3 -->
-                    <a href="https://wa.me/5597984154273?text=Queria saber sobre o pijama macacão rosa com corações" target="_blank" class="btn-comprar" style="text-decoration: none; display: block; text-align: center; margin-top: 10px;">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 4: Macacão Feminino Bege (Bebê) -->
-            <div class="produto-card" data-categoria="bebe">
-                <div class="produto-badge-novidade">Novo 🧸</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(4, 'Macacão Infantil Feminino Bege', 'R$ 115,00', './macacao-bege.jpeg', 'Elegante macacão infantil feminino confeccionado em malha premium de toque sedoso e suave.')">
-                    <img src="./macacao-bege.jpeg" alt="Macacão Infantil Feminino Bege">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Bebês</span>
-                    <h3>Macacão Infantil Feminino Bege</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (19)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 115,00</span></div>
-                    <!-- LINK ATUALIZADO PRODUTO 4 -->
-                    <a href="https://wa.me/5597984154273?text=Queria saber sobre o macacão feminino bege" target="_blank" class="btn-comprar" style="text-decoration: none; display: block; text-align: center; margin-top: 10px;">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-        </div>
-
-    </main>
-    <!-- SEÇÃO: ENCOMENDAS E BORDADOS PERSONALIZADOS -->
-    <section id="personalizados" class="personalizados-secao" style="background-color: #fcf8f5; padding: 60px 20px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 1200px; border: 1px dashed #e6ccb2;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <span style="font-size: 24px;">🪡✨</span>
-            <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; color: #4a3e3d; font-size: 28px; margin-top: 10px; margin-bottom: 15px; font-weight: 700;">Peças Bordadas & Personalizadas</h2>
-            <p style="font-family: 'Plus Jakarta Sans', sans-serif; color: #6e5a58; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">
-                Quer deixar o enxoval do seu pequeno ainda mais exclusivo? Nós produzimos mantas, bodys, rompers e fraldinhas com o nome do bebê ou o desenho que você escolher! Nossos bordados são feitos com linhas macias que não arranham a pele sensível do bebê.
-            </p>
-            
-            <!-- Botão Direto para o seu WhatsApp com Texto Customizado -->
-            <a href="https://wa.me/5597984154273?text=Óla queria encomendar uma peça costumizada" 
-               target="_blank" 
-               style="display: inline-block; background-color: #d4a373; color: white; padding: 15px 35px; font-size: 16px; font-weight: 600; text-decoration: óla quero encomendar uma peça personalizada; border-radius: 50px; box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3); transition: all 0.3s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
-               Encomendar Peça Personalizada via WhatsApp 💬
+            <a href="#" id="botao-finalizar-link" target="_blank" rel="noopener noreferrer" class="btn-finalizar" onclick="enviarPedidoWhatsApp(event)">
+                Finalizar Pedido via WhatsApp 💬
             </a>
         </div>
-    </section>
+    </aside>
+    <div id="carrinho-overlay" class="carrinho-overlay" onclick="alternarCarrinho(false)"></div>
 
-    <div id="modal-detalhes" class="modal-detalhes">
+    <main>
+        <section id="inicio" class="hero">
+            <div class="hero-container">
+                <div class="hero-texto">
+                    <span class="hero-mini">CEGONHA BABY STORE</span>
+                    <h1>O conforto que seu pequeno merece, com o estilo que você ama!</h1>
+                    <p>Roupas infantis premium, macias e cheias de afeto para acompanhar todas as descobertas.</p>
+                    <div class="hero-botoes">
+                        <a href="#produtos" class="btn-principal">Ver Coleção</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="beneficios" aria-label="Benefícios da loja">
+            <div>🚚 <strong>Envio rápido</strong><span>para todo o Brasil</span></div>
+            <div>💳 <strong>Até 6x</strong><span>sem juros</span></div>
+            <div>💬 <strong>Atendimento</strong><span>pelo WhatsApp</span></div>
+        </section>
+
+        <section class="filtros-secao" aria-label="Categorias de produtos">
+            <button class="btn-filtro ativo" type="button" data-categoria="todos" onclick="filtrarProdutos('todos', this)">Todos os Looks</button>
+            <button class="btn-filtro" type="button" data-categoria="bebe" onclick="filtrarProdutos('bebe', this)">Bebês</button>
+            <button class="btn-filtro" type="button" data-categoria="menina" onclick="filtrarProdutos('menina', this)">Meninas</button>
+            <button class="btn-filtro" type="button" data-categoria="menino" onclick="filtrarProdutos('menino', this)">Meninos</button>
+        </section>
+
+        <section id="produtos" class="vitrine-container">
+            <div class="secao-cabecalho vitrine-cabecalho">
+                <div>
+                    <h2>Destaques Imperdíveis ✨</h2>
+                    <p>Arraste para o lado para ver mais produtos</p>
+                </div>
+
+                <div class="controles-carrossel" aria-label="Navegação dos produtos">
+                    <button type="button" class="seta-carrossel" onclick="rolarProdutos(-1)" aria-label="Produtos anteriores">‹</button>
+                    <button type="button" class="seta-carrossel" onclick="rolarProdutos(1)" aria-label="Próximos produtos">›</button>
+                </div>
+            </div>
+
+            <!--
+                IMPORTANTE:
+                Os cards abaixo NÃO são escritos manualmente.
+                Eles são criados automaticamente pelo script.js.
+                Para cadastrar uma nova peça, edite somente a lista PRODUTOS no início do script.js.
+            -->
+            <div class="grade-produtos" id="lista-produtos" aria-live="polite"></div>
+        </section>
+
+        <section id="personalizados" class="personalizados-secao">
+            <div class="secao-cabecalho personalizados-cabecalho">
+                <span class="personalizados-mini">FEITO ESPECIALMENTE PARA VOCÊ</span>
+                <h2>Personalizados com carinho 🧵✨</h2>
+                <p>Além dos nossos looks, também trabalhamos com bordados e crochê. Transformamos sua ideia em uma peça única, feita com cuidado em cada detalhe.</p>
+            </div>
+
+            <div class="personalizados-grade">
+                <article class="personalizado-card">
+                    <div class="personalizado-icone" aria-hidden="true">🪡</div>
+                    <h3>Bordados Personalizados</h3>
+                    <p>Escolha nome, iniciais, cores ou uma ideia especial e fale com a gente para criar seu pedido personalizado.</p>
+                    <a class="btn-personalizado" href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20de%20bordado%20personalizado.%20%F0%9F%AA%A1%E2%9C%A8" target="_blank" rel="noopener noreferrer">Quero um bordado 💬</a>
+                </article>
+
+                <article class="personalizado-card">
+                    <div class="personalizado-icone" aria-hidden="true">🧶</div>
+                    <h3>Crochê Artesanal</h3>
+                    <p>Peças e detalhes em crochê feitos com cuidado, delicadeza e aquele toque artesanal que torna cada pedido especial.</p>
+                    <a class="btn-personalizado" href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store%20e%20gostaria%20de%20fazer%20um%20or%C3%A7amento%20de%20croch%C3%AA%20personalizado.%20%F0%9F%A7%B6%E2%9C%A8" target="_blank" rel="noopener noreferrer">Quero um crochê 💬</a>
+                </article>
+
+                <article class="personalizado-card personalizado-destaque">
+                    <div class="personalizado-icone" aria-hidden="true">💝</div>
+                    <h3>Tem uma ideia diferente?</h3>
+                    <p>Conte para a gente o que você imaginou. Envie sua referência pelo WhatsApp e vamos conversar sobre as possibilidades.</p>
+                    <a class="btn-personalizado" href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store%20e%20tenho%20uma%20ideia%20para%20um%20pedido%20personalizado.%20Posso%20enviar%20uma%20refer%C3%AAncia%3F%20%F0%9F%92%95" target="_blank" rel="noopener noreferrer">Pedir orçamento 💬</a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-detalhes" class="modal-detalhes" onclick="fecharModalAoClicarFora(event)">
         <div class="modal-conteudo">
-            <button class="btn-fechar-modal" onclick="fecharDetalhes()">✕</button>
-            <div class="modal-foto-bloco"><img id="modal-img" src="" alt="Produto Expandido"></div>
+            <button class="btn-fechar-modal" type="button" onclick="fecharDetalhes()" aria-label="Fechar detalhes">✕</button>
+            <div class="modal-foto-bloco" id="modal-foto-bloco">
+                <img id="modal-img" src="" alt="Produto ampliado">
+            </div>
             <div class="modal-info-bloco">
+                <span id="modal-categoria" class="produto-categoria"></span>
                 <h2 id="modal-titulo">Nome do Produto</h2>
                 <div id="modal-preco" class="modal-preco">R$ 0,00</div>
                 <p id="modal-descricao" class="modal-descricao">Descrição...</p>
-                <button id="modal-btn-comprar" class="btn-comprar">Adicionar à Sacola</button>
+                <button id="modal-btn-comprar" type="button" class="btn-comprar">Adicionar à Sacola</button>
             </div>
         </div>
     </div>
 
+    <a href="https://wa.me/5597984154273?text=Olá!%20Gostaria%20de%20mais%20informações."
+       class="whatsapp-btn"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Falar no WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 32 32" fill="white" aria-hidden="true">
+            <path d="M16.001 3C8.832 3 3 8.831 3 16c0 2.58.756 5.09 2.188 7.24L3 29l5.93-2.155A12.95 12.95 0 0016.001 29C23.169 29 29 23.169 29 16S23.169 3 16.001 3zm0 23.4a10.3 10.3 0 01-5.253-1.435l-.376-.224-3.52 1.279 1.303-3.43-.245-.392A10.31 10.31 0 015.7 16c0-5.68 4.622-10.3 10.301-10.3 5.68 0 10.3 4.62 10.3 10.3 0 5.679-4.62 10.4-10.3 10.4zm5.65-7.65c-.31-.156-1.83-.902-2.116-1.004-.285-.104-.492-.156-.699.156-.207.31-.803 1.004-.985 1.21-.182.208-.364.234-.674.078-.31-.155-1.31-.482-2.496-1.537-.922-.822-1.544-1.837-1.726-2.148-.182-.31-.02-.478.136-.633.14-.139.31-.363.466-.544.156-.182.207-.311.31-.519.104-.207.052-.389-.026-.544-.078-.156-.699-1.685-.959-2.307-.252-.605-.508-.522-.699-.532h-.596c-.208 0-.544.078-.829.389-.285.31-1.088 1.063-1.088 2.592s1.114 3.006 1.27 3.214c.155.207 2.193 3.348 5.313 4.694.742.32 1.321.511 1.773.654.745.237 1.423.204 1.96.124.598-.089 1.83-.748 2.089-1.47.26-.724.26-1.345.182-1.47-.078-.13-.285-.208-.596-.364z"/>
+        </svg>
+    </a>
+
     <footer>
+        <img src="./logo.jpg" alt="Cegonha Baby Store" class="footer-logo">
         <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="./script.js"></script>
-        <!-- BOTÃO FLUTUANTE PREMIUM DO WHATSAPP -->
-    <a href="https://wa.me/5597984154273" target="_blank" class="whatsapp-flutuante" aria-label="WhatsApp"></a>
-
-
-  
-
-
+    <script src="./script.js?v=4"></script>
 </body>
 </html>
