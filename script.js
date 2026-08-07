@@ -1,471 +1,131 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cegonha Baby Store | Moda Infantil Premium</title>
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
+let carrinho = [];
 
-    <!-- Faixa Promocional de Luxo -->
-    <div class="topo-alerta">
-        🎉 FRETE GRÁTIS em compras acima de R$ 199 | Até 6x sem juros no cartão!
-    </div>
+// Função que abre e fecha a sacola lateral deslizante
+function alternarCarrinho(abrir) {
+    const lateral = document.getElementById('carrinho-lateral');
+    const overlay = document.getElementById('carrinho-overlay');
+    if (lateral && overlay) {
+        if (abrir) {
+            lateral.classList.add('aberto');
+            overlay.classList.add('aberto');
+        } else {
+            lateral.classList.remove('aberto');
+            overlay.classList.remove('aberto');
+        }
+    }
+}
 
-    <!-- Cabeçalho / Menu Superior -->
-    <header>
-        <div class="logo-container">
-            <img src="./logo.jpg" alt="Cegonha Baby Store" class="logo-img">
-        </div>
-        <nav>
-            <a href="#" class="ativo" onclick="gerenciarMenuAtivo(this)">Início</a>
-            <a href="#produtos" onclick="gerenciarMenuAtivo(this)">Novidades</a>
-            <a href="#personalizados">Bordados ✨</a>
-        </nav>
-        <div class="carrinho" onclick="alternarCarrinho(true)">
-            🛍️ Sacola (<span id="contador-carrinho">0</span>)
-        </div>
-    </header>
+// Controla o visual ativo dos menus do topo
+function gerenciarMenuAtivo(elemento) {
+    const links = document.querySelectorAll('header nav a');
+    links.forEach(link => link.classList.remove('ativo'));
+    elemento.classList.add('ativo');
+}
 
-    <!-- Sacola Lateral Deslizante (Carrinho) -->
-    <div id="carrinho-lateral" class="carrinho-lateral">
-        <div class="carrinho-cabecalho">
-            <h3>Sua Sacola 🛍️</h3>
-            <button class="btn-fechar" onclick="alternarCarrinho(false)">✕</button>
-        </div>
-        <div id="carrinho-itens" class="carrinho-itens">
-            <p class="carrinho-vazio">Sua sacola está vazia... 🥺</p>
-        </div>
-        <div class="carrinho-rodape">
-            <div class="total-bloco">
-                <span>Total:</span>
-                <span id="carrinho-total">R$ 0,00</span>
-            </div>
-            <a href="https://wa.me" id="botao-finalizar-link" target="_blank" class="btn-finalizar" style="text-decoration: none; display: block; text-align: center;">Finalizar Pedido via WhatsApp 💬</a>
-        </div>
-    </div>
-    <div id="carrinho-overlay" class="carrinho-overlay" onclick="alternarCarrinho(false)"></div>
+// Adiciona a roupinha dentro da sacola e calcula as quantidades
+function adicionarProduto(id, nome, preco, imagem) {
+    const itemExistente = carrinho.find(item => item.id === id);
+    if (itemExistente) {
+        itemExistente.quantidade++;
+    } else {
+        carrinho.push({ id, nome, preco, imagem, quantidade: 1 });
+    }
+    atualizarInterfaceCarrinho();
+    alternarCarrinho(true); // Abre a sacola para mostrar que o produto entrou
+}
 
-    <!-- Banner Principal -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-texto">
-                <h1>O conforto que seu pequeno merece, com o estilo que você ama!</h1>
-                <p>Roupas infantis premium feitas com algodão 100% hipoalergênico. Peças duráveis, macias e cheias de afeto para acompanhar todas as descobertas.</p>
-                <div class="hero-botoes">
-                    <a href="#produtos" class="btn-principal">Ver Coleção</a>
-                </div>
-            </div>
-        </div>
-    </section>
+// Remove o item da sacola
+function removerProduto(id) {
+    carrinho = carrinho.filter(item => item.id !== id);
+    atualizarInterfaceCarrinho();
+}
 
-    <!-- Barra de Filtros Sofisticados -->
-    <section class="filtros-secao">
-        <button class="btn-filtro ativo" onclick="filtrarProdutos('todos')">Todos os Looks</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('bebe')">Bebês</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('menina')">Meninas</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('menino')">Meninos</button>
-    </section>
+// Atualiza os valores, contador e lista visual de itens na sacola
+function atualizarInterfaceCarrinho() {
+    const conteinerItens = document.getElementById('carrinho-itens');
+    const contadorSacola = document.getElementById('contador-carrinho');
+    const totalSacola = document.getElementById('carrinho-total');
 
-    <!-- Vitrine de Produtos -->
-    <main id="produtos" class="vitrine-container">
-        <div class="secao-cabecalho">
-            <h2>Destaques Imperdíveis ✨</h2>
-            <p>Looks selecionados com amor para todas as ocasiões</p>
-        </div>
+    const totalPecas = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+    if (contadorSacola) contadorSacola.innerText = totalPecas;
+
+    if (carrinho.length === 0) {
+        if (conteinerItens) conteinerItens.innerHTML = '<p class="carrinho-vazio">Sua sacola está vazia... 🥺</p>';
+        if (totalSacola) totalSacola.innerText = 'R$ 0,00';
+        return;
+    }
+
+    if (conteinerItens) {
+        conteinerItens.innerHTML = '';
+        let valorTotalGeral = 0;
+
+        carrinho.forEach(item => {
+            const subtotal = item.preco * item.quantidade;
+            valorTotalGeral += subtotal;
+            conteinerItens.innerHTML += `
+                <div class="item-carrinho">
+                    <img src="${item.imagem}" alt="${item.nome}">
+                    <div class="item-info">
+                        <h5>${item.nome}</h5>
+                        <p>${item.quantidade}x - R$ ${item.preco.toFixed(2).replace('.', ',')}</p>
+                        <button class="btn-remover" onclick="removerProduto(${item.id})">Remover</button>
+                    </div>
+                </div>`;
+        });
+        if (totalSacola) totalSacola.innerText = `R$ ${valorTotalGeral.toFixed(2).replace('.', ',')}`;
+    }
+}
+
+// Sistema de filtros por botões (Bebês, Meninas, Meninos)
+function filtrarProdutos(categoria) {
+    const botoes = document.querySelectorAll('.btn-filtro');
+    botoes.forEach(btn => btn.classList.remove('ativo'));
+    
+    // Destaca o botão clicado
+    if (event && event.target) {
+        event.target.classList.add('ativo');
+    }
+
+    const cards = document.querySelectorAll('.produto-card');
+    cards.forEach(card => {
+        if (categoria === 'todos' || card.getAttribute('data-categoria') === categoria) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// 🔥 A FUNÇÃO CHAVE QUE ESTAVA FALTANDO! Clica na foto e joga as informações na janela preta
+function abrirDetalhes(id, nome, precoTexto, imagem, descricao) {
+    const modal = document.getElementById('modal-detalhes');
+    if (modal) {
+        // Encontra os campos do HTML e injeta os textos reais da roupinha clicada
+        document.getElementById('modal-titulo').innerText = nome;
+        document.getElementById('modal-preco').innerText = precoTexto;
+        document.getElementById('modal-descricao').innerText = descricao;
+        document.getElementById('modal-img').src = imagem;
         
-        <div class="grade-produtos">
-            <!-- PRODUTO 1 -->
-            <div class="produto-card" data-categoria="menino">
-                <div class="produto-badge-desconto">15% OFF</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(1, 'Conjunto Pijama Infantil Masculino', 'R$ 89,90', './fotovitrine1m.jpeg', 'Conjunto de pijama masculino infantil confeccionado em algodão premium extremamente macio.')">
-                    <img src="./fotovitrine1m.jpeg" alt="Conjunto Pijama Infantil Masculino">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Menino</span>
-                    <h3>Conjunto Pijama Infantil Masculino</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (24)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 89,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 2 -->
-            <div class="produto-card" data-categoria="bebe">
-                <div class="produto-badge-novidade">Destaque ✨</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(2, 'Body Feminino Laranja Premium', 'R$ 68,90', './body feminino laranja.jpeg', 'Lindo body feminino na cor laranja vibrante, feito com malha de toque macio.')">
-                    <img src="./body feminino laranja.jpeg" alt="Body Feminino Laranja Premium">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Bebês</span>
-                    <h3>Body Feminino Laranja Premium</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (14)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 68,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 3 -->
-            <div class="produto-card" data-categoria="menina">
-                <div class="produto-badge-novidade">Fofura 💕</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(3, 'Pijama Macacão Plush Corações', 'R$ 129,90', './macacão rosa com corações.jpeg', 'Aconchegante macacão longo infantil de plush premium.')">
-                    <img src="./macacão rosa com corações.jpeg" alt="Pijama Macacão Plush Corações">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Menina</span>
-                    <h3>Pijama Macacão Plush Corações</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (28)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 129,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 4 -->
-            <div class="produto-card" data-categoria="bebe">
-                <div class="produto-badge-novidade">Novo 🧸</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(4, 'Macacão Infantil Feminino Bege', 'R$ 115,00', './macacao-bege.jpeg', 'Elegante macacão infantil em malha de toque macio.')">
-                    <img src="./macacao-bege.jpeg" alt="Macacão Infantil Feminino Bege">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Bebês</span>
-                    <h3>Macacão Infantil Feminino Bege</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (19)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 115,00</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Seção de Bordados Personalizados -->
-    <section id="personalizados" class="personalizados-secao" style="background-color: #fcf8f5; padding: 60px 20px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 1200px; border: 1px dashed #e6ccb2;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <span style="font-size: 24px;">🪡✨</span>
-            <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; color: #4a3e3d; font-size: 28px; margin-top: 10px; margin-bottom: 15px; font-weight: 700;">Peças Bordadas & Personalizadas</h2>
-            <p style="font-family: 'Plus Jakarta Sans', sans-serif; color: #6e5a58; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">Quer deixar o enxoval do seu pequeno ainda mais exclusivo? Nós produzimos mantas, bodys, rompers e fraldinhas com o nome do bebê ou o desenho que você escolher!</p>
-            <a href="https://wa.me" target="_blank" style="display: inline-block; background-color: #d4a373; color: white; padding: 15px 35px; font-size: 16px; font-weight: 600; text-decoration: none; border-radius: 50px; box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3); font-family: 'Plus Jakarta Sans', sans-serif;">Encomendar Peça Personalizada via WhatsApp 💬</a>
-        </div>
-    </section>
-
-    <div id="modal-detalhes" class="modal-detalhes">
-        <div class="modal-conteudo">
-            <button class="btn-fechar-modal" onclick="fecharDetalhes()">✕</button>
-            <div class="modal-foto-bloco">
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cegonha Baby Store | Moda Infantil Premium</title>
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-
-    <!-- Faixa Promocional de Luxo -->
-    <div class="topo-alerta">
-        🎉 FRETE GRÁTIS em compras acima de R$ 199 | Até 6x sem juros no cartão!
-    </div>
-
-    <!-- Cabeçalho / Menu Superior -->
-    <header>
-        <div class="logo-container">
-            <img src="./logo.jpg" alt="Cegonha Baby Store" class="logo-img">
-        </div>
-        <nav>
-            <a href="#" class="ativo" onclick="gerenciarMenuAtivo(this)">Início</a>
-            <a href="#produtos" onclick="gerenciarMenuAtivo(this)">Novidades</a>
-            <a href="#personalizados">Bordados ✨</a>
-        </nav>
-        <div class="carrinho" onclick="alternarCarrinho(true)">
-            🛍️ Sacola (<span id="contador-carrinho">0</span>)
-        </div>
-    </header>
-
-    <!-- Sacola Lateral Deslizante (Carrinho) -->
-    <div id="carrinho-lateral" class="carrinho-lateral">
-        <div class="carrinho-cabecalho">
-            <h3>Sua Sacola 🛍️</h3>
-            <button class="btn-fechar" onclick="alternarCarrinho(false)">✕</button>
-        </div>
-        <div id="carrinho-itens" class="carrinho-itens">
-            <p class="carrinho-vazio">Sua sacola está vazia... 🥺</p>
-        </div>
-        <div class="carrinho-rodape">
-            <div class="total-bloco">
-                <span>Total:</span>
-                <span id="carrinho-total">R$ 0,00</span>
-            </div>
-            <a href="https://wa.me" id="botao-finalizar-link" target="_blank" class="btn-finalizar" style="text-decoration: none; display: block; text-align: center;">Finalizar Pedido via WhatsApp 💬</a>
-        </div>
-    </div>
-    <div id="carrinho-overlay" class="carrinho-overlay" onclick="alternarCarrinho(false)"></div>
-
-    <!-- Banner Principal -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-texto">
-                <h1>O conforto que seu pequeno merece, com o estilo que você ama!</h1>
-                <p>Roupas infantis premium feitas com algodão 100% hipoalergênico. Peças duráveis, macias e cheias de afeto para acompanhar todas as descobertas.</p>
-                <div class="hero-botoes">
-                    <a href="#produtos" class="btn-principal">Ver Coleção</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Barra de Filtros Sofisticados -->
-    <section class="filtros-secao">
-        <button class="btn-filtro ativo" onclick="filtrarProdutos('todos')">Todos os Looks</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('bebe')">Bebês</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('menina')">Meninas</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('menino')">Meninos</button>
-    </section>
-
-    <!-- Vitrine de Produtos -->
-    <main id="produtos" class="vitrine-container">
-        <div class="secao-cabecalho">
-            <h2>Destaques Imperdíveis ✨</h2>
-            <p>Looks selecionados com amor para todas as ocasiões</p>
-        </div>
+        // Limpa o sinal "R$" e converte o preço em número para o carrinho conseguir somar
+        const precoNumero = parseFloat(precoTexto.replace('R$', '').replace(',', '.').trim());
         
-        <div class="grade-produtos">
-            <!-- PRODUTO 1 -->
-            <div class="produto-card" data-categoria="menino">
-                <div class="produto-badge-desconto">15% OFF</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(1, 'Conjunto Pijama Infantil Masculino', 'R$ 89,90', './fotovitrine1m.jpeg', 'Conjunto de pijama masculino infantil confeccionado em algodão premium extremamente macio.')">
-                    <img src="./fotovitrine1m.jpeg" alt="Conjunto Pijama Infantil Masculino">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Menino</span>
-                    <h3>Conjunto Pijama Infantil Masculino</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (24)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 89,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 2 -->
-            <div class="produto-card" data-categoria="bebe">
-                <div class="produto-badge-novidade">Destaque ✨</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(2, 'Body Feminino Laranja Premium', 'R$ 68,90', './body feminino laranja.jpeg', 'Lindo body feminino na cor laranja vibrante, feito com malha de toque macio.')">
-                    <img src="./body feminino laranja.jpeg" alt="Body Feminino Laranja Premium">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Bebês</span>
-                    <h3>Body Feminino Laranja Premium</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (14)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 68,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 3 -->
-            <div class="produto-card" data-categoria="menina">
-                <div class="produto-badge-novidade">Fofura 💕</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(3, 'Pijama Macacão Plush Corações', 'R$ 129,90', './macacão rosa com corações.jpeg', 'Aconchegante macacão longo infantil de plush premium.')">
-                    <img src="./macacão rosa com corações.jpeg" alt="Pijama Macacão Plush Corações">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Menina</span>
-                    <h3>Pijama Macacão Plush Corações</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (28)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 129,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 4 -->
-            <div class="produto-card" data-categoria="bebe">
-                <div class="produto-badge-novidade">Novo 🧸</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(4, 'Macacão Infantil Feminino Bege', 'R$ 115,00', './macacao-bege.jpeg', 'Elegante macacão infantil em malha de toque macio.')">
-                    <img src="./macacao-bege.jpeg" alt="Macacão Infantil Feminino Bege">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Bebês</span>
-                    <h3>Macacão Infantil Feminino Bege</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (19)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 115,00</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Seção de Bordados Personalizados -->
-    <section id="personalizados" class="personalizados-secao" style="background-color: #fcf8f5; padding: 60px 20px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 1200px; border: 1px dashed #e6ccb2;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <span style="font-size: 24px;">🪡✨</span>
-            <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; color: #4a3e3d; font-size: 28px; margin-top: 10px; margin-bottom: 15px; font-weight: 700;">Peças Bordadas & Personalizadas</h2>
-            <p style="font-family: 'Plus Jakarta Sans', sans-serif; color: #6e5a58; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">Quer deixar o enxoval do seu pequeno ainda mais exclusivo? Nós produzimos mantas, bodys, rompers e fraldinhas com o nome do bebê ou o desenho que você escolher!</p>
-            <a href="https://wa.me" target="_blank" style="display: inline-block; background-color: #d4a373; color: white; padding: 15px 35px; font-size: 16px; font-weight: 600; text-decoration: none; border-radius: 50px; box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3); font-family: 'Plus Jakarta Sans', sans-serif;">Encomendar Peça Personalizada via WhatsApp 💬</a>
-        </div>
-    </section>
-
-    <div id="modal-detalhes" class="modal-detalhes">
-        <div class="modal-conteudo">
-            <button class="btn-fechar-modal" onclick="fecharDetalhes()">✕</button>
-            <div class="modal-foto-bloco">
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cegonha Baby Store | Moda Infantil Premium</title>
-    <link rel="preconnect" href="https://googleapis.com">
-    <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css">
-</head>
-<body>
-
-    <!-- Faixa Promocional de Luxo -->
-    <div class="topo-alerta">
-        🎉 FRETE GRÁTIS em compras acima de R$ 199 | Até 6x sem juros no cartão!
-    </div>
-
-    <!-- Cabeçalho / Menu Superior -->
-    <header>
-        <div class="logo-container">
-            <img src="./logo.jpg" alt="Cegonha Baby Store" class="logo-img">
-        </div>
-        <nav>
-            <a href="#" class="ativo" onclick="gerenciarMenuAtivo(this)">Início</a>
-            <a href="#produtos" onclick="gerenciarMenuAtivo(this)">Novidades</a>
-            <a href="#personalizados">Bordados ✨</a>
-        </nav>
-        <div class="carrinho" onclick="alternarCarrinho(true)">
-            🛍️ Sacola (<span id="contador-carrinho">0</span>)
-        </div>
-    </header>
-
-    <!-- Sacola Lateral Deslizante (Carrinho) -->
-    <div id="carrinho-lateral" class="carrinho-lateral">
-        <div class="carrinho-cabecalho">
-            <h3>Sua Sacola 🛍️</h3>
-            <button class="btn-fechar" onclick="alternarCarrinho(false)">✕</button>
-        </div>
-        <div id="carrinho-itens" class="carrinho-itens">
-            <p class="carrinho-vazio">Sua sacola está vazia... 🥺</p>
-        </div>
-        <div class="carrinho-rodape">
-            <div class="total-bloco">
-                <span>Total:</span>
-                <span id="carrinho-total">R$ 0,00</span>
-            </div>
-            <a href="https://wa.me" id="botao-finalizar-link" target="_blank" class="btn-finalizar" style="text-decoration: none; display: block; text-align: center;">Finalizar Pedido via WhatsApp 💬</a>
-        </div>
-    </div>
-    <div id="carrinho-overlay" class="carrinho-overlay" onclick="alternarCarrinho(false)"></div>
-
-    <!-- Banner Principal -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-texto">
-                <h1>O conforto que seu pequeno merece, com o estilo que você ama!</h1>
-                <p>Roupas infantis premium feitas com algodão 100% hipoalergênico. Peças duráveis, macias e cheias de afeto para acompanhar todas as descobertas.</p>
-                <div class="hero-botoes">
-                    <a href="#produtos" class="btn-principal">Ver Coleção</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Barra de Filtros Sofisticados -->
-    <section class="filtros-secao">
-        <button class="btn-filtro ativo" onclick="filtrarProdutos('todos')">Todos os Looks</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('bebe')">Bebês</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('menina')">Meninas</button>
-        <button class="btn-filtro" onclick="filtrarProdutos('menino')">Meninos</button>
-    </section>
-
-    <!-- Vitrine de Produtos -->
-    <main id="produtos" class="vitrine-container">
-        <div class="secao-cabecalho">
-            <h2>Destaques Imperdíveis ✨</h2>
-            <p>Looks selecionados com amor para todas as ocasiões</p>
-        </div>
+        // Captura o botão interno "Adicionar à Sacola" do modal
+        const btnComprarModal = document.querySelector('.modal-info-bloco .btn-comprar') || document.getElementById('modal-btn-comprar');
         
-        <div class="grade-produtos">
-            <!-- PRODUTO 1 -->
-            <div class="produto-card" data-categoria="menino">
-                <div class="produto-badge-desconto">15% OFF</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(1, 'Conjunto Pijama Infantil Masculino', 'R$ 89,90', './fotovitrine1m.jpeg', 'Conjunto de pijama masculino infantil confeccionado em algodão premium extremamente macio.')">
-                    <img src="./fotovitrine1m.jpeg" alt="Conjunto Pijama Infantil Masculino">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Menino</span>
-                    <h3>Conjunto Pijama Infantil Masculino</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (24)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 89,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
+        // Se o botão existir, ativa a função de clique dele para jogar o produto na sacola
+        if (btnComprarModal) {
+            btnComprarModal.onclick = function() {
+                adicionarProduto(id, nome, precoNumero, imagem);
+                fecharDetalhes(); // Fecha a janelinha após colocar na sacola
+            };
+        }
+        
+        modal.classList.add('ativo'); // Abre a janela na tela
+    }
+}
 
-            <!-- PRODUTO 2 -->
-            <div class="produto-card" data-categoria="bebe">
-                <div class="produto-badge-novidade">Destaque ✨</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(2, 'Body Feminino Laranja Premium', 'R$ 68,90', './body feminino laranja.jpeg', 'Lindo body feminino na cor laranja vibrante, feito com malha de toque macio.')">
-                    <img src="./body feminino laranja.jpeg" alt="Body Feminino Laranja Premium">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Bebês</span>
-                    <h3>Body Feminino Laranja Premium</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (14)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 68,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 3 -->
-            <div class="produto-card" data-categoria="menina">
-                <div class="produto-badge-novidade">Fofura 💕</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(3, 'Pijama Macacão Plush Corações', 'R$ 129,90', './macacão rosa com corações.jpeg', 'Aconchegante macacão longo infantil de plush premium.')">
-                    <img src="./macacão rosa com corações.jpeg" alt="Pijama Macacão Plush Corações">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Menina</span>
-                    <h3>Pijama Macacão Plush Corações</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (28)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 129,90</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-
-            <!-- PRODUTO 4 -->
-            <div class="produto-card" data-categoria="bebe">
-                <div class="produto-badge-novidade">Novo 🧸</div>
-                <div class="produto-imagem" onclick="abrirDetalhes(4, 'Macacão Infantil Feminino Bege', 'R$ 115,00', './macacao-bege.jpeg', 'Elegante macacão infantil em malha de toque macio.')">
-                    <img src="./macacao-bege.jpeg" alt="Macacão Infantil Feminino Bege">
-                </div>
-                <div class="produto-info">
-                    <span class="produto-categoria">Bebês</span>
-                    <h3>Macacão Infantil Feminino Bege</h3>
-                    <div class="produto-estrelas">⭐⭐⭐⭐⭐ (19)</div>
-                    <div class="produto-preco-bloco"><span class="preco-atual">R$ 115,00</span></div>
-                    <a href="https://wa.me" target="_blank" class="btn-comprar">Comprar via WhatsApp 💬</a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Seção de Bordados Personalizados -->
-    <section id="personalizados" class="personalizados-secao" style="background-color: #fcf8f5; padding: 60px 20px; text-align: center; border-radius: 20px; margin: 40px auto; max-width: 1200px; border: 1px dashed #e6ccb2;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <span style="font-size: 24px;">🪡✨</span>
-            <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; color: #4a3e3d; font-size: 28px; margin-top: 10px; margin-bottom: 15px; font-weight: 700;">Peças Bordadas & Personalizadas</h2>
-            <p style="font-family: 'Plus Jakarta Sans', sans-serif; color: #6e5a58; font-size: 16px; line-height: 1.6; margin-bottom: 30px;">Quer deixar o enxoval do seu pequeno ainda mais exclusivo? Nós produzimos mantas, bodys, rompers e fraldinhas com o nome do bebê ou o desenho que você escolher!</p>
-            <a href="https://wa.me" target="_blank" style="display: inline-block; background-color: #d4a373; color: white; padding: 15px 35px; font-size: 16px; font-weight: 600; text-decoration: none; border-radius: 50px; box-shadow: 0 4px 15px rgba(212, 163, 115, 0.3); font-family: 'Plus Jakarta Sans', sans-serif;">Encomendar Peça Personalizada via WhatsApp 💬</a>
-        </div>
-    </section>
-
-    <div id="modal-detalhes" class="modal-detalhes">
-        <div class="modal-conteudo">
-            <button class="btn-fechar-modal" onclick="fecharDetalhes()">✕</button>
-            <div class="modal-foto-bloco">
+// Fecha a janela de detalhes
+function fecharDetalhes() {
+    const modal = document.getElementById('modal-detalhes');
+    if (modal) modal.classList.remove('ativo');
+}
