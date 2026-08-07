@@ -27,57 +27,124 @@
    ========================================================= */
 
 const PRODUTOS = [
+    // ATENÇÃO: os preços abaixo são PROVISÓRIOS.
+    // Troque o campo "preco" assim que você souber o valor real de cada peça.
     {
         id: 1,
-        nome: "Conjunto Pijama Infantil Masculino",
+        nome: "Conjunto Pijama Golfinhos Azul",
         categoria: "menino",
         categoriaLabel: "Menino",
         preco: 89.90,
-        precoAntigo: 105.90,
+        precoAntigo: null,
         imagem: "./fotovitrine1m.jpeg",
-        badge: "15% OFF",
-        tipoBadge: "desconto",
-        avaliacoes: 24,
-        descricao: "Conjunto de pijama masculino infantil confeccionado em algodão premium, extremamente macio e confortável."
+        badge: "Destaque 🐬",
+        tipoBadge: "novidade",
+        avaliacoes: 0,
+        descricao: "Conjunto de pijama infantil em azul-claro, com blusa de manga longa e calça estampadas com golfinhos e estrelas. O contraste azul-marinho na gola, nos punhos e nas barras deixa o visual ainda mais charmoso."
     },
     {
         id: 2,
-        nome: "Body Feminino Laranja Premium",
-        categoria: "bebe",
-        categoriaLabel: "Bebês",
-        preco: 68.90,
+        nome: "Romper Babados Mostarda com Renda",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 79.90,
         precoAntigo: null,
-        imagem: "./body feminino laranja.jpeg",
-        badge: "Destaque ✨",
+        imagem: "./Body Feminino Laranja Premium.jpeg",
+        badge: "Fofura ✨",
         tipoBadge: "novidade",
-        avaliacoes: 14,
-        descricao: "Lindo body feminino na cor laranja, confeccionado em tecido de toque macio e confortável para o dia a dia."
+        avaliacoes: 0,
+        descricao: "Romper infantil em tom mostarda com alças de babados, acabamento delicado de renda branca e camadas franzidas. Uma peça charmosa para passeios, fotos e ocasiões especiais."
     },
     {
         id: 3,
-        nome: "Pijama Macacão Plush Corações",
+        nome: "Pijama Macacão Corações Rosa",
         categoria: "menina",
         categoriaLabel: "Menina",
         preco: 129.90,
         precoAntigo: null,
         imagem: "./macacão rosa com corações.jpeg",
-        badge: "Fofura 💕",
+        badge: "Aconchego 💕",
         tipoBadge: "novidade",
-        avaliacoes: 28,
-        descricao: "Aconchegante macacão longo infantil, perfeito para dias mais amenos e noites confortáveis."
+        avaliacoes: 0,
+        descricao: "Macacão longo rosa com estampa de corações em tom vinho, fechamento frontal e punhos ajustados. Um visual divertido e aconchegante para os momentos de descanso."
     },
     {
         id: 4,
-        nome: "Macacão Infantil Feminino Bege",
+        nome: "Macacão Curto Rosa Clássico",
         categoria: "bebe",
         categoriaLabel: "Bebês",
-        preco: 115.00,
+        preco: 79.90,
         precoAntigo: null,
         imagem: "./macacão feminino bege.jpeg",
-        badge: "Novo 🧸",
+        badge: "Delicado 🌷",
         tipoBadge: "novidade",
-        avaliacoes: 19,
-        descricao: "Elegante macacão infantil feminino confeccionado em malha de toque suave, ideal para conforto e estilo."
+        avaliacoes: 0,
+        descricao: "Macacão curto em rosa-claro com gola arredondada, botões frontais, bolsinho e acabamento contrastante. O estilo clássico combina conforto visual e delicadeza para o dia a dia."
+    },
+    {
+        id: 5,
+        nome: "Conjunto Batinha Bordada Xadrez Rosa",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 109.90,
+        precoAntigo: null,
+        imagem: "./conjunto-batinha-xadrez.jpeg",
+        badge: "Novo 🎀",
+        tipoBadge: "novidade",
+        avaliacoes: 0,
+        descricao: "Conjunto delicado com batinha branca de bordado vazado, barra franzida e laço xadrez, acompanhado de short estilo bloomer xadrez rosa com babados e laços laterais."
+    },
+    {
+        id: 6,
+        nome: "Conjunto Polo Amarelo e Jardineira Xadrez",
+        categoria: "menino",
+        categoriaLabel: "Menino",
+        preco: 149.90,
+        precoAntigo: null,
+        imagem: "./conjunto-polo-jardineira-linho.jpeg",
+        badge: "Elegante ✨",
+        tipoBadge: "novidade",
+        avaliacoes: 0,
+        descricao: "Look infantil com body polo amarelo de gola clássica e jardineira xadrez em tons claros, com alças e botões marrons. Uma combinação arrumadinha e versátil para passeios e eventos."
+    },
+    {
+        id: 7,
+        nome: "Macacão Jardineira Ursinho",
+        categoria: "bebe",
+        categoriaLabel: "Bebês",
+        preco: 99.90,
+        precoAntigo: null,
+        imagem: "./macacao-ursinho-soft.jpeg",
+        badge: "Ursinho 🧸",
+        tipoBadge: "novidade",
+        avaliacoes: 0,
+        descricao: "Macacão estilo jardineira em tons bege e creme, com xadrez suave, estampa de ursinhos e detalhe aplicado no peitoral. Os acabamentos claros deixam a peça ainda mais delicada."
+    },
+    {
+        id: 8,
+        nome: "Romper Ciganinha Floral Preto",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 74.90,
+        precoAntigo: null,
+        imagem: "./romper-ciganinha-floral.jpeg.jpeg",
+        badge: "Floral 🌸",
+        tipoBadge: "novidade",
+        avaliacoes: 0,
+        descricao: "Romper preto com estampa de flores rosadas, alças finas, mangas amplas estilo ciganinha e cintura franzida. Um modelo alegre e cheio de personalidade."
+    },
+    {
+        id: 9,
+        nome: "Romper Dinossauros Verde com Chapéu",
+        categoria: "menino",
+        categoriaLabel: "Menino",
+        preco: 89.90,
+        precoAntigo: null,
+        imagem: "./romper-dinossauros-chapeu.jpeg",
+        badge: "Aventura 🦕",
+        tipoBadge: "novidade",
+        avaliacoes: 0,
+        descricao: "Romper verde sem mangas com estampa de dinossauros coloridos, botões frontais e fechamento entrepernas. A combinação com o chapéu estampado cria um look divertido para os dias quentes."
     }
 ];
 
@@ -204,7 +271,7 @@ function renderizarProdutos(categoria = categoriaAtual) {
                 <div class="produto-info">
                     <span class="produto-categoria">${produto.categoriaLabel}</span>
                     <h3>${produto.nome}</h3>
-                    <div class="produto-estrelas">★★★★★ (${produto.avaliacoes})</div>
+                    <div class="produto-estrelas">${produto.avaliacoes > 0 ? `★★★★★ (${produto.avaliacoes})` : "Novo produto ✨"}</div>
 
                     <div class="produto-preco-bloco">
                         <span class="preco-atual">${moeda(produto.preco)}</span>
