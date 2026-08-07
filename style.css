@@ -155,34 +155,30 @@ header nav a.ativo, header nav a:hover {
     color: #6e5a58;
 }
 
-/* ESTRUTURA DE FILEIRAS EM LINHAS PARALELAS */
+/* 🔒 GRADE DE PRODUTOS UM DO LADO DO OUTRO */
 .grade-produtos {
-    display: flex;
-    flex-direction: column; /* Organiza os cartões em fileiras horizontais de cima para baixo */
-    gap: 20px;
-    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
 }
 
 .produto-card {
     position: relative;
     background: #ffffff;
     border-radius: 16px;
-    padding: 20px;
+    padding: 16px;
     box-shadow: 0 4px 18px rgba(74, 62, 61, 0.04);
     display: flex;
-    flex-direction: row; /* Coloca a foto de um lado e as informações do outro */
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-    height: auto; 
+    flex-direction: column;
+    justify-content: space-between;
+    height: 520px; /* Garante que todas as caixas fiquem do mesmo tamanho */
     border: 1px solid #f5ebe6;
 }
 
-/* Tamanho controlado da foto na linha */
+/* Gaiola padronizada para as imagens */
 .produto-imagem {
-    width: 200px;
-    height: 200px; 
-    flex-shrink: 0;
+    width: 100%;
+    height: 290px; 
     overflow: hidden;
     border-radius: 12px;
     background-color: #ffffff;
@@ -195,59 +191,69 @@ header nav a.ativo, header nav a:hover {
 .produto-imagem img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: contain; 
     background-color: #ffffff;
+    transition: transform 0.4s ease; /* EFEITO SUAVE DO ZOOM */
+}
+
+/* 🔍 APLICA O ZOOM AO PASSAR O MOUSE */
+.produto-card:hover .produto-imagem img {
+    transform: scale(1.08);
 }
 
 .produto-info {
+    margin-top: 12px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    justify-content: center;
-    align-items: flex-start;
-    text-align: left;
+    justify-content: flex-end;
 }
 
 .produto-categoria {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
     color: #b79491;
     font-weight: 600;
     letter-spacing: 0.5px;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
+    text-align: center;
 }
 
 .produto-info h3 {
-    font-size: 18px;
+    font-size: 15px;
     color: #4a3e3d;
     font-weight: 600;
     line-height: 1.3;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    min-height: 40px; 
+    text-align: center;
 }
 
 .produto-estrelas {
-    font-size: 12px;
+    font-size: 11px;
     color: #ffb703;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .produto-preco-bloco {
-    margin-bottom: 15px;
+    margin-bottom: 12px;
+    text-align: center;
 }
 
 .preco-atual {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
     color: #d4a373;
 }
 
-/* BOTÃO DE COMPRA ESTICADO NA SEÇÃO LATERAL */
+/* BOTÕES DE COMPRA VIA WHATSAPP */
 .btn-comprar {
     background-color: #4a3e3d;
     color: white;
     border: none;
-    padding: 12px 30px;
-    max-width: 250px;
+    padding: 12px;
+    width: 100%;
     border-radius: 30px;
     font-weight: 600;
     font-size: 14px;
@@ -263,15 +269,15 @@ header nav a.ativo, header nav a:hover {
     background-color: #d4a373;
 }
 
-/* ADESIVOS DESTAQUES */
+/* ADESIVOS DE DESTAQUE FIXADOS NO CORPO DO CARD */
 .produto-badge-desconto, 
 .produto-badge-novidade {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 25px;
+    left: 25px;
     background-color: #e29578;
     color: white;
-    padding: 4px 10px;
+    padding: 5px 12px;
     font-size: 11px;
     font-weight: 600;
     border-radius: 20px;
@@ -283,7 +289,7 @@ header nav a.ativo, header nav a:hover {
     background-color: #d4a373;
 }
 
-/* BOTÃO FLUTUANTE WHATSAPP */
+/* BOTÃO FLUTUANTE PREMIUM DO WHATSAPP */
 .whatsapp-flutuante {
     position: fixed;
     width: 60px;
@@ -340,49 +346,15 @@ footer {
     margin-top: 40px;
 }
 
-/* ADAPTAÇÃO DAS LINHAS EXCLUSIVA PARA TELAS DE CELULAR */
+/* RESPONSIVIDADE PARA DOIS POR LINHA NO CELULAR */
 @media (max-width: 768px) {
-    .grade-produtos {
-        gap: 15px;
-        padding: 5px;
-    }
-    .produto-card {
-        flex-direction: row; /* Mantém a estrutura de linha horizontal mesmo no mobile */
-        padding: 12px;
-        min-height: auto;
-        gap: 12px;
-    }
-    .produto-imagem {
-        width: 110px; /* Reduz o tamanho do quadrado da foto para caber nas telas finas */
-        height: 110px;
-    }
-    .produto-info h3 {
-        font-size: 14px;
-        text-align: left;
-        min-height: auto;
-        margin-bottom: 4px;
-    }
-    .produto-categoria {
-        font-size: 10px;
-        text-align: left;
-    }
-    .produto-estrelas {
-        margin-bottom: 6px;
-    }
-    .preco-atual {
-        font-size: 16px;
-    }
-    .btn-comprar {
-        padding: 8px 15px;
-        font-size: 12px;
-        max-width: 100%;
-        width: auto;
-    }
-    .produto-badge-desconto, 
-    .produto-badge-novidade {
-        top: 8px;
-        left: 8px;
-        font-size: 9px;
-        padding: 2px 6px;
-    }
+    header { padding: 15px; }
+    header nav { display: none; }
+    .hero-texto h1 { font-size: 26px; }
+    .grade-produtos { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 10px; }
+    .produto-card { height: 410px; padding: 10px; }
+    .produto-imagem { height: 190px; }
+    .produto-info h3 { font-size: 13px; min-height: 35px; }
+    .preco-atual { font-size: 15px; }
+    .btn-comprar { padding: 10px 5px; font-size: 11px; }
 }
