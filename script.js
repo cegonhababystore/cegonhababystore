@@ -772,6 +772,171 @@ function alternarAvaliacoesMobile() {
     botao.classList.toggle("ativo", abriu);
 }
 
+// =========================================================
+// VISUALIZADOR DE IMAGEM: ampliar, arrastar e usar pinça
+// =========================================================
+let visualizadorEscala = 1;
+let visualizadorX = 0;
+let visualizadorY = 0;
+let visualizadorDistanciaInicial = 0;
+let visualizadorEscalaInicial = 1;
+const visualizadorPonteiros = new Map();
+
+function aplicarTransformacaoVisualizador() {
+    const img = document.getElementById("visualizador-img");
+    if (!img) return;
+    img.style.transform = `translate3d(${visualizadorX}px, ${visualizadorY}px, 0) scale(${visualizadorEscala})`;
+
+    const reset = document.querySelector(".visualizador-reset");
+    if (reset) reset.textContent = `${Math.round(visualizadorEscala * 100)}%`;
+}
+
+function limitarPanVisualizador() {
+    const area = document.getElementById("visualizador-area");
+    const img = document.getElementById("visualizador-img");
+    if (!area || !img) return;
+
+    if (visualizadorEscala <= 1) {
+        visualizadorX = 0;
+        visualizadorY = 0;
+        return;
+    }
+
+    const larguraBase = img.offsetWidth || area.clientWidth;
+    const alturaBase = img.offsetHeight || area.clientHeight;
+    const maxX = Math.max(0, (larguraBase * visualizadorEscala - area.clientWidth) / 2 + 20);
+    const maxY = Math.max(0, (alturaBase * visualizadorEscala - area.clientHeight) / 2 + 20);
+
+    visualizadorX = Math.max(-maxX, Math.min(maxX, visualizadorX));
+    visualizadorY = Math.max(-maxY, Math.min(maxY, visualizadorY));
+}
+
+function resetarVisualizadorImagem() {
+    visualizadorEscala = 1;
+    visualizadorX = 0;
+    visualizadorY = 0;
+    visualizadorPonteiros.clear();
+    aplicarTransformacaoVisualizador();
+}
+
+function alterarZoomImagem(delta) {
+    visualizadorEscala = Math.max(1, Math.min(4, visualizadorEscala + Number(delta || 0)));
+    limitarPanVisualizador();
+    aplicarTransformacaoVisualizador();
+}
+
+function abrirVisualizadorImagem() {
+    const imagemModal = document.getElementById("modal-img");
+    const viewer = document.getElementById("visualizador-imagem");
+    const imagemViewer = document.getElementById("visualizador-img");
+    const nomeViewer = document.getElementById("visualizador-nome");
+    const nomeProduto = document.getElementById("modal-titulo")?.textContent || "Detalhes da peça";
+
+    if (!imagemModal || !viewer || !imagemViewer || !imagemModal.src || imagemModal.style.display === "none") return;
+
+    resetarVisualizadorImagem();
+    imagemViewer.src = imagemModal.currentSrc || imagemModal.src;
+    imagemViewer.alt = imagemModal.alt || nomeProduto;
+    if (nomeViewer) nomeViewer.textContent = nomeProduto;
+
+    viewer.classList.add("ativo");
+    viewer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+
+    imagemViewer.onload = () => {
+        resetarVisualizadorImagem();
+    };
+}
+
+function fecharVisualizadorImagem() {
+    const viewer = document.getElementById("visualizador-imagem");
+    if (!viewer) return;
+    viewer.classList.remove("ativo");
+    viewer.setAttribute("aria-hidden", "true");
+    visualizadorPonteiros.clear();
+    resetarVisualizadorImagem();
+
+    const detalhesAberto = document.getElementById("modal-detalhes")?.classList.contains("ativo");
+    document.body.style.overflow = detalhesAberto ? "hidden" : "";
+}
+
+function distanciaEntrePonteiros() {
+    const pontos = [...visualizadorPonteiros.values()];
+    if (pontos.length < 2) return 0;
+    const dx = pontos[0].x - pontos[1].x;
+    const dy = pontos[0].y - pontos[1].y;
+    return Math.hypot(dx, dy);
+}
+
+function ativarGestosVisualizador() {
+    const area = document.getElementById("visualizador-area");
+    const img = document.getElementById("visualizador-img");
+    if (!area || !img) return;
+
+    area.addEventListener("pointerdown", event => {
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+        visualizadorPonteiros.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        try { area.setPointerCapture(event.pointerId); } catch (_) {}
+
+        if (visualizadorPonteiros.size === 2) {
+            visualizadorDistanciaInicial = distanciaEntrePonteiros();
+            visualizadorEscalaInicial = visualizadorEscala;
+        }
+        area.classList.add("arrastando");
+    });
+
+    area.addEventListener("pointermove", event => {
+        const anterior = visualizadorPonteiros.get(event.pointerId);
+        if (!anterior) return;
+
+        visualizadorPonteiros.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+        if (visualizadorPonteiros.size >= 2) {
+            const distanciaAtual = distanciaEntrePonteiros();
+            if (visualizadorDistanciaInicial > 0) {
+                visualizadorEscala = Math.max(1, Math.min(4, visualizadorEscalaInicial * (distanciaAtual / visualizadorDistanciaInicial)));
+            }
+        } else if (visualizadorEscala > 1) {
+            visualizadorX += event.clientX - anterior.x;
+            visualizadorY += event.clientY - anterior.y;
+        }
+
+        limitarPanVisualizador();
+        aplicarTransformacaoVisualizador();
+    });
+
+    const finalizarPonteiro = event => {
+        visualizadorPonteiros.delete(event.pointerId);
+        if (visualizadorPonteiros.size < 2) {
+            visualizadorDistanciaInicial = 0;
+            visualizadorEscalaInicial = visualizadorEscala;
+        }
+        if (visualizadorPonteiros.size === 0) area.classList.remove("arrastando");
+    };
+
+    area.addEventListener("pointerup", finalizarPonteiro);
+    area.addEventListener("pointercancel", finalizarPonteiro);
+
+    area.addEventListener("wheel", event => {
+        event.preventDefault();
+        alterarZoomImagem(event.deltaY < 0 ? 0.25 : -0.25);
+    }, { passive: false });
+
+    area.addEventListener("dblclick", event => {
+        event.preventDefault();
+        visualizadorEscala = visualizadorEscala > 1 ? 1 : 2;
+        if (visualizadorEscala === 1) {
+            visualizadorX = 0;
+            visualizadorY = 0;
+        }
+        limitarPanVisualizador();
+        aplicarTransformacaoVisualizador();
+    });
+
+    img.addEventListener("dragstart", event => event.preventDefault());
+}
+
+
 function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricaoAntiga) {
     if (mouseArrastou) return;
 
@@ -862,6 +1027,11 @@ function fecharContatoAoClicarFora(event) {
 
 document.addEventListener("keydown", event => {
     if (event.key === "Escape") {
+        const viewer = document.getElementById("visualizador-imagem");
+        if (viewer?.classList.contains("ativo")) {
+            fecharVisualizadorImagem();
+            return;
+        }
         fecharDetalhes();
         fecharContato();
         alternarCarrinho(false);
@@ -878,6 +1048,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const primeiroLinkMobile = document.querySelector(".bottom-nav-mobile a");
     if (primeiroLinkMobile) primeiroLinkMobile.classList.add("ativo");
     salvarAvaliacoes();
+    ativarGestosVisualizador();
+
+    const fotoModal = document.getElementById("modal-foto-bloco");
+    if (fotoModal) {
+        fotoModal.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                abrirVisualizadorImagem();
+            }
+        });
+    }
 
     const lista = document.getElementById("lista-produtos");
     if (lista) {
