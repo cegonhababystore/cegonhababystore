@@ -2605,3 +2605,47 @@ footer p {
         max-height: 180px;
     }
 }
+
+/* =========================================================
+   AJUSTE EXTRA MOBILE - HERO MAIS LIMPO + ÂNCORA DE PRODUTOS
+   ========================================================= */
+
+#categorias {
+    scroll-margin-top: 74px;
+}
+
+@media (max-width: 600px) {
+    .hero {
+        padding-bottom: 28px;
+    }
+
+    .hero-layout {
+        gap: 14px;
+    }
+
+    .hero-visual {
+        display: none !important;
+    }
+
+    .hero-texto {
+        margin: 0 auto;
+    }
+
+    .hero-texto h1 {
+        margin-bottom: 10px;
+    }
+
+    .hero-botoes {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .hero-botoes a {
+        flex: 1 1 100%;
+    }
+
+    .filtros-secao {
+        scroll-margin-top: 74px;
+        margin-top: 6px;
+    }
+}
