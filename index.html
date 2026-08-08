@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=7">
+    <link rel="stylesheet" href="./style.css?v=8">
 </head>
 <body>
 
@@ -74,10 +74,13 @@
                     </div>
                 </div>
 
-                <div class="hero-visual" aria-hidden="true">
+                <div class="hero-visual">
                     <div class="hero-card-principal">
                         <span class="hero-selo">MAIS VISTO</span>
-                        <img src="./conjunto-batinha-xadrez.jpeg" alt="Conjunto infantil em destaque">
+                        <img src="./conjunto-batinha-xadrez.jpeg" alt="Conjunto Batinha Bordada Xadrez Rosa">
+                        <button class="hero-ver-produto" type="button" onclick="abrirDetalhes(5)" aria-label="Ver o Conjunto Batinha Bordada Xadrez Rosa">
+                            Ver este look <span aria-hidden="true">→</span>
+                        </button>
                     </div>
                     <div class="hero-card-secundario hero-card-topo">
                         <img src="./romper-dinossauros-chapeu.jpeg" alt="Produto infantil em destaque secundário">
@@ -97,10 +100,10 @@
         </section>
 
         <section class="faixa-categorias" aria-label="Destaques da loja">
-            <div class="faixa-item">🔥 Novidades da semana</div>
-            <div class="faixa-item">🧵 Bordados personalizados</div>
-            <div class="faixa-item">🧶 Crochê artesanal</div>
-            <div class="faixa-item">🎁 Peças para presentear</div>
+            <a class="faixa-item" href="#produtos">🔥 Novidades da semana</a>
+            <a class="faixa-item" href="#personalizados">🧵 Bordados personalizados</a>
+            <a class="faixa-item" href="#personalizados">🧶 Crochê artesanal</a>
+            <a class="faixa-item" href="#produtos">🎁 Peças para presentear</a>
         </section>
 
         <section class="filtros-secao" aria-label="Categorias de produtos">
@@ -298,6 +301,6 @@
         <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="./script.js?v=7"></script>
+    <script src="./script.js?v=8"></script>
 </body>
 </html>
