@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=12">
+    <link rel="stylesheet" href="./style.css?v=14">
 </head>
 <body>
 
@@ -106,7 +106,7 @@
             <a class="faixa-item" href="#produtos">🎁 Peças para presentear</a>
         </section>
 
-        <section class="filtros-secao" aria-label="Categorias de produtos">
+        <section id="categorias" class="filtros-secao" aria-label="Categorias de produtos">
             <button class="btn-filtro ativo" type="button" data-categoria="todos" onclick="filtrarProdutos('todos', this)">Todos os Looks</button>
             <button class="btn-filtro" type="button" data-categoria="bebe" onclick="filtrarProdutos('bebe', this)">Bebês</button>
             <button class="btn-filtro" type="button" data-categoria="menina" onclick="filtrarProdutos('menina', this)">Meninas</button>
@@ -276,8 +276,9 @@
     <div id="modal-detalhes" class="modal-detalhes" onclick="fecharModalAoClicarFora(event)">
         <div class="modal-conteudo">
             <button class="btn-fechar-modal" type="button" onclick="fecharDetalhes()" aria-label="Fechar detalhes">✕</button>
-            <div class="modal-foto-bloco" id="modal-foto-bloco">
+            <div class="modal-foto-bloco" id="modal-foto-bloco" onclick="abrirVisualizadorImagem()" role="button" tabindex="0" aria-label="Ampliar e explorar a foto do produto">
                 <img id="modal-img" src="" alt="Produto ampliado">
+                <span class="dica-ampliar" aria-hidden="true">🔍 Toque para ampliar</span>
             </div>
             <div class="modal-info-bloco">
                 <span id="modal-categoria" class="produto-categoria"></span>
@@ -335,6 +336,27 @@
         </div>
     </div>
 
+    <!-- Visualizador da foto: zoom + arrastar/passear pela imagem -->
+    <div id="visualizador-imagem" class="visualizador-imagem" aria-hidden="true">
+        <div class="visualizador-barra">
+            <div class="visualizador-titulo">
+                <strong id="visualizador-nome">Detalhes da peça</strong>
+                <small>Arraste para explorar • use dois dedos para ampliar</small>
+            </div>
+            <button class="visualizador-fechar" type="button" onclick="fecharVisualizadorImagem()" aria-label="Fechar imagem ampliada">✕</button>
+        </div>
+
+        <div id="visualizador-area" class="visualizador-area" aria-label="Imagem ampliada do produto">
+            <img id="visualizador-img" src="" alt="" draggable="false">
+        </div>
+
+        <div class="visualizador-controles" aria-label="Controles de zoom">
+            <button type="button" onclick="alterarZoomImagem(-0.5)" aria-label="Diminuir zoom">−</button>
+            <button type="button" class="visualizador-reset" onclick="resetarVisualizadorImagem()">100%</button>
+            <button type="button" onclick="alterarZoomImagem(0.5)" aria-label="Aumentar zoom">+</button>
+        </div>
+    </div>
+
     <div id="toast-carrinho" class="toast-carrinho" aria-live="polite"></div>
 
     <a href="https://wa.me/5597984154273?text=Olá!%20Gostaria%20de%20mais%20informações."
@@ -349,7 +371,7 @@
 
     <nav class="bottom-nav-mobile" aria-label="Navegação rápida mobile">
         <a href="#inicio" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#inicio\']'))">🏠<span>Início</span></a>
-        <a href="#produtos" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#produtos\']'))">🛍️<span>Produtos</span></a>
+        <a href="#categorias" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#produtos\']'))">🛍️<span>Produtos</span></a>
         <a href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store.%20%F0%9F%92%AC" target="_blank" rel="noopener noreferrer">💬<span>WhatsApp</span></a>
         <a href="javascript:void(0)" onclick="alternarCarrinho(true)">👜<span>Sacola</span></a>
     </nav>
@@ -361,6 +383,6 @@
         <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="./script.js?v=12"></script>
+    <script src="./script.js?v=14"></script>
 </body>
 </html>

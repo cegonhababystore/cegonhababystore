@@ -2649,3 +2649,211 @@ footer p {
         margin-top: 6px;
     }
 }
+
+/* =========================================================
+   FOTO DO PRODUTO SEM CORTE + MODO EXPLORAR/ZOOM
+   ========================================================= */
+
+.modal-foto-bloco {
+    cursor: zoom-in;
+    background: #fff;
+    border: 1px solid rgba(74, 55, 40, .07);
+}
+
+.modal-foto-bloco img {
+    object-fit: contain !important;
+    background: #fff;
+}
+
+.dica-ampliar {
+    position: absolute;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .94);
+    color: var(--marrom-luxo);
+    box-shadow: 0 8px 18px rgba(74, 55, 40, .12);
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.visualizador-imagem {
+    position: fixed;
+    inset: 0;
+    z-index: 6000;
+    display: none;
+    grid-template-rows: auto 1fr auto;
+    background: rgba(20, 18, 17, .97);
+    color: #fff;
+    overscroll-behavior: contain;
+}
+
+.visualizador-imagem.ativo {
+    display: grid;
+}
+
+.visualizador-barra {
+    min-height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 20px;
+    background: rgba(20, 18, 17, .84);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    z-index: 3;
+}
+
+.visualizador-titulo {
+    min-width: 0;
+}
+
+.visualizador-titulo strong {
+    display: block;
+    max-width: min(70vw, 680px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.visualizador-titulo small {
+    display: block;
+    margin-top: 4px;
+    color: rgba(255,255,255,.64);
+    font-size: 11px;
+}
+
+.visualizador-fechar {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 50%;
+    background: rgba(255,255,255,.09);
+    color: #fff;
+    font-size: 21px;
+    cursor: pointer;
+}
+
+.visualizador-area {
+    min-height: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    touch-action: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.visualizador-area.arrastando {
+    cursor: grabbing;
+}
+
+.visualizador-area img {
+    display: block;
+    max-width: 92vw;
+    max-height: calc(100dvh - 170px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform .08s linear;
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+.visualizador-area.arrastando img {
+    transition: none;
+}
+
+.visualizador-controles {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: rgba(20, 18, 17, .9);
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    z-index: 3;
+}
+
+.visualizador-controles button {
+    min-width: 48px;
+    height: 44px;
+    padding: 0 15px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 999px;
+    background: rgba(255,255,255,.1);
+    color: #fff;
+    font-size: 21px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.visualizador-controles .visualizador-reset {
+    min-width: 78px;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    .modal-foto-bloco {
+        height: 280px;
+        border-radius: 18px;
+    }
+
+    .dica-ampliar {
+        bottom: 10px;
+        font-size: 10px;
+        padding: 7px 10px;
+    }
+
+    .visualizador-barra {
+        min-height: 68px;
+        padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 10px;
+    }
+
+    .visualizador-titulo strong {
+        max-width: 72vw;
+        font-size: 13px;
+    }
+
+    .visualizador-titulo small {
+        font-size: 9px;
+    }
+
+    .visualizador-fechar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .visualizador-area img {
+        max-width: 96vw;
+        max-height: calc(100dvh - 155px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    }
+
+    .visualizador-controles {
+        min-height: 68px;
+        padding-top: 10px;
+    }
+
+    .visualizador-controles button {
+        height: 42px;
+        min-width: 46px;
+    }
+}
