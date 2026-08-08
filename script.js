@@ -348,6 +348,7 @@ function alternarCarrinho(abrir) {
 
     lateral.classList.toggle("aberto", abrir);
     overlay.classList.toggle("aberto", abrir);
+    document.body.classList.toggle("carrinho-aberto", abrir);
     document.body.style.overflow = abrir ? "hidden" : "";
 }
 
