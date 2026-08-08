@@ -370,10 +370,10 @@
     </a>
 
     <nav class="bottom-nav-mobile" aria-label="Navegação rápida mobile">
-        <a href="#inicio" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#inicio\']'))">🏠<span>Início</span></a>
-        <a href="#categorias" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#produtos\']'))">🛍️<span>Produtos</span></a>
-        <a href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store.%20%F0%9F%92%AC" target="_blank" rel="noopener noreferrer">💬<span>WhatsApp</span></a>
-        <a href="javascript:void(0)" onclick="alternarCarrinho(true)">👜<span>Sacola</span></a>
+        <a href="#inicio" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#inicio\']')); setNavMobileAtivo(this)">🏠<span>Início</span></a>
+        <a href="#categorias" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#produtos\']')); setNavMobileAtivo(this)">🛍️<span>Produtos</span></a>
+        <a href="javascript:void(0)" onclick="abrirFavoritosMobile(this)"><span class="mobile-icone-com-badge">❤️<em id="contador-favoritos-mobile">0</em></span><span>Favoritos</span></a>
+        <a href="javascript:void(0)" onclick="alternarCarrinho(true); setNavMobileAtivo(this)"><span class="mobile-icone-com-badge">👜<em id="contador-sacola-mobile">0</em></span><span>Sacola</span></a>
     </nav>
 
     <footer>
