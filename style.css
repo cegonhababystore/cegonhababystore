@@ -2892,3 +2892,71 @@ footer p {
         min-width: 46px;
     }
 }
+
+/* =========================================================
+   REFINO VISUAL FINAL - MENOS EMOJIS, MAIS CONSISTÊNCIA
+   ========================================================= */
+
+.mobile-nav-icon {
+    width: 23px;
+    height: 23px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+}
+
+.mobile-nav-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mobile-icone-com-badge em {
+    top: -7px;
+    right: -10px;
+}
+
+.instagram-em-breve {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 20px;
+    border-radius: 999px;
+    border: 1px solid rgba(74,55,40,.12);
+    background: rgba(255,255,255,.7);
+    color: var(--marrom-suave);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.fallback-foto-icone {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(74,55,40,.08);
+    color: var(--marrom-suave);
+    font-size: 20px;
+}
+
+/* Mantém emojis apenas como ícones de apoio em benefícios e personalizados.
+   Títulos, CTAs e navegação principal usam texto/ícones vetoriais. */
+
+@media (max-width: 600px) {
+    .bottom-nav-mobile a {
+        gap: 3px;
+    }
+
+    .instagram-em-breve,
+    .instagram-acoes .btn-instagram {
+        width: 100%;
+    }
+}

@@ -323,7 +323,7 @@ function renderizarProdutos(categoria = categoriaAtual, opcoes = {}) {
 
     if (produtosFiltrados.length === 0) {
         lista.innerHTML = modoFavoritos
-            ? '<div class="sem-produtos">Você ainda não salvou favoritos ❤️</div>'
+            ? '<div class="sem-produtos">Você ainda não salvou favoritos.</div>'
             : '<div class="sem-produtos">Nenhum produto encontrado nesta categoria.</div>';
         return;
     }
@@ -415,7 +415,7 @@ function imagemComErro(img, nomeProduto = "Produto") {
     const fallback = document.createElement("div");
     fallback.className = "fallback-foto";
     fallback.innerHTML = `
-        <span style="font-size:34px">🧸</span>
+        <span class="fallback-foto-icone">•</span>
         <strong>Foto não encontrada</strong>
         <span>${nomeProduto}</span>
     `;
@@ -460,10 +460,10 @@ function alternarFavorito(id, event) {
     const numeroId = Number(id);
     if (isFavorito(numeroId)) {
         favoritos = favoritos.filter(item => item !== numeroId);
-        mostrarToast("Removido dos favoritos 💔");
+        mostrarToast("Removido dos favoritos.");
     } else {
         favoritos.push(numeroId);
-        mostrarToast("Adicionado aos favoritos ❤️");
+        mostrarToast("Adicionado aos favoritos.");
     }
 
     salvarFavoritos();
@@ -499,7 +499,7 @@ function adicionarProduto(id, nomeAntigo, precoAntigo, imagemAntiga) {
     salvarCarrinho();
     atualizarInterfaceCarrinho();
     alternarCarrinho(true);
-    mostrarToast(`${produto.nome} foi adicionado à sacola 🛍️`);
+    mostrarToast(`${produto.nome} foi adicionado à sacola.`);
 }
 
 function alterarQuantidade(id, diferenca) {
@@ -551,7 +551,7 @@ function atualizarInterfaceCarrinho() {
     atualizarContadoresMobile();
 
     if (carrinho.length === 0) {
-        conteinerItens.innerHTML = '<p class="carrinho-vazio">Sua sacola está vazia... 🥺</p>';
+        conteinerItens.innerHTML = '<p class="carrinho-vazio">Sua sacola está vazia.</p>';
         return;
     }
 
@@ -635,7 +635,7 @@ function enviarPedidoWhatsApp(event) {
         return;
     }
 
-    let texto = "👶 *Novo Pedido - Cegonha Baby Store*\n\n";
+    let texto = "*Novo Pedido - Cegonha Baby Store*\n\n";
     texto += "Olá! Gostaria de encomendar as seguintes peças:\n\n";
 
     let total = 0;
@@ -645,8 +645,8 @@ function enviarPedidoWhatsApp(event) {
         texto += `• *${item.quantidade}x* ${item.nome} — ${moeda(subtotal)}\n`;
     });
 
-    texto += `\n💰 *Total do pedido:* ${moeda(total)}`;
-    texto += "\n\nAguardo as instruções para finalizar. ✨";
+    texto += `\n*Total do pedido:* ${moeda(total)}`;
+    texto += "\n\nAguardo as instruções para finalizar.";
 
     const linkFinal = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(texto)}`;
     window.open(linkFinal, "_blank", "noopener,noreferrer");
@@ -713,7 +713,7 @@ function enviarAvaliacao(event) {
     if (!Number.isFinite(produtoId)) return;
 
     if (!notaSelecionada) {
-        mostrarToast("Escolha de 1 a 5 estrelas para avaliar ⭐");
+        mostrarToast("Escolha de 1 a 5 estrelas para avaliar.");
         return;
     }
 
@@ -733,10 +733,10 @@ function enviarAvaliacao(event) {
 
     if (indiceExistente >= 0) {
         lista[indiceExistente] = avaliacao;
-        mostrarToast("Sua avaliação foi atualizada ⭐");
+        mostrarToast("Sua avaliação foi atualizada.");
     } else {
         lista.push(avaliacao);
-        mostrarToast("Obrigado pela sua avaliação! ⭐");
+        mostrarToast("Obrigado pela sua avaliação!");
     }
 
     avaliacoesClientes[chave] = lista;
