@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=11">
+    <link rel="stylesheet" href="./style.css?v=12">
 </head>
 <body>
 
@@ -136,7 +136,9 @@
                 <p>Uma loja pensada para unir delicadeza, praticidade e aquele atendimento próximo que faz diferença.</p>
             </div>
 
-            <div class="por-que-grade">
+            <button class="mobile-section-toggle" type="button" onclick="alternarSecaoMobile('secao-por-que', this)">Ver mais informações</button>
+            <div id="secao-por-que" class="mobile-section-content">
+                <div class="por-que-grade">
                 <article class="por-que-card">
                     <div class="por-que-icone">📍</div>
                     <h3>Loja com endereço</h3>
@@ -157,6 +159,7 @@
                     <h3>Visual encantador</h3>
                     <p>Peças escolhidas para encantar em passeios, presentes, ensaios e momentos especiais.</p>
                 </article>
+                </div>
             </div>
         </section>
 
@@ -167,7 +170,9 @@
                 <p>Além dos nossos looks, também trabalhamos com bordados e crochê. Transformamos sua ideia em uma peça única, feita com cuidado em cada detalhe.</p>
             </div>
 
-            <div class="atelier-faixa">
+            <button class="mobile-section-toggle" type="button" onclick="alternarSecaoMobile('secao-personalizados', this)">Abrir personalizados</button>
+            <div id="secao-personalizados" class="mobile-section-content">
+                <div class="atelier-faixa">
                 <div>
                     <strong>Seu pedido pode ser único 💖</strong>
                     <p>Fazemos peças personalizadas com bordados, crochê e detalhes especiais para presentear ou criar algo só seu.</p>
@@ -196,11 +201,19 @@
                     <p>Conte para a gente o que você imaginou. Envie sua referência pelo WhatsApp e vamos conversar sobre as possibilidades.</p>
                     <a class="btn-personalizado" href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store%20e%20tenho%20uma%20ideia%20para%20um%20pedido%20personalizado.%20Posso%20enviar%20uma%20refer%C3%AAncia%3F%20%F0%9F%92%95" target="_blank" rel="noopener noreferrer">Pedir orçamento 💬</a>
                 </article>
+                </div>
             </div>
         </section>
 
         <section id="instagram" class="instagram-secao">
-            <div class="instagram-card">
+            <div class="secao-cabecalho secao-cabecalho-mobile-simples">
+                <span class="personalizados-mini">MAIS NOVIDADES</span>
+                <h2>Instagram da loja 📸</h2>
+                <p>Acesse quando quiser e receba novidades pelo WhatsApp.</p>
+            </div>
+            <button class="mobile-section-toggle" type="button" onclick="alternarSecaoMobile('secao-instagram', this)">Abrir Instagram</button>
+            <div id="secao-instagram" class="mobile-section-content">
+                <div class="instagram-card">
                 <div>
                     <span class="personalizados-mini">MAIS NOVIDADES</span>
                     <h2>Instagram da loja 📸</h2>
@@ -209,6 +222,7 @@
                 <div class="instagram-acoes">
                     <a class="btn-instagram" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Abrir Instagram</a>
                     <a class="btn-instagram btn-instagram-secundario" href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Quero%20receber%20as%20novidades%20da%20Cegonha%20Baby%20Store.%20%F0%9F%93%B1" target="_blank" rel="noopener noreferrer">Receber novidades no WhatsApp</a>
+                </div>
                 </div>
             </div>
         </section>
@@ -270,9 +284,14 @@
                 <h2 id="modal-titulo">Nome do Produto</h2>
                 <div id="modal-preco" class="modal-preco">R$ 0,00</div>
                 <p id="modal-descricao" class="modal-descricao">Descrição...</p>
-                <button id="modal-btn-comprar" type="button" class="btn-comprar">Adicionar à Sacola</button>
+                <div class="modal-acoes">
+                    <button id="modal-btn-comprar" type="button" class="btn-comprar">Adicionar à Sacola</button>
+                    <a id="modal-btn-whatsapp" class="btn-modal-whatsapp" href="https://wa.me/5597984154273" target="_blank" rel="noopener noreferrer">Falar no WhatsApp</a>
+                </div>
 
-                <section class="avaliacoes-modal" aria-labelledby="avaliacoes-titulo">
+                <button class="btn-toggle-avaliacoes-mobile" type="button" onclick="alternarAvaliacoesMobile()">Ver avaliações e avaliar</button>
+
+                <section id="avaliacoes-modal" class="avaliacoes-modal" aria-labelledby="avaliacoes-titulo">
                     <div class="avaliacoes-resumo avaliacoes-resumo-compacto">
                         <div>
                             <span class="avaliacoes-mini">AVALIAÇÕES DE CLIENTES</span>
@@ -342,6 +361,6 @@
         <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="./script.js?v=11"></script>
+    <script src="./script.js?v=12"></script>
 </body>
 </html>

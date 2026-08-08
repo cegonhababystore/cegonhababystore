@@ -636,7 +636,6 @@ function renderizarAvaliacoesModal(id) {
     const listaEl = document.getElementById("lista-avaliacoes");
     const nomeInput = document.getElementById("avaliacao-nome");
     const comentarioInput = document.getElementById("avaliacao-comentario");
-    const botaoEnviar = document.getElementById("btn-enviar-avaliacao");
 
     if (resumo) {
         resumo.innerHTML = lista.length
@@ -655,7 +654,6 @@ function renderizarAvaliacoesModal(id) {
     }
     if (nomeInput) nomeInput.value = minha?.nome || "";
     if (comentarioInput) comentarioInput.value = minha?.comentario || "";
-    if (botaoEnviar) botaoEnviar.textContent = minha ? "Atualizar ⭐" : "Enviar ⭐";
 
     if (!listaEl) return;
     if (!lista.length) {
@@ -714,6 +712,33 @@ function enviarAvaliacao(event) {
     renderizarProdutos(categoriaAtual, { preservarScroll: true });
 }
 
+
+function alternarSecaoMobile(idConteudo, botao) {
+    const conteudo = document.getElementById(idConteudo);
+    if (!conteudo) return;
+    const abriu = conteudo.classList.toggle("aberto");
+
+    if (botao) {
+        const mapa = {
+            "secao-por-que": ["Ver mais informações", "Ocultar informações"],
+            "secao-personalizados": ["Abrir personalizados", "Fechar personalizados"],
+            "secao-instagram": ["Abrir Instagram", "Fechar Instagram"]
+        };
+        const [fechado, aberto] = mapa[idConteudo] || ["Abrir", "Fechar"];
+        botao.textContent = abriu ? aberto : fechado;
+        botao.classList.toggle("ativo", abriu);
+    }
+}
+
+function alternarAvaliacoesMobile() {
+    const bloco = document.getElementById("avaliacoes-modal");
+    const botao = document.querySelector(".btn-toggle-avaliacoes-mobile");
+    if (!bloco || !botao) return;
+    const abriu = bloco.classList.toggle("aberto-mobile");
+    botao.textContent = abriu ? "Ocultar avaliações" : "Ver avaliações e avaliar";
+    botao.classList.toggle("ativo", abriu);
+}
+
 function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricaoAntiga) {
     if (mouseArrastou) return;
 
@@ -747,10 +772,25 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
     img.onerror = () => imagemComErro(img, produto.nome);
 
     const btnComprarModal = document.getElementById("modal-btn-comprar");
+    const btnWhatsModal = document.getElementById("modal-btn-whatsapp");
+    const blocoAvaliacoes = document.getElementById("avaliacoes-modal");
+    const botaoAvaliacoesMobile = document.querySelector(".btn-toggle-avaliacoes-mobile");
+
     btnComprarModal.onclick = () => {
         adicionarProduto(produto.id, produto.nome, produto.preco, produto.imagem);
         fecharDetalhes();
     };
+
+    if (btnWhatsModal) {
+        const textoWhats = `Olá! Vim pelo site da Cegonha Baby Store e gostaria de saber mais sobre o produto: ${produto.nome}.`;
+        btnWhatsModal.href = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWhats)}`;
+    }
+
+    if (blocoAvaliacoes) blocoAvaliacoes.classList.remove("aberto-mobile");
+    if (botaoAvaliacoesMobile) {
+        botaoAvaliacoesMobile.textContent = "Ver avaliações e avaliar";
+        botaoAvaliacoesMobile.classList.remove("ativo");
+    }
 
     renderizarAvaliacoesModal(produto.id);
     modal.classList.add("ativo");
