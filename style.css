@@ -2960,3 +2960,41 @@ footer p {
         width: 100%;
     }
 }
+
+
+/* =========================================================
+   AJUSTE DEFINITIVO - LOGO REDONDA NO RODAPÉ
+   Mantém a imagem totalmente recortada em círculo, sem
+   aparecer o fundo quadrado do arquivo JPG.
+   ========================================================= */
+.footer-logo-botao {
+    width: 92px !important;
+    height: 92px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    background: transparent !important;
+    line-height: 0 !important;
+}
+
+.footer-logo-botao .footer-logo {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: 50% !important;
+    clip-path: circle(50% at 50% 50%);
+    margin: 0 !important;
+    display: block !important;
+}
+
+@media (max-width: 600px) {
+    .footer-logo-botao {
+        width: 86px !important;
+        height: 86px !important;
+    }
+}
