@@ -2967,22 +2967,35 @@ footer p {
    Evita qualquer corte nas laterais da arte da Cegonha.
    ========================================================= */
 .footer-logo-botao {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex;
+    width: 104px;
+    height: 104px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
-    border: none;
-    padding: 0;
-    cursor: pointer;
+    padding: 7px;
+    overflow: visible;
+    border-radius: 24px;
+    background: rgba(255,255,255,.06);
 }
 
-.footer-logo {
-    width: 82%;
-    height: 82%;
+.footer-logo-botao .footer-logo {
+    width: 100%;
+    height: 100%;
+    max-width: none;
     object-fit: contain;
-    display: block;
+    object-position: center;
+    border-radius: 18px;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .footer-logo-botao {
+        width: 92px;
+        height: 92px;
+        padding: 6px;
+    }
+
+    .footer-logo-botao .footer-logo {
+        border-radius: 16px;
+    }
 }
