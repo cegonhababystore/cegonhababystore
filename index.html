@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=9">
+    <link rel="stylesheet" href="./style.css?v=10">
 </head>
 <body>
 
@@ -271,6 +271,40 @@
                 <div id="modal-preco" class="modal-preco">R$ 0,00</div>
                 <p id="modal-descricao" class="modal-descricao">Descrição...</p>
                 <button id="modal-btn-comprar" type="button" class="btn-comprar">Adicionar à Sacola</button>
+
+                <section class="avaliacoes-modal" aria-labelledby="avaliacoes-titulo">
+                    <div class="avaliacoes-resumo">
+                        <div>
+                            <span class="avaliacoes-mini">AVALIAÇÕES DE CLIENTES</span>
+                            <h3 id="avaliacoes-titulo">O que acharam desta peça?</h3>
+                        </div>
+                        <div class="avaliacoes-media" id="avaliacoes-media">
+                            <strong>—</strong>
+                            <span>☆☆☆☆☆</span>
+                        </div>
+                    </div>
+
+                    <form class="avaliacao-form" onsubmit="enviarAvaliacao(event)">
+                        <p class="avaliacao-pergunta">Sua nota:</p>
+                        <div class="avaliacao-estrelas-escolha" id="avaliacao-estrelas-escolha" role="radiogroup" aria-label="Escolha uma nota de 1 a 5 estrelas">
+                            <button type="button" data-nota="1" onclick="selecionarNota(1)" aria-label="1 estrela">★</button>
+                            <button type="button" data-nota="2" onclick="selecionarNota(2)" aria-label="2 estrelas">★</button>
+                            <button type="button" data-nota="3" onclick="selecionarNota(3)" aria-label="3 estrelas">★</button>
+                            <button type="button" data-nota="4" onclick="selecionarNota(4)" aria-label="4 estrelas">★</button>
+                            <button type="button" data-nota="5" onclick="selecionarNota(5)" aria-label="5 estrelas">★</button>
+                        </div>
+
+                        <div class="avaliacao-campos">
+                            <input id="avaliacao-nome" type="text" maxlength="40" placeholder="Seu nome (opcional)" autocomplete="name">
+                            <textarea id="avaliacao-comentario" maxlength="300" rows="3" placeholder="Conte o que achou da peça (opcional)"></textarea>
+                        </div>
+
+                        <button class="btn-enviar-avaliacao" type="submit">Enviar avaliação ⭐</button>
+                        <small class="avaliacao-aviso">Você pode atualizar sua avaliação depois neste mesmo aparelho.</small>
+                    </form>
+
+                    <div id="lista-avaliacoes" class="lista-avaliacoes"></div>
+                </section>
             </div>
         </div>
     </div>
@@ -301,6 +335,6 @@
         <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="./script.js?v=9"></script>
+    <script src="./script.js?v=10"></script>
 </body>
 </html>

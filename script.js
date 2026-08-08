@@ -140,9 +140,14 @@ const PRODUTOS = [
 const NUMERO_WHATSAPP = "5597984154273";
 const CHAVE_CARRINHO = "cegonhaBabyStoreCarrinho";
 const CHAVE_FAVORITOS = "cegonhaBabyStoreFavoritos";
+const CHAVE_AVALIACOES = "cegonhaBabyStoreAvaliacoes";
+const CHAVE_CLIENTE_AVALIACAO = "cegonhaBabyStoreClienteAvaliacao";
 
 let carrinho = carregarCarrinho();
 let favoritos = carregarFavoritos();
+let avaliacoesClientes = carregarAvaliacoes();
+let clienteAvaliacaoId = obterClienteAvaliacaoId();
+let notaSelecionada = 0;
 let categoriaAtual = "todos";
 let mouseArrastou = false;
 let toastTimer = null;
@@ -219,6 +224,63 @@ function salvarFavoritos() {
     } catch (_) {}
 }
 
+function carregarAvaliacoes() {
+    try {
+        const salvo = localStorage.getItem(CHAVE_AVALIACOES);
+        const dados = JSON.parse(salvo || "{}");
+        return dados && typeof dados === "object" && !Array.isArray(dados) ? dados : {};
+    } catch (_) {
+        return {};
+    }
+}
+
+function salvarAvaliacoes() {
+    try {
+        localStorage.setItem(CHAVE_AVALIACOES, JSON.stringify(avaliacoesClientes));
+    } catch (_) {}
+}
+
+function obterClienteAvaliacaoId() {
+    try {
+        let id = localStorage.getItem(CHAVE_CLIENTE_AVALIACAO);
+        if (!id) {
+            id = (window.crypto && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : `cliente-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+            localStorage.setItem(CHAVE_CLIENTE_AVALIACAO, id);
+        }
+        return id;
+    } catch (_) {
+        return `cliente-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+}
+
+function obterAvaliacoesProduto(id) {
+    const lista = avaliacoesClientes[String(Number(id))];
+    return Array.isArray(lista) ? lista : [];
+}
+
+function mediaAvaliacoes(id) {
+    const lista = obterAvaliacoesProduto(id);
+    if (!lista.length) return 0;
+    const soma = lista.reduce((total, item) => total + Number(item.nota || 0), 0);
+    return soma / lista.length;
+}
+
+function estrelasDaMedia(media) {
+    const cheias = Math.max(0, Math.min(5, Math.round(Number(media) || 0)));
+    return "★".repeat(cheias) + "☆".repeat(5 - cheias);
+}
+
+function escaparHtml(texto) {
+    return String(texto ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
 function encontrarProduto(id) {
     return PRODUTOS.find(produto => produto.id === Number(id));
 }
@@ -280,12 +342,14 @@ function renderizarProdutos(categoria = categoriaAtual, opcoes = {}) {
                         draggable="false"
                         onerror="imagemComErro(this, '${escaparTexto(produto.nome)}')"
                     >
+                    <div class="avaliacao-canto" title="Avaliação dos clientes" aria-label="Avaliação dos clientes: ${obterAvaliacoesProduto(produto.id).length ? mediaAvaliacoes(produto.id).toFixed(1) + ' de 5' : 'ainda sem avaliações'}">
+                        ${estrelasDaMedia(mediaAvaliacoes(produto.id))}
+                    </div>
                 </div>
 
                 <div class="produto-info">
                     <span class="produto-categoria">${produto.categoriaLabel}</span>
                     <h3>${produto.nome}</h3>
-                    <div class="produto-estrelas">${produto.avaliacoes > 0 ? `★★★★★ (${produto.avaliacoes})` : "Novo produto ✨"}</div>
 
                     ${produto.chamada ? `<p class="produto-chamada">${produto.chamada}</p>` : ""}
 
@@ -555,6 +619,99 @@ function enviarPedidoWhatsApp(event) {
     window.open(linkFinal, "_blank", "noopener,noreferrer");
 }
 
+function selecionarNota(nota) {
+    notaSelecionada = Math.max(0, Math.min(5, Number(nota) || 0));
+    document.querySelectorAll("#avaliacao-estrelas-escolha button").forEach(botao => {
+        const valor = Number(botao.dataset.nota);
+        botao.classList.toggle("ativo", valor <= notaSelecionada);
+        botao.setAttribute("aria-checked", valor === notaSelecionada ? "true" : "false");
+    });
+}
+
+function renderizarAvaliacoesModal(id) {
+    const produtoId = Number(id);
+    const lista = obterAvaliacoesProduto(produtoId);
+    const media = mediaAvaliacoes(produtoId);
+    const resumo = document.getElementById("avaliacoes-media");
+    const listaEl = document.getElementById("lista-avaliacoes");
+    const nomeInput = document.getElementById("avaliacao-nome");
+    const comentarioInput = document.getElementById("avaliacao-comentario");
+
+    if (resumo) {
+        resumo.innerHTML = lista.length
+            ? `<strong>${media.toFixed(1)}</strong><span>${estrelasDaMedia(media)}</span><small>${lista.length} ${lista.length === 1 ? "avaliação" : "avaliações"}</small>`
+            : `<strong>—</strong><span>☆☆☆☆☆</span><small>Seja o primeiro a avaliar</small>`;
+    }
+
+    const minha = lista.find(item => item.clienteId === clienteAvaliacaoId);
+    notaSelecionada = minha ? Number(minha.nota) : 0;
+    selecionarNota(notaSelecionada || 0);
+    if (!notaSelecionada) {
+        document.querySelectorAll("#avaliacao-estrelas-escolha button").forEach(botao => {
+            botao.classList.remove("ativo");
+            botao.setAttribute("aria-checked", "false");
+        });
+    }
+    if (nomeInput) nomeInput.value = minha?.nome || "";
+    if (comentarioInput) comentarioInput.value = minha?.comentario || "";
+
+    if (!listaEl) return;
+    if (!lista.length) {
+        listaEl.innerHTML = '<div class="avaliacoes-vazio">Ainda não há avaliações desta peça. ⭐</div>';
+        return;
+    }
+
+    const ordenadas = [...lista].sort((a, b) => Number(b.criadoEm || 0) - Number(a.criadoEm || 0));
+    listaEl.innerHTML = ordenadas.slice(0, 6).map(item => `
+        <article class="avaliacao-item">
+            <div class="avaliacao-item-topo">
+                <strong>${escaparHtml(item.nome || "Cliente")}</strong>
+                <span>${"★".repeat(Number(item.nota) || 0)}${"☆".repeat(5 - (Number(item.nota) || 0))}</span>
+            </div>
+            ${item.comentario ? `<p>${escaparHtml(item.comentario)}</p>` : ""}
+        </article>
+    `).join("");
+}
+
+function enviarAvaliacao(event) {
+    if (event) event.preventDefault();
+    const modal = document.getElementById("modal-detalhes");
+    const produtoId = Number(modal?.dataset.produtoId);
+    if (!Number.isFinite(produtoId)) return;
+
+    if (!notaSelecionada) {
+        mostrarToast("Escolha de 1 a 5 estrelas para avaliar ⭐");
+        return;
+    }
+
+    const nome = document.getElementById("avaliacao-nome")?.value.trim().slice(0, 40) || "";
+    const comentario = document.getElementById("avaliacao-comentario")?.value.trim().slice(0, 300) || "";
+    const chave = String(produtoId);
+    const lista = obterAvaliacoesProduto(produtoId);
+    const indiceExistente = lista.findIndex(item => item.clienteId === clienteAvaliacaoId);
+
+    const avaliacao = {
+        clienteId: clienteAvaliacaoId,
+        nota: notaSelecionada,
+        nome,
+        comentario,
+        criadoEm: Date.now()
+    };
+
+    if (indiceExistente >= 0) {
+        lista[indiceExistente] = avaliacao;
+        mostrarToast("Sua avaliação foi atualizada ⭐");
+    } else {
+        lista.push(avaliacao);
+        mostrarToast("Obrigado pela sua avaliação! ⭐");
+    }
+
+    avaliacoesClientes[chave] = lista;
+    salvarAvaliacoes();
+    renderizarAvaliacoesModal(produtoId);
+    renderizarProdutos(categoriaAtual, { preservarScroll: true });
+}
+
 function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricaoAntiga) {
     if (mouseArrastou) return;
 
@@ -573,6 +730,7 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
     const modal = document.getElementById("modal-detalhes");
     const img = document.getElementById("modal-img");
     const fotoBloco = document.getElementById("modal-foto-bloco");
+    modal.dataset.produtoId = String(produto.id);
 
     document.getElementById("modal-titulo").textContent = produto.nome;
     document.getElementById("modal-preco").textContent = moeda(produto.preco);
@@ -592,6 +750,7 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
         fecharDetalhes();
     };
 
+    renderizarAvaliacoesModal(produto.id);
     modal.classList.add("ativo");
     document.body.style.overflow = "hidden";
 }
@@ -640,6 +799,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ativarArrasteComMouse();
     salvarCarrinho();
     salvarFavoritos();
+    salvarAvaliacoes();
 
     const lista = document.getElementById("lista-produtos");
     if (lista) {

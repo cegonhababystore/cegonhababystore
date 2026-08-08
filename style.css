@@ -2048,3 +2048,256 @@ footer p {
         pointer-events: none;
     }
 }
+
+/* =========================================================
+   SISTEMA DE AVALIAÇÕES DOS PRODUTOS
+   ========================================================= */
+
+/* No card ficam SOMENTE as estrelas, discretas no canto da foto. */
+.avaliacao-canto {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    z-index: 6;
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .94);
+    color: #e3a900;
+    box-shadow: 0 7px 18px rgba(74, 55, 40, .12);
+    font-size: 13px;
+    letter-spacing: 1px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* A avaliação completa aparece apenas dentro dos detalhes do produto. */
+.avaliacoes-modal {
+    margin-top: 24px;
+    padding-top: 22px;
+    border-top: 1px solid var(--borda);
+}
+
+.avaliacoes-resumo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.avaliacoes-mini {
+    display: block;
+    color: var(--marrom-suave);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    margin-bottom: 5px;
+}
+
+.avaliacoes-resumo h3 {
+    font-size: 17px;
+    line-height: 1.35;
+}
+
+.avaliacoes-media {
+    min-width: 102px;
+    text-align: right;
+}
+
+.avaliacoes-media strong {
+    display: block;
+    font-size: 22px;
+    color: var(--marrom-luxo);
+}
+
+.avaliacoes-media span {
+    display: block;
+    color: #e3a900;
+    font-size: 14px;
+    letter-spacing: .6px;
+    white-space: nowrap;
+}
+
+.avaliacoes-media small {
+    display: block;
+    margin-top: 3px;
+    color: var(--marrom-suave);
+    font-size: 10px;
+}
+
+.avaliacao-form {
+    background: #fdfbf7;
+    border: 1px solid var(--borda);
+    border-radius: 18px;
+    padding: 16px;
+}
+
+.avaliacao-pergunta {
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.avaliacao-estrelas-escolha {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 13px;
+}
+
+.avaliacao-estrelas-escolha button {
+    width: 34px;
+    height: 34px;
+    border: 0;
+    background: transparent;
+    color: #d5ccc6;
+    cursor: pointer;
+    font-size: 27px;
+    line-height: 1;
+    padding: 0;
+    transition: color .15s ease, transform .15s ease;
+}
+
+.avaliacao-estrelas-escolha button:hover,
+.avaliacao-estrelas-escolha button.ativo {
+    color: #f0b323;
+    transform: scale(1.08);
+}
+
+.avaliacao-campos {
+    display: grid;
+    gap: 9px;
+}
+
+.avaliacao-campos input,
+.avaliacao-campos textarea {
+    width: 100%;
+    border: 1px solid rgba(74, 55, 40, .13);
+    border-radius: 13px;
+    background: #fff;
+    color: var(--marrom-luxo);
+    padding: 11px 12px;
+    font: inherit;
+    font-size: 12px;
+    outline: none;
+}
+
+.avaliacao-campos textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+.avaliacao-campos input:focus,
+.avaliacao-campos textarea:focus {
+    border-color: rgba(74, 55, 40, .35);
+    box-shadow: 0 0 0 3px rgba(74, 55, 40, .05);
+}
+
+.btn-enviar-avaliacao {
+    width: 100%;
+    border: 0;
+    border-radius: 999px;
+    margin-top: 11px;
+    padding: 12px 14px;
+    background: var(--marrom-luxo);
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.avaliacao-aviso {
+    display: block;
+    color: var(--marrom-suave);
+    text-align: center;
+    margin-top: 8px;
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+.lista-avaliacoes {
+    display: grid;
+    gap: 9px;
+    margin-top: 14px;
+}
+
+.avaliacao-item {
+    padding: 13px 14px;
+    border-radius: 15px;
+    background: #fff;
+    border: 1px solid var(--borda);
+}
+
+.avaliacao-item-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.avaliacao-item-topo strong {
+    font-size: 12px;
+}
+
+.avaliacao-item-topo span {
+    color: #e3a900;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.avaliacao-item p {
+    margin-top: 7px;
+    color: var(--marrom-suave);
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.avaliacoes-vazio {
+    padding: 13px;
+    text-align: center;
+    color: var(--marrom-suave);
+    background: #fdfbf7;
+    border-radius: 14px;
+    font-size: 11px;
+}
+
+/* O modal passa a aceitar conteúdo maior sem estourar a tela. */
+.modal-conteudo {
+    max-height: 92dvh;
+    overflow: hidden;
+}
+
+.modal-info-bloco {
+    overflow-y: auto;
+    padding-right: 5px;
+    scrollbar-width: thin;
+}
+
+@media (max-width: 600px) {
+    .avaliacao-canto {
+        left: 10px;
+        bottom: 10px;
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .modal-conteudo {
+        overflow-y: auto;
+        max-height: 90dvh;
+    }
+
+    .modal-info-bloco {
+        overflow: visible;
+        padding-right: 0;
+    }
+
+    .avaliacoes-resumo {
+        align-items: center;
+    }
+
+    .avaliacao-estrelas-escolha button {
+        width: 38px;
+        height: 38px;
+        font-size: 30px;
+    }
+}
