@@ -2301,3 +2301,202 @@ footer p {
         font-size: 30px;
     }
 }
+
+/* =========================================================
+   AJUSTE COMPACTO DAS AVALIAÇÕES NO MODAL
+   ========================================================= */
+
+.avaliacoes-modal {
+    margin-top: 18px;
+    padding-top: 18px;
+}
+
+.avaliacoes-resumo-compacto {
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.avaliacoes-resumo-compacto h3 {
+    font-size: 22px;
+    margin: 0;
+}
+
+.avaliacoes-media {
+    min-width: 124px;
+}
+
+.avaliacoes-media strong {
+    font-size: 20px;
+}
+
+.avaliacoes-media span {
+    font-size: 13px;
+}
+
+.avaliacoes-media small {
+    font-size: 10px;
+}
+
+.avaliacao-form-compacta {
+    padding: 14px;
+    border-radius: 16px;
+    gap: 10px;
+}
+
+.avaliacao-linha-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.avaliacao-pergunta {
+    margin-bottom: 2px;
+}
+
+.avaliacao-dica {
+    color: var(--marrom-suave);
+    font-size: 11px;
+}
+
+.avaliacao-estrelas-escolha {
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.avaliacao-estrelas-escolha button {
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+}
+
+.avaliacao-campos-compactos {
+    gap: 8px;
+}
+
+.avaliacao-campos-compactos textarea {
+    min-height: 58px;
+}
+
+.avaliacao-rodape-form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.btn-enviar-avaliacao {
+    width: auto;
+    min-width: 132px;
+    margin-top: 0;
+    padding: 11px 18px;
+    flex-shrink: 0;
+}
+
+.avaliacao-aviso {
+    margin-top: 0;
+    text-align: left;
+    font-size: 10px;
+    line-height: 1.45;
+    max-width: 290px;
+}
+
+.lista-avaliacoes-compacta {
+    margin-top: 12px;
+    max-height: 170px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.avaliacao-item {
+    padding: 11px 12px;
+    border-radius: 14px;
+}
+
+.avaliacao-item-topo strong {
+    font-size: 11px;
+}
+
+.avaliacao-item-topo span {
+    font-size: 12px;
+}
+
+.avaliacao-item p {
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.avaliacoes-vazio {
+    font-size: 10px;
+    padding: 12px;
+}
+
+.modal-conteudo {
+    max-width: 980px;
+    gap: 28px;
+}
+
+.modal-info-bloco {
+    justify-content: flex-start;
+}
+
+@media (max-width: 900px) {
+    .modal-conteudo {
+        gap: 20px;
+    }
+
+    .avaliacoes-resumo-compacto h3 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 600px) {
+    .avaliacoes-modal {
+        margin-top: 16px;
+        padding-top: 16px;
+    }
+
+    .avaliacoes-resumo-compacto {
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .avaliacoes-resumo-compacto h3 {
+        font-size: 18px;
+    }
+
+    .avaliacoes-media {
+        min-width: auto;
+        text-align: left;
+    }
+
+    .avaliacao-form-compacta {
+        padding: 12px;
+    }
+
+    .avaliacao-linha-topo,
+    .avaliacao-rodape-form {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .avaliacao-estrelas-escolha button {
+        width: 32px;
+        height: 32px;
+        font-size: 24px;
+    }
+
+    .btn-enviar-avaliacao {
+        width: 100%;
+    }
+
+    .avaliacao-aviso {
+        max-width: none;
+        font-size: 9px;
+    }
+
+    .lista-avaliacoes-compacta {
+        max-height: 150px;
+    }
+}

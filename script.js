@@ -636,6 +636,7 @@ function renderizarAvaliacoesModal(id) {
     const listaEl = document.getElementById("lista-avaliacoes");
     const nomeInput = document.getElementById("avaliacao-nome");
     const comentarioInput = document.getElementById("avaliacao-comentario");
+    const botaoEnviar = document.getElementById("btn-enviar-avaliacao");
 
     if (resumo) {
         resumo.innerHTML = lista.length
@@ -654,6 +655,7 @@ function renderizarAvaliacoesModal(id) {
     }
     if (nomeInput) nomeInput.value = minha?.nome || "";
     if (comentarioInput) comentarioInput.value = minha?.comentario || "";
+    if (botaoEnviar) botaoEnviar.textContent = minha ? "Atualizar ⭐" : "Enviar ⭐";
 
     if (!listaEl) return;
     if (!lista.length) {
