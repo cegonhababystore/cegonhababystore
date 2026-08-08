@@ -2653,3 +2653,33 @@ footer p {
         padding-top: 4px;
     }
 }
+
+
+/* =========================================================
+   CORREÇÃO FINAL MOBILE - REMOVER HERO VISUAL / MAIS VISTO
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .hero .hero-visual,
+    .hero .hero-card-principal,
+    .hero .hero-card-secundario,
+    .hero .hero-card-info,
+    .hero .hero-selo {
+        display: none !important;
+    }
+
+    .hero .hero-layout {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+
+    .hero .hero-texto,
+    .hero .hero-texto-alinhado {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hero {
+        padding-bottom: 24px;
+    }
+}
