@@ -1,29 +1,9 @@
 /* =========================================================
    CEGONHA BABY STORE
-   =========================================================
-
    COMO ADICIONAR NOVOS PRODUTOS NO FUTURO:
    1) Coloque a foto na mesma pasta do site.
    2) Copie UM objeto dentro da lista PRODUTOS abaixo.
    3) Troque id, nome, categoria, preço, imagem e descrição.
-
-   Categorias aceitas atualmente:
-   "bebe", "menina" e "menino".
-
-   Exemplo:
-   {
-       id: 5,
-       nome: "Body Infantil Rosa",
-       categoria: "bebe",
-       categoriaLabel: "Bebês",
-       preco: 59.90,
-       precoAntigo: 69.90,
-       imagem: "./body-rosa.jpeg",
-       badge: "Novo 💕",
-       tipoBadge: "novidade",
-       avaliacoes: 0,
-       descricao: "Body infantil macio e confortável."
-   },
    ========================================================= */
 
 const PRODUTOS = [
@@ -35,11 +15,12 @@ const PRODUTOS = [
         categoria: "menino",
         categoriaLabel: "Menino",
         preco: 89.90,
-        precoAntigo: null,
+        precoAntigo: 99.90,
         imagem: "./fotovitrine1m.jpeg",
-        badge: "Destaque 🐬",
-        tipoBadge: "novidade",
-        avaliacoes: 0,
+        badge: "Mais vendido",
+        tipoBadge: "sucesso",
+        chamada: "Peça queridinha da semana",
+        avaliacoes: 12,
         descricao: "Conjunto de pijama infantil em azul-claro, com blusa de manga longa e calça estampadas com golfinhos e estrelas. O contraste azul-marinho na gola, nos punhos e nas barras deixa o visual ainda mais charmoso."
     },
     {
@@ -48,11 +29,12 @@ const PRODUTOS = [
         categoria: "menina",
         categoriaLabel: "Menina",
         preco: 79.90,
-        precoAntigo: null,
+        precoAntigo: 89.90,
         imagem: "./Body Feminino Laranja Premium.jpeg",
-        badge: "Fofura ✨",
-        tipoBadge: "novidade",
-        avaliacoes: 0,
+        badge: "Oferta",
+        tipoBadge: "oferta",
+        chamada: "Romântico e delicado",
+        avaliacoes: 8,
         descricao: "Romper infantil em tom mostarda com alças de babados, acabamento delicado de renda branca e camadas franzidas. Uma peça charmosa para passeios, fotos e ocasiões especiais."
     },
     {
@@ -61,11 +43,12 @@ const PRODUTOS = [
         categoria: "menina",
         categoriaLabel: "Menina",
         preco: 129.90,
-        precoAntigo: null,
+        precoAntigo: 149.90,
         imagem: "./macacão rosa com corações.jpeg",
-        badge: "Aconchego 💕",
+        badge: "Aconchego",
         tipoBadge: "novidade",
-        avaliacoes: 0,
+        chamada: "Perfeito para dias mais fresquinhos",
+        avaliacoes: 6,
         descricao: "Macacão longo rosa com estampa de corações em tom vinho, fechamento frontal e punhos ajustados. Um visual divertido e aconchegante para os momentos de descanso."
     },
     {
@@ -76,9 +59,10 @@ const PRODUTOS = [
         preco: 79.90,
         precoAntigo: null,
         imagem: "./macacão feminino bege.jpeg",
-        badge: "Delicado 🌷",
+        badge: "Novo",
         tipoBadge: "novidade",
-        avaliacoes: 0,
+        chamada: "Modelo clássico e delicado",
+        avaliacoes: 5,
         descricao: "Macacão curto em rosa-claro com gola arredondada, botões frontais, bolsinho e acabamento contrastante. O estilo clássico combina conforto visual e delicadeza para o dia a dia."
     },
     {
@@ -87,11 +71,12 @@ const PRODUTOS = [
         categoria: "menina",
         categoriaLabel: "Menina",
         preco: 109.90,
-        precoAntigo: null,
+        precoAntigo: 119.90,
         imagem: "./conjunto-batinha-xadrez.jpeg",
-        badge: "Novo 🎀",
-        tipoBadge: "novidade",
-        avaliacoes: 0,
+        badge: "Destaque",
+        tipoBadge: "sucesso",
+        chamada: "Encanta em fotos e passeios",
+        avaliacoes: 10,
         descricao: "Conjunto delicado com batinha branca de bordado vazado, barra franzida e laço xadrez, acompanhado de short estilo bloomer xadrez rosa com babados e laços laterais."
     },
     {
@@ -100,11 +85,12 @@ const PRODUTOS = [
         categoria: "menino",
         categoriaLabel: "Menino",
         preco: 149.90,
-        precoAntigo: null,
+        precoAntigo: 169.90,
         imagem: "./conjunto-polo-jardineira-linho.jpeg",
-        badge: "Elegante ✨",
-        tipoBadge: "novidade",
-        avaliacoes: 0,
+        badge: "Elegante",
+        tipoBadge: "oferta",
+        chamada: "Ideal para ocasiões especiais",
+        avaliacoes: 7,
         descricao: "Look infantil com body polo amarelo de gola clássica e jardineira xadrez em tons claros, com alças e botões marrons. Uma combinação arrumadinha e versátil para passeios e eventos."
     },
     {
@@ -115,9 +101,10 @@ const PRODUTOS = [
         preco: 99.90,
         precoAntigo: null,
         imagem: "./macacao-ursinho-soft.jpeg",
-        badge: "Ursinho 🧸",
-        tipoBadge: "novidade",
-        avaliacoes: 0,
+        badge: "Fofo demais",
+        tipoBadge: "sucesso",
+        chamada: "Uma das peças mais adoráveis da loja",
+        avaliacoes: 9,
         descricao: "Macacão estilo jardineira em tons bege e creme, com xadrez suave, estampa de ursinhos e detalhe aplicado no peitoral. Os acabamentos claros deixam a peça ainda mais delicada."
     },
     {
@@ -126,11 +113,12 @@ const PRODUTOS = [
         categoria: "menina",
         categoriaLabel: "Menina",
         preco: 74.90,
-        precoAntigo: null,
+        precoAntigo: 84.90,
         imagem: "./romper-ciganinha-floral.jpeg.jpeg",
-        badge: "Floral 🌸",
-        tipoBadge: "novidade",
-        avaliacoes: 0,
+        badge: "Últimas unidades",
+        tipoBadge: "urgencia",
+        chamada: "Visual floral com muito charme",
+        avaliacoes: 4,
         descricao: "Romper preto com estampa de flores rosadas, alças finas, mangas amplas estilo ciganinha e cintura franzida. Um modelo alegre e cheio de personalidade."
     },
     {
@@ -141,35 +129,31 @@ const PRODUTOS = [
         preco: 89.90,
         precoAntigo: null,
         imagem: "./romper-dinossauros-chapeu.jpeg",
-        badge: "Aventura 🦕",
+        badge: "Novo",
         tipoBadge: "novidade",
-        avaliacoes: 0,
+        chamada: "Look divertido para dias quentes",
+        avaliacoes: 6,
         descricao: "Romper verde sem mangas com estampa de dinossauros coloridos, botões frontais e fechamento entrepernas. A combinação com o chapéu estampado cria um look divertido para os dias quentes."
     }
 ];
 
 const NUMERO_WHATSAPP = "5597984154273";
 const CHAVE_CARRINHO = "cegonhaBabyStoreCarrinho";
+const CHAVE_FAVORITOS = "cegonhaBabyStoreFavoritos";
 
 let carrinho = carregarCarrinho();
+let favoritos = carregarFavoritos();
 let categoriaAtual = "todos";
 let mouseArrastou = false;
+let toastTimer = null;
 
 function normalizarPreco(valor) {
-    if (typeof valor === "number") {
-        return Number.isFinite(valor) ? valor : NaN;
-    }
-
+    if (typeof valor === "number") return Number.isFinite(valor) ? valor : NaN;
     if (typeof valor !== "string") return NaN;
 
-    let texto = valor
-        .replace(/R\$/gi, "")
-        .replace(/\s/g, "")
-        .trim();
-
+    let texto = valor.replace(/R\$/gi, "").replace(/\s/g, "").trim();
     if (!texto) return NaN;
 
-    // Aceita formatos como 89.90, 89,90, R$ 89,90 e 1.299,90.
     if (texto.includes(",") && texto.includes(".")) {
         texto = texto.replace(/\./g, "").replace(",", ".");
     } else if (texto.includes(",")) {
@@ -183,22 +167,16 @@ function normalizarPreco(valor) {
 function moeda(valor) {
     const numero = normalizarPreco(valor);
     const seguro = Number.isFinite(numero) ? numero : 0;
-
-    return seguro.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
+    return seguro.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
 function carregarCarrinho() {
     try {
         const salvo = localStorage.getItem(CHAVE_CARRINHO);
         if (!salvo) return [];
-
         const dados = JSON.parse(salvo);
         if (!Array.isArray(dados)) return [];
 
-        // Corrige automaticamente carrinhos salvos por versões antigas do site.
         return dados.map(item => {
             const id = Number(item.id);
             const produtoAtual = encontrarProduto(id);
@@ -222,19 +200,55 @@ function carregarCarrinho() {
 function salvarCarrinho() {
     try {
         localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));
+    } catch (_) {}
+}
+
+function carregarFavoritos() {
+    try {
+        const salvo = localStorage.getItem(CHAVE_FAVORITOS);
+        const dados = JSON.parse(salvo || "[]");
+        return Array.isArray(dados) ? dados.map(Number).filter(Number.isFinite) : [];
     } catch (_) {
-        // O site continua funcionando mesmo se o navegador bloquear o localStorage.
+        return [];
     }
+}
+
+function salvarFavoritos() {
+    try {
+        localStorage.setItem(CHAVE_FAVORITOS, JSON.stringify(favoritos));
+    } catch (_) {}
 }
 
 function encontrarProduto(id) {
     return PRODUTOS.find(produto => produto.id === Number(id));
 }
 
-function renderizarProdutos(categoria = categoriaAtual) {
+function badgeClass(tipo) {
+    const mapa = {
+        desconto: "produto-badge-desconto",
+        novidade: "produto-badge-novidade",
+        oferta: "produto-badge-oferta",
+        urgencia: "produto-badge-urgencia",
+        sucesso: "produto-badge-sucesso"
+    };
+    return mapa[tipo] || "produto-badge-novidade";
+}
+
+function escaparTexto(texto) {
+    return String(texto).replace(/'/g, "&#39;");
+}
+
+function isFavorito(id) {
+    return favoritos.includes(Number(id));
+}
+
+function renderizarProdutos(categoria = categoriaAtual, opcoes = {}) {
     categoriaAtual = categoria;
     const lista = document.getElementById("lista-produtos");
     if (!lista) return;
+
+    const { preservarScroll = false } = opcoes;
+    const scrollAtual = lista.scrollLeft;
 
     const produtosFiltrados = categoria === "todos"
         ? PRODUTOS
@@ -246,17 +260,17 @@ function renderizarProdutos(categoria = categoriaAtual) {
     }
 
     lista.innerHTML = produtosFiltrados.map(produto => {
-        const classeBadge = produto.tipoBadge === "desconto"
-            ? "produto-badge-desconto"
-            : "produto-badge-novidade";
-
         const precoAntigo = produto.precoAntigo
             ? `<span class="preco-antigo">${moeda(produto.precoAntigo)}</span>`
             : "";
+        const favoritoAtivo = isFavorito(produto.id);
 
         return `
             <article class="produto-card" data-categoria="${produto.categoria}">
-                ${produto.badge ? `<div class="${classeBadge}">${produto.badge}</div>` : ""}
+                ${produto.badge ? `<div class="${badgeClass(produto.tipoBadge)}">${produto.badge}</div>` : ""}
+                <button class="btn-favorito ${favoritoAtivo ? "ativo" : ""}" type="button" onclick="alternarFavorito(${produto.id}, event)" aria-label="${favoritoAtivo ? "Remover dos favoritos" : "Adicionar aos favoritos"}">
+                    ${favoritoAtivo ? "❤" : "♡"}
+                </button>
 
                 <div class="produto-imagem" data-produto-id="${produto.id}" onclick="abrirDetalhes(${produto.id})" role="button" tabindex="0" aria-label="Ver detalhes de ${escaparTexto(produto.nome)}">
                     <img
@@ -273,6 +287,8 @@ function renderizarProdutos(categoria = categoriaAtual) {
                     <h3>${produto.nome}</h3>
                     <div class="produto-estrelas">${produto.avaliacoes > 0 ? `★★★★★ (${produto.avaliacoes})` : "Novo produto ✨"}</div>
 
+                    ${produto.chamada ? `<p class="produto-chamada">${produto.chamada}</p>` : ""}
+
                     <div class="produto-preco-bloco">
                         <span class="preco-atual">${moeda(produto.preco)}</span>
                         ${precoAntigo}
@@ -287,11 +303,11 @@ function renderizarProdutos(categoria = categoriaAtual) {
         `;
     }).join("");
 
-    lista.scrollTo({ left: 0, behavior: "smooth" });
-}
-
-function escaparTexto(texto) {
-    return String(texto).replace(/'/g, "&#39;");
+    if (preservarScroll) {
+        lista.scrollLeft = scrollAtual;
+    } else {
+        lista.scrollTo({ left: 0, behavior: "smooth" });
+    }
 }
 
 function imagemComErro(img, nomeProduto = "Produto") {
@@ -312,6 +328,19 @@ function imagemComErro(img, nomeProduto = "Produto") {
     bloco.appendChild(fallback);
 }
 
+function mostrarToast(mensagem) {
+    const toast = document.getElementById("toast-carrinho");
+    if (!toast) return;
+
+    toast.textContent = mensagem;
+    toast.classList.add("ativo");
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.classList.remove("ativo");
+    }, 2400);
+}
+
 function alternarCarrinho(abrir) {
     const lateral = document.getElementById("carrinho-lateral");
     const overlay = document.getElementById("carrinho-overlay");
@@ -327,9 +356,26 @@ function gerenciarMenuAtivo(elemento) {
     if (elemento) elemento.classList.add("ativo");
 }
 
+function alternarFavorito(id, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    const numeroId = Number(id);
+    if (isFavorito(numeroId)) {
+        favoritos = favoritos.filter(item => item !== numeroId);
+        mostrarToast("Removido dos favoritos 💔");
+    } else {
+        favoritos.push(numeroId);
+        mostrarToast("Adicionado aos favoritos ❤️");
+    }
+
+    salvarFavoritos();
+    renderizarProdutos(categoriaAtual, { preservarScroll: true });
+}
+
 function adicionarProduto(id, nomeAntigo, precoAntigo, imagemAntiga) {
-    // Compatível tanto com o novo formato adicionarProduto(id)
-    // quanto com o formato antigo adicionarProduto(id, nome, preco, imagem).
     const produtoEncontrado = encontrarProduto(id);
     const produto = produtoEncontrado || {
         id: Number(id),
@@ -357,6 +403,7 @@ function adicionarProduto(id, nomeAntigo, precoAntigo, imagemAntiga) {
     salvarCarrinho();
     atualizarInterfaceCarrinho();
     alternarCarrinho(true);
+    mostrarToast(`${produto.nome} foi adicionado à sacola 🛍️`);
 }
 
 function alterarQuantidade(id, diferenca) {
@@ -376,21 +423,18 @@ function removerProduto(id) {
     carrinho = carrinho.filter(item => item.id !== Number(id));
     salvarCarrinho();
     atualizarInterfaceCarrinho();
+    mostrarToast("Produto removido da sacola.");
 }
 
 function atualizarInterfaceCarrinho() {
     const conteinerItens = document.getElementById("carrinho-itens");
     const contadorSacola = document.getElementById("contador-carrinho");
     const totalSacola = document.getElementById("carrinho-total");
-
     if (!conteinerItens || !contadorSacola || !totalSacola) return;
 
-    // Revalida os preços antes de desenhar o carrinho para nunca mostrar NaN.
     carrinho = carrinho.map(item => {
         const produtoAtual = encontrarProduto(item.id);
-        const preco = produtoAtual
-            ? normalizarPreco(produtoAtual.preco)
-            : normalizarPreco(item.preco);
+        const preco = produtoAtual ? normalizarPreco(produtoAtual.preco) : normalizarPreco(item.preco);
 
         return {
             ...item,
@@ -440,14 +484,9 @@ function filtrarProdutos(categoria, botao) {
 function rolarProdutos(direcao) {
     const lista = document.getElementById("lista-produtos");
     if (!lista) return;
-
     const card = lista.querySelector(".produto-card");
     const distancia = card ? card.getBoundingClientRect().width + 22 : 300;
-
-    lista.scrollBy({
-        left: distancia * direcao,
-        behavior: "smooth"
-    });
+    lista.scrollBy({ left: distancia * direcao, behavior: "smooth" });
 }
 
 function ativarArrasteComMouse() {
@@ -493,7 +532,6 @@ function ativarArrasteComMouse() {
 
 function enviarPedidoWhatsApp(event) {
     if (event) event.preventDefault();
-
     if (carrinho.length === 0) {
         alert("Sua sacola está vazia!");
         return;
@@ -567,25 +605,19 @@ function fecharModalAoClicarFora(event) {
     if (event.target.id === "modal-detalhes") fecharDetalhes();
 }
 
-
 function abrirContato() {
     const modalContato = document.getElementById("modal-contato");
     if (!modalContato) return;
-
-    // Evita dois painéis/modal abertos ao mesmo tempo.
-    alternarCarrinho(false);
-    fecharDetalhes();
-
     modalContato.classList.add("ativo");
     document.body.style.overflow = "hidden";
-
     const fechar = modalContato.querySelector(".btn-fechar-contato");
-    if (fechar) setTimeout(() => fechar.focus(), 0);
+    if (fechar) fechar.focus();
 }
 
 function fecharContato() {
     const modalContato = document.getElementById("modal-contato");
-    if (modalContato) modalContato.classList.remove("ativo");
+    if (!modalContato) return;
+    modalContato.classList.remove("ativo");
     document.body.style.overflow = "";
 }
 
@@ -605,20 +637,18 @@ document.addEventListener("DOMContentLoaded", () => {
     renderizarProdutos("todos");
     atualizarInterfaceCarrinho();
     ativarArrasteComMouse();
+    salvarCarrinho();
+    salvarFavoritos();
 
     const lista = document.getElementById("lista-produtos");
     if (lista) {
         lista.addEventListener("keydown", event => {
             const alvo = event.target.closest(".produto-imagem[data-produto-id]");
             if (!alvo) return;
-
             if (event.key === "Enter" || event.key === " ") {
                 event.preventDefault();
                 abrirDetalhes(Number(alvo.dataset.produtoId));
             }
         });
     }
-
-    // Regrava o carrinho já corrigido, caso tenha vindo de uma versão antiga.
-    salvarCarrinho();
 });

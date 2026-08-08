@@ -8,8 +8,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css?v=7">
 </head>
 <body>
 
@@ -57,13 +57,34 @@
 
     <main>
         <section id="inicio" class="hero">
-            <div class="hero-container">
-                <div class="hero-texto">
+            <div class="hero-container hero-layout">
+                <div class="hero-texto hero-texto-alinhado">
                     <span class="hero-mini">CEGONHA BABY STORE</span>
-                    <h1>O conforto que seu pequeno merece, com o estilo que você ama!</h1>
-                    <p>Roupas infantis premium, macias e cheias de afeto para acompanhar todas as descobertas.</p>
+                    <span class="hero-chip">✨ Nova coleção + personalizados exclusivos</span>
+                    <h1>Looks encantadores para os pequenos e detalhes feitos com carinho.</h1>
+                    <p>Roupas infantis, bordados e crochê em uma loja delicada, chamativa e pensada para deixar a experiência de compra ainda mais especial.</p>
                     <div class="hero-botoes">
-                        <a href="#produtos" class="btn-principal">Ver Coleção</a>
+                        <a href="#produtos" class="btn-principal">Ver Novidades</a>
+                        <a href="#personalizados" class="btn-secundario">Quero personalizados</a>
+                    </div>
+                    <div class="hero-mini-cards">
+                        <div><strong>9+</strong><span>looks disponíveis</span></div>
+                        <div><strong>100%</strong><span>atendimento humanizado</span></div>
+                        <div><strong>💬</strong><span>pedido fácil no WhatsApp</span></div>
+                    </div>
+                </div>
+
+                <div class="hero-visual" aria-hidden="true">
+                    <div class="hero-card-principal">
+                        <span class="hero-selo">MAIS VISTO</span>
+                        <img src="./conjunto-batinha-xadrez.jpeg" alt="Conjunto infantil em destaque">
+                    </div>
+                    <div class="hero-card-secundario hero-card-topo">
+                        <img src="./romper-dinossauros-chapeu.jpeg" alt="Produto infantil em destaque secundário">
+                    </div>
+                    <div class="hero-card-info">
+                        <strong>Bordados • Crochê • Moda Infantil</strong>
+                        <p>Peças cheias de carinho para presentear, vestir e encantar.</p>
                     </div>
                 </div>
             </div>
@@ -73,6 +94,13 @@
             <div>🚚 <strong>Envio rápido</strong><span>para todo o Brasil</span></div>
             <div>💳 <strong>Até 6x</strong><span>sem juros</span></div>
             <div>💬 <strong>Atendimento</strong><span>pelo WhatsApp</span></div>
+        </section>
+
+        <section class="faixa-categorias" aria-label="Destaques da loja">
+            <div class="faixa-item">🔥 Novidades da semana</div>
+            <div class="faixa-item">🧵 Bordados personalizados</div>
+            <div class="faixa-item">🧶 Crochê artesanal</div>
+            <div class="faixa-item">🎁 Peças para presentear</div>
         </section>
 
         <section class="filtros-secao" aria-label="Categorias de produtos">
@@ -86,7 +114,7 @@
             <div class="secao-cabecalho vitrine-cabecalho">
                 <div>
                     <h2>Destaques Imperdíveis ✨</h2>
-                    <p>Arraste para o lado para ver mais produtos</p>
+                    <p>Arraste para o lado para ver mais produtos e toque no coração para salvar seus favoritos.</p>
                 </div>
 
                 <div class="controles-carrossel" aria-label="Navegação dos produtos">
@@ -95,13 +123,38 @@
                 </div>
             </div>
 
-            <!--
-                IMPORTANTE:
-                Os cards abaixo NÃO são escritos manualmente.
-                Eles são criados automaticamente pelo script.js.
-                Para cadastrar uma nova peça, edite somente a lista PRODUTOS no início do script.js.
-            -->
             <div class="grade-produtos" id="lista-produtos" aria-live="polite"></div>
+        </section>
+
+        <section class="por-que-comprar" aria-label="Por que comprar na Cegonha Baby Store">
+            <div class="secao-cabecalho">
+                <span class="personalizados-mini">ATENDIMENTO COM CARINHO</span>
+                <h2>Por que comprar na Cegonha? 💕</h2>
+                <p>Uma loja pensada para unir delicadeza, praticidade e aquele atendimento próximo que faz diferença.</p>
+            </div>
+
+            <div class="por-que-grade">
+                <article class="por-que-card">
+                    <div class="por-que-icone">📍</div>
+                    <h3>Loja com endereço</h3>
+                    <p>Estamos em Coari para atender com mais confiança, proximidade e carinho.</p>
+                </article>
+                <article class="por-que-card">
+                    <div class="por-que-icone">💬</div>
+                    <h3>Atendimento fácil</h3>
+                    <p>Seu pedido pode ser tirado do site direto para o WhatsApp, sem complicação.</p>
+                </article>
+                <article class="por-que-card">
+                    <div class="por-que-icone">🧵</div>
+                    <h3>Personalizados</h3>
+                    <p>Além das roupas, você também encontra bordados e crochê feitos com cuidado.</p>
+                </article>
+                <article class="por-que-card">
+                    <div class="por-que-icone">🎀</div>
+                    <h3>Visual encantador</h3>
+                    <p>Peças escolhidas para encantar em passeios, presentes, ensaios e momentos especiais.</p>
+                </article>
+            </div>
         </section>
 
         <section id="personalizados" class="personalizados-secao">
@@ -109,6 +162,14 @@
                 <span class="personalizados-mini">FEITO ESPECIALMENTE PARA VOCÊ</span>
                 <h2>Personalizados com carinho 🧵✨</h2>
                 <p>Além dos nossos looks, também trabalhamos com bordados e crochê. Transformamos sua ideia em uma peça única, feita com cuidado em cada detalhe.</p>
+            </div>
+
+            <div class="atelier-faixa">
+                <div>
+                    <strong>Seu pedido pode ser único 💖</strong>
+                    <p>Fazemos peças personalizadas com bordados, crochê e detalhes especiais para presentear ou criar algo só seu.</p>
+                </div>
+                <a href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store%20e%20gostaria%20de%20fazer%20um%20pedido%20personalizado.%20%F0%9F%92%96" target="_blank" rel="noopener noreferrer">Solicitar orçamento 💬</a>
             </div>
 
             <div class="personalizados-grade">
@@ -134,10 +195,22 @@
                 </article>
             </div>
         </section>
+
+        <section id="instagram" class="instagram-secao">
+            <div class="instagram-card">
+                <div>
+                    <span class="personalizados-mini">MAIS NOVIDADES</span>
+                    <h2>Instagram da loja 📸</h2>
+                    <p>Deixei essa área pronta para ficar ainda mais chamativa. Quando você criar ou confirmar o @ oficial, é só trocar o texto e o link para divulgar novidades, bastidores e promoções.</p>
+                </div>
+                <div class="instagram-acoes">
+                    <a class="btn-instagram" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Abrir Instagram</a>
+                    <a class="btn-instagram btn-instagram-secundario" href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Quero%20receber%20as%20novidades%20da%20Cegonha%20Baby%20Store.%20%F0%9F%93%B1" target="_blank" rel="noopener noreferrer">Receber novidades no WhatsApp</a>
+                </div>
+            </div>
+        </section>
     </main>
 
-
-    <!-- Informações da loja: abre ao clicar na logo -->
     <div id="modal-contato" class="modal-contato" onclick="fecharContatoAoClicarFora(event)">
         <section class="contato-conteudo" role="dialog" aria-modal="true" aria-labelledby="contato-titulo">
             <button class="btn-fechar-contato" type="button" onclick="fecharContato()" aria-label="Fechar informações da loja">✕</button>
@@ -199,6 +272,8 @@
         </div>
     </div>
 
+    <div id="toast-carrinho" class="toast-carrinho" aria-live="polite"></div>
+
     <a href="https://wa.me/5597984154273?text=Olá!%20Gostaria%20de%20mais%20informações."
        class="whatsapp-btn"
        target="_blank"
@@ -209,6 +284,13 @@
         </svg>
     </a>
 
+    <nav class="bottom-nav-mobile" aria-label="Navegação rápida mobile">
+        <a href="#inicio" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#inicio\']'))">🏠<span>Início</span></a>
+        <a href="#produtos" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href=\'#produtos\']'))">🛍️<span>Produtos</span></a>
+        <a href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store.%20%F0%9F%92%AC" target="_blank" rel="noopener noreferrer">💬<span>WhatsApp</span></a>
+        <a href="javascript:void(0)" onclick="alternarCarrinho(true)">👜<span>Sacola</span></a>
+    </nav>
+
     <footer>
         <button class="footer-logo-botao" type="button" onclick="abrirContato()" aria-label="Ver informações da Cegonha Baby Store" title="Ver informações da loja">
             <img src="./logo.jpg" alt="Cegonha Baby Store" class="footer-logo">
@@ -216,6 +298,6 @@
         <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="./script.js?v=6"></script>
+    <script src="./script.js?v=7"></script>
 </body>
 </html>
