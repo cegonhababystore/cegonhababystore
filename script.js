@@ -567,9 +567,36 @@ function fecharModalAoClicarFora(event) {
     if (event.target.id === "modal-detalhes") fecharDetalhes();
 }
 
+
+function abrirContato() {
+    const modalContato = document.getElementById("modal-contato");
+    if (!modalContato) return;
+
+    // Evita dois painéis/modal abertos ao mesmo tempo.
+    alternarCarrinho(false);
+    fecharDetalhes();
+
+    modalContato.classList.add("ativo");
+    document.body.style.overflow = "hidden";
+
+    const fechar = modalContato.querySelector(".btn-fechar-contato");
+    if (fechar) setTimeout(() => fechar.focus(), 0);
+}
+
+function fecharContato() {
+    const modalContato = document.getElementById("modal-contato");
+    if (modalContato) modalContato.classList.remove("ativo");
+    document.body.style.overflow = "";
+}
+
+function fecharContatoAoClicarFora(event) {
+    if (event.target.id === "modal-contato") fecharContato();
+}
+
 document.addEventListener("keydown", event => {
     if (event.key === "Escape") {
         fecharDetalhes();
+        fecharContato();
         alternarCarrinho(false);
     }
 });

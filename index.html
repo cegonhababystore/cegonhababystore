@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=5">
+    <link rel="stylesheet" href="./style.css?v=6">
 </head>
 <body>
 
@@ -18,9 +18,9 @@
     </div>
 
     <header>
-        <a class="logo-container" href="#inicio" aria-label="Ir para o início">
+        <button class="logo-container logo-botao" type="button" onclick="abrirContato()" aria-label="Ver informações da Cegonha Baby Store" title="Ver informações da loja">
             <img src="./logo.jpg" alt="Cegonha Baby Store" class="logo-img">
-        </a>
+        </button>
 
         <nav aria-label="Menu principal">
             <a href="#inicio" class="ativo" onclick="gerenciarMenuAtivo(this)">Início</a>
@@ -136,6 +136,53 @@
         </section>
     </main>
 
+
+    <!-- Informações da loja: abre ao clicar na logo -->
+    <div id="modal-contato" class="modal-contato" onclick="fecharContatoAoClicarFora(event)">
+        <section class="contato-conteudo" role="dialog" aria-modal="true" aria-labelledby="contato-titulo">
+            <button class="btn-fechar-contato" type="button" onclick="fecharContato()" aria-label="Fechar informações da loja">✕</button>
+
+            <div class="contato-topo">
+                <img src="./logo.jpg" alt="Cegonha Baby Store" class="contato-logo">
+                <div>
+                    <span class="contato-mini">FALE COM A GENTE</span>
+                    <h2 id="contato-titulo">Cegonha Baby Store</h2>
+                    <p>Será um prazer atender você. Confira nossos canais e endereço.</p>
+                </div>
+            </div>
+
+            <div class="contato-lista">
+                <a class="contato-item" href="tel:+559784262577">
+                    <span class="contato-icone" aria-hidden="true">📞</span>
+                    <span>
+                        <small>Telefone</small>
+                        <strong>(97) 8426-2577</strong>
+                    </span>
+                </a>
+
+                <a class="contato-item" href="mailto:cegonhababystoreoficial@gmail.com">
+                    <span class="contato-icone" aria-hidden="true">✉️</span>
+                    <span>
+                        <small>E-mail</small>
+                        <strong>cegonhababystoreoficial@gmail.com</strong>
+                    </span>
+                </a>
+
+                <div class="contato-item contato-endereco">
+                    <span class="contato-icone" aria-hidden="true">📍</span>
+                    <span>
+                        <small>Endereço</small>
+                        <strong>Rua Dois de Agosto, nº 478 — Centro, Coari - AM</strong>
+                    </span>
+                </div>
+            </div>
+
+            <a class="contato-whatsapp" href="https://wa.me/5597984154273?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Cegonha%20Baby%20Store%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." target="_blank" rel="noopener noreferrer">
+                Falar pelo WhatsApp 💬
+            </a>
+        </section>
+    </div>
+
     <div id="modal-detalhes" class="modal-detalhes" onclick="fecharModalAoClicarFora(event)">
         <div class="modal-conteudo">
             <button class="btn-fechar-modal" type="button" onclick="fecharDetalhes()" aria-label="Fechar detalhes">✕</button>
@@ -163,10 +210,12 @@
     </a>
 
     <footer>
-        <img src="./logo.jpg" alt="Cegonha Baby Store" class="footer-logo">
+        <button class="footer-logo-botao" type="button" onclick="abrirContato()" aria-label="Ver informações da Cegonha Baby Store" title="Ver informações da loja">
+            <img src="./logo.jpg" alt="Cegonha Baby Store" class="footer-logo">
+        </button>
         <p>&copy; 2026 Cegonha Baby Store - Todos os direitos reservados.</p>
     </footer>
 
-    <script src="./script.js?v=5"></script>
+    <script src="./script.js?v=6"></script>
 </body>
 </html>

@@ -1080,3 +1080,292 @@ footer p {
         bottom: 14px;
     }
 }
+
+
+/* =========================================================
+   LOGO CLICÁVEL + MODAL DE INFORMAÇÕES DA LOJA
+   ========================================================= */
+.logo-botao,
+.footer-logo-botao {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+}
+
+.logo-botao {
+    position: relative;
+    border-radius: 50%;
+}
+
+.logo-botao::after {
+    content: "i";
+    position: absolute;
+    right: -2px;
+    bottom: 2px;
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--marrom-luxo);
+    color: #fff;
+    border: 3px solid #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 4px 10px rgba(74, 55, 40, .18);
+}
+
+.logo-botao .logo-img,
+.footer-logo-botao .footer-logo {
+    transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.logo-botao:hover .logo-img,
+.logo-botao:focus-visible .logo-img,
+.footer-logo-botao:hover .footer-logo,
+.footer-logo-botao:focus-visible .footer-logo {
+    transform: scale(1.05);
+    box-shadow: 0 8px 22px rgba(74, 55, 40, .15);
+}
+
+.logo-botao:focus-visible,
+.footer-logo-botao:focus-visible {
+    outline: 3px solid rgba(74, 55, 40, .22);
+    outline-offset: 4px;
+}
+
+.modal-contato {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(74, 55, 40, .46);
+    backdrop-filter: blur(9px);
+    z-index: 3200;
+}
+
+.modal-contato.ativo {
+    display: flex;
+}
+
+.contato-conteudo {
+    position: relative;
+    width: min(620px, 100%);
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid var(--borda);
+    border-radius: 30px;
+    padding: 34px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, .18);
+    animation: modalEntrada .3s ease;
+}
+
+.btn-fechar-contato {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--borda);
+    background: #fff;
+    color: var(--marrom-luxo);
+    font-size: 17px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.contato-topo {
+    display: grid;
+    grid-template-columns: 94px 1fr;
+    align-items: center;
+    gap: 20px;
+    padding-right: 32px;
+    margin-bottom: 26px;
+}
+
+.contato-logo {
+    width: 94px;
+    height: 94px;
+    object-fit: contain;
+    border-radius: 50%;
+    box-shadow: 0 10px 24px rgba(74, 55, 40, .10);
+}
+
+.contato-mini {
+    display: inline-block;
+    margin-bottom: 6px;
+    color: var(--marrom-suave);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.contato-topo h2 {
+    margin: 0 0 6px;
+    font-size: 26px;
+    line-height: 1.2;
+}
+
+.contato-topo p {
+    color: var(--marrom-suave);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.contato-lista {
+    display: grid;
+    gap: 11px;
+}
+
+.contato-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid var(--borda);
+    border-radius: 17px;
+    background: #fdfbf7;
+    color: var(--marrom-luxo);
+    text-decoration: none;
+    transition: transform .2s ease, border-color .2s ease, background .2s ease;
+}
+
+.contato-item[href]:hover {
+    transform: translateY(-2px);
+    border-color: rgba(74, 55, 40, .18);
+    background: #fff;
+}
+
+.contato-icone {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    background: var(--rosa-fundo);
+    font-size: 22px;
+}
+
+.contato-item span:last-child {
+    min-width: 0;
+}
+
+.contato-item small {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--marrom-suave);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+}
+
+.contato-item strong {
+    display: block;
+    font-size: 13px;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.contato-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 50px;
+    margin-top: 18px;
+    border-radius: 999px;
+    background: var(--verde-whatsapp);
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 9px 20px rgba(37, 211, 102, .20);
+    transition: transform .2s ease, filter .2s ease;
+}
+
+.contato-whatsapp:hover {
+    transform: translateY(-2px);
+    filter: brightness(.96);
+}
+
+.footer-logo-botao {
+    display: inline-block;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.footer-logo-botao .footer-logo {
+    margin-bottom: 0;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .logo-botao::after {
+        width: 19px;
+        height: 19px;
+        right: -3px;
+        bottom: 0;
+        border-width: 2px;
+        font-size: 9px;
+    }
+
+    .modal-contato {
+        align-items: flex-end;
+        padding: 12px;
+    }
+
+    .contato-conteudo {
+        width: 100%;
+        max-height: 88dvh;
+        border-radius: 26px;
+        padding: 26px 18px 20px;
+    }
+
+    .contato-topo {
+        grid-template-columns: 70px 1fr;
+        gap: 14px;
+        padding-right: 25px;
+        margin-bottom: 20px;
+    }
+
+    .contato-logo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .contato-topo h2 {
+        font-size: 20px;
+    }
+
+    .contato-topo p {
+        font-size: 12px;
+    }
+
+    .contato-item {
+        grid-template-columns: 42px 1fr;
+        padding: 12px;
+    }
+
+    .contato-icone {
+        width: 42px;
+        height: 42px;
+        font-size: 19px;
+    }
+
+    .contato-item strong {
+        font-size: 12px;
+    }
+}
