@@ -151,6 +151,27 @@ let notaSelecionada = 0;
 let categoriaAtual = "todos";
 let modoFavoritos = false;
 let mouseArrastou = false;
+
+// Integra modais e sacola com o botão VOLTAR do celular/navegador.
+const CHAVE_HISTORICO_UI = "cegonhaUI";
+
+function estadoHistoricoUI() {
+    return history.state?.[CHAVE_HISTORICO_UI] || null;
+}
+
+function empilharHistoricoUI(tipo) {
+    if (estadoHistoricoUI() === tipo) return;
+    const estadoAtual = (history.state && typeof history.state === "object") ? history.state : {};
+    history.pushState({ ...estadoAtual, [CHAVE_HISTORICO_UI]: tipo }, "", window.location.href);
+}
+
+function voltarHistoricoSeFor(tipo) {
+    if (estadoHistoricoUI() === tipo) {
+        history.back();
+        return true;
+    }
+    return false;
+}
 let toastTimer = null;
 
 function normalizarPreco(valor) {
@@ -435,15 +456,26 @@ function mostrarToast(mensagem) {
     }, 2400);
 }
 
-function alternarCarrinho(abrir) {
+function alternarCarrinho(abrir, vindoDoHistorico = false) {
     const lateral = document.getElementById("carrinho-lateral");
     const overlay = document.getElementById("carrinho-overlay");
     if (!lateral || !overlay) return;
 
-    lateral.classList.toggle("aberto", abrir);
-    overlay.classList.toggle("aberto", abrir);
-    document.body.classList.toggle("carrinho-aberto", abrir);
-    document.body.style.overflow = abrir ? "hidden" : "";
+    if (abrir) {
+        lateral.classList.add("aberto");
+        overlay.classList.add("aberto");
+        document.body.classList.add("carrinho-aberto");
+        document.body.style.overflow = "hidden";
+        if (!vindoDoHistorico) empilharHistoricoUI("carrinho");
+        return;
+    }
+
+    if (!vindoDoHistorico && voltarHistoricoSeFor("carrinho")) return;
+
+    lateral.classList.remove("aberto");
+    overlay.classList.remove("aberto");
+    document.body.classList.remove("carrinho-aberto");
+    document.body.style.overflow = "";
 }
 
 function gerenciarMenuAtivo(elemento) {
@@ -842,15 +874,19 @@ function abrirVisualizadorImagem() {
     viewer.classList.add("ativo");
     viewer.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
+    empilharHistoricoUI("visualizador");
 
     imagemViewer.onload = () => {
         resetarVisualizadorImagem();
     };
 }
 
-function fecharVisualizadorImagem() {
+function fecharVisualizadorImagem(vindoDoHistorico = false) {
     const viewer = document.getElementById("visualizador-imagem");
     if (!viewer) return;
+
+    if (!vindoDoHistorico && voltarHistoricoSeFor("visualizador")) return;
+
     viewer.classList.remove("ativo");
     viewer.setAttribute("aria-hidden", "true");
     visualizadorPonteiros.clear();
@@ -975,8 +1011,13 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
     const botaoAvaliacoesMobile = document.querySelector(".btn-toggle-avaliacoes-mobile");
 
     btnComprarModal.onclick = () => {
+        // Troca o estado "detalhes" pelo estado "carrinho" sem criar um passo fantasma no botão Voltar.
+        fecharDetalhes(true);
+        if (estadoHistoricoUI() === "detalhes") {
+            const estadoAtual = (history.state && typeof history.state === "object") ? history.state : {};
+            history.replaceState({ ...estadoAtual, [CHAVE_HISTORICO_UI]: "carrinho" }, "", window.location.href);
+        }
         adicionarProduto(produto.id, produto.nome, produto.preco, produto.imagem);
-        fecharDetalhes();
     };
 
     if (btnWhatsModal) {
@@ -993,11 +1034,16 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
     renderizarAvaliacoesModal(produto.id);
     modal.classList.add("ativo");
     document.body.style.overflow = "hidden";
+    empilharHistoricoUI("detalhes");
 }
 
-function fecharDetalhes() {
+function fecharDetalhes(vindoDoHistorico = false) {
     const modal = document.getElementById("modal-detalhes");
-    if (modal) modal.classList.remove("ativo");
+    if (!modal) return;
+
+    if (!vindoDoHistorico && voltarHistoricoSeFor("detalhes")) return;
+
+    modal.classList.remove("ativo");
     document.body.style.overflow = "";
 }
 
@@ -1010,13 +1056,17 @@ function abrirContato() {
     if (!modalContato) return;
     modalContato.classList.add("ativo");
     document.body.style.overflow = "hidden";
+    empilharHistoricoUI("contato");
     const fechar = modalContato.querySelector(".btn-fechar-contato");
     if (fechar) fechar.focus();
 }
 
-function fecharContato() {
+function fecharContato(vindoDoHistorico = false) {
     const modalContato = document.getElementById("modal-contato");
     if (!modalContato) return;
+
+    if (!vindoDoHistorico && voltarHistoricoSeFor("contato")) return;
+
     modalContato.classList.remove("ativo");
     document.body.style.overflow = "";
 }
@@ -1035,6 +1085,31 @@ document.addEventListener("keydown", event => {
         fecharDetalhes();
         fecharContato();
         alternarCarrinho(false);
+    }
+});
+
+window.addEventListener("popstate", () => {
+    const viewer = document.getElementById("visualizador-imagem");
+    if (viewer?.classList.contains("ativo")) {
+        fecharVisualizadorImagem(true);
+        return;
+    }
+
+    const detalhes = document.getElementById("modal-detalhes");
+    if (detalhes?.classList.contains("ativo")) {
+        fecharDetalhes(true);
+        return;
+    }
+
+    const contato = document.getElementById("modal-contato");
+    if (contato?.classList.contains("ativo")) {
+        fecharContato(true);
+        return;
+    }
+
+    const carrinho = document.getElementById("carrinho-lateral");
+    if (carrinho?.classList.contains("aberto")) {
+        alternarCarrinho(false, true);
     }
 });
 
