@@ -5,6 +5,7 @@ const BUCKET_PRODUTOS = "produtos";
 let adminSupabase = null;
 let adminUser = null;
 let produtosAdmin = [];
+let avaliacoesAdmin = [];
 let viewAdminAtual = "produtos";
 let toastAdminTimer = null;
 
@@ -80,6 +81,7 @@ async function exibirPainel(user) {
     document.getElementById("painel-view").hidden = false;
     document.getElementById("admin-email").textContent = user.email || "Administrador";
     await carregarProdutosAdmin();
+    await carregarAvaliacoesAdmin();
 }
 
 function exibirLogin() {
@@ -131,6 +133,7 @@ async function loginAdmin(event) {
 async function sairAdmin() {
     try { await adminSupabase.auth.signOut(); } catch (_) {}
     produtosAdmin = [];
+    avaliacoesAdmin = [];
     exibirLogin();
     mostrarMensagemLogin("Você saiu do painel.", true);
 }
@@ -278,6 +281,127 @@ async function alterarEstoque(id, delta) {
     }
 }
 
+function nomeProdutoDaAvaliacao(produtoId) {
+    return produtosAdmin.find(p => Number(p.id) === Number(produtoId))?.nome || `Produto #${produtoId}`;
+}
+
+async function carregarAvaliacoesAdmin() {
+    const loading = document.getElementById("avaliacoes-loading");
+    if (loading) loading.hidden = false;
+
+    try {
+        const { data, error } = await adminSupabase.rpc("listar_avaliacoes_publicas");
+        if (error) throw error;
+        avaliacoesAdmin = Array.isArray(data) ? data : [];
+        atualizarResumoAvaliacoes();
+        renderizarAvaliacoesAdmin();
+    } catch (erro) {
+        console.error(erro);
+        toastAdmin("Não foi possível carregar as avaliações.", true);
+        const vazio = document.getElementById("avaliacoes-vazio");
+        if (vazio) {
+            vazio.textContent = "Erro ao carregar avaliações. Execute a configuração V22 no Supabase.";
+            vazio.hidden = false;
+        }
+    } finally {
+        if (loading) loading.hidden = true;
+    }
+}
+
+function atualizarResumoAvaliacoes() {
+    const total = avaliacoesAdmin.length;
+    const soma = avaliacoesAdmin.reduce((acc, item) => acc + Number(item.nota || 0), 0);
+    const media = total ? soma / total : 0;
+    const cinco = avaliacoesAdmin.filter(item => Number(item.nota) === 5).length;
+    const comentarios = avaliacoesAdmin.filter(item => String(item.comentario || "").trim()).length;
+
+    const totalEl = document.getElementById("stat-avaliacoes-total");
+    const mediaEl = document.getElementById("stat-avaliacoes-media");
+    const cincoEl = document.getElementById("stat-avaliacoes-cinco");
+    const comentarioEl = document.getElementById("stat-avaliacoes-comentario");
+    if (totalEl) totalEl.textContent = total;
+    if (mediaEl) mediaEl.textContent = total ? media.toFixed(1).replace(".", ",") : "—";
+    if (cincoEl) cincoEl.textContent = cinco;
+    if (comentarioEl) comentarioEl.textContent = comentarios;
+}
+
+function avaliacoesFiltradasAdmin() {
+    const busca = (document.getElementById("busca-avaliacao")?.value || "").trim().toLowerCase();
+    const notaFiltro = document.getElementById("filtro-nota")?.value || "todas";
+
+    return avaliacoesAdmin.filter(item => {
+        const produto = nomeProdutoDaAvaliacao(item.produto_id);
+        const texto = `${produto} ${item.nome || ""} ${item.comentario || ""}`.toLowerCase();
+        const passaBusca = !busca || texto.includes(busca);
+        const passaNota = notaFiltro === "todas" || Number(item.nota) === Number(notaFiltro);
+        return passaBusca && passaNota;
+    });
+}
+
+function formatarDataAvaliacao(valor) {
+    const data = new Date(valor || "");
+    if (Number.isNaN(data.getTime())) return "";
+    return data.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+
+function renderizarAvaliacoesAdmin() {
+    const lista = document.getElementById("avaliacoes-admin-lista");
+    const vazio = document.getElementById("avaliacoes-vazio");
+    if (!lista || !vazio) return;
+
+    const filtradas = avaliacoesFiltradasAdmin();
+    vazio.hidden = filtradas.length > 0;
+    lista.hidden = filtradas.length === 0;
+
+    if (!filtradas.length) {
+        vazio.textContent = avaliacoesAdmin.length ? "Nenhuma avaliação corresponde ao filtro." : "Ainda não há avaliações publicadas.";
+        lista.innerHTML = "";
+        return;
+    }
+
+    lista.innerHTML = filtradas.map(item => {
+        const nota = Math.max(1, Math.min(5, Number(item.nota) || 1));
+        const estrelas = "★".repeat(nota) + "☆".repeat(5 - nota);
+        const produto = nomeProdutoDaAvaliacao(item.produto_id);
+        const cliente = String(item.nome || "").trim() || "Cliente";
+        const comentario = String(item.comentario || "").trim();
+        return `
+            <article class="avaliacao-admin-item">
+                <div class="avaliacao-admin-topo">
+                    <div>
+                        <strong>${escaparHtml(produto)}</strong>
+                        <span class="avaliacao-admin-estrelas" aria-label="${nota} de 5 estrelas">${estrelas}</span>
+                    </div>
+                    <button class="btn-danger" type="button" onclick="excluirAvaliacaoAdmin(${Number(item.id)})">Excluir</button>
+                </div>
+                <div class="avaliacao-admin-meta">
+                    <span>${escaparHtml(cliente)}</span>
+                    <span>${formatarDataAvaliacao(item.created_at)}</span>
+                </div>
+                ${comentario ? `<p>${escaparHtml(comentario)}</p>` : '<p class="sem-comentario">Sem comentário escrito.</p>'}
+            </article>
+        `;
+    }).join("");
+}
+
+async function excluirAvaliacaoAdmin(id) {
+    const avaliacao = avaliacoesAdmin.find(item => Number(item.id) === Number(id));
+    if (!avaliacao) return;
+    const produto = nomeProdutoDaAvaliacao(avaliacao.produto_id);
+    const confirmou = window.confirm(`Excluir esta avaliação de “${produto}”?`);
+    if (!confirmou) return;
+
+    try {
+        const { error } = await adminSupabase.rpc("admin_excluir_avaliacao", { p_avaliacao_id: Number(id) });
+        if (error) throw error;
+        toastAdmin("Avaliação excluída.");
+        await carregarAvaliacoesAdmin();
+    } catch (erro) {
+        console.error(erro);
+        toastAdmin("Não foi possível excluir a avaliação.", true);
+    }
+}
+
 function trocarViewAdmin(view, botao) {
     viewAdminAtual = view;
     document.querySelectorAll(".admin-nav .nav-item:not(.desabilitado)").forEach(item => item.classList.remove("ativo"));
@@ -285,10 +409,20 @@ function trocarViewAdmin(view, botao) {
 
     const produtos = document.getElementById("conteudo-produtos");
     const estoque = document.getElementById("conteudo-estoque");
-    produtos.hidden = view !== "produtos";
-    estoque.hidden = view !== "estoque";
-    document.getElementById("titulo-view").textContent = view === "estoque" ? "Estoque" : "Produtos";
+    const avaliacoes = document.getElementById("conteudo-avaliacoes");
+    if (produtos) produtos.hidden = view !== "produtos";
+    if (estoque) estoque.hidden = view !== "estoque";
+    if (avaliacoes) avaliacoes.hidden = view !== "avaliacoes";
+
+    const titulos = {
+        produtos: "Produtos",
+        estoque: "Estoque",
+        avaliacoes: "Avaliações"
+    };
+    document.getElementById("titulo-view").textContent = titulos[view] || "Produtos";
     document.body.classList.remove("menu-admin-aberto");
+
+    if (view === "avaliacoes") carregarAvaliacoesAdmin();
 }
 
 function alternarMenuAdmin() {

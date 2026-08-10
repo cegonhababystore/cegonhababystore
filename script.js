@@ -150,6 +150,28 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iU8gK5XlJUUX0i_F3iZp4g_sDb5iAX_
 let PRODUTOS = PRODUTOS_FALLBACK.map(produto => ({ ...produto }));
 let supabaseClient = null;
 
+function iniciarSupabaseLoja() {
+    if (!window.supabase || typeof window.supabase.createClient !== "function") {
+        throw new Error("A biblioteca do Supabase não carregou.");
+    }
+
+    if (!supabaseClient) {
+        supabaseClient = window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY,
+            {
+                auth: {
+                    persistSession: false,
+                    autoRefreshToken: false,
+                    detectSessionInUrl: false
+                }
+            }
+        );
+    }
+
+    return supabaseClient;
+}
+
 function categoriaLabelDoBanco(categoria) {
     const mapa = {
         bebe: "Bebês",
@@ -198,23 +220,11 @@ function sincronizarCarrinhoComProdutos() {
 
 async function carregarProdutosDoSupabase() {
     try {
-        if (!window.supabase || typeof window.supabase.createClient !== "function") {
+        try {
+            iniciarSupabaseLoja();
+        } catch (erro) {
             console.warn("Supabase JS não carregou. Usando catálogo local de segurança.");
             return false;
-        }
-
-        if (!supabaseClient) {
-            supabaseClient = window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_PUBLISHABLE_KEY,
-                {
-                    auth: {
-                        persistSession: false,
-                        autoRefreshToken: false,
-                        detectSessionInUrl: false
-                    }
-                }
-            );
         }
 
         const { data, error } = await supabaseClient
@@ -368,6 +378,82 @@ function salvarAvaliacoes() {
     try {
         localStorage.setItem(CHAVE_AVALIACOES, JSON.stringify(avaliacoesClientes));
     } catch (_) {}
+}
+
+async function carregarAvaliacoesDoSupabase() {
+    try {
+        iniciarSupabaseLoja();
+
+        const [publicasResposta, minhasResposta] = await Promise.all([
+            supabaseClient.rpc("listar_avaliacoes_publicas"),
+            supabaseClient.rpc("listar_minhas_avaliacoes", { p_cliente_id: clienteAvaliacaoId })
+        ]);
+
+        if (publicasResposta.error) throw publicasResposta.error;
+        if (minhasResposta.error) throw minhasResposta.error;
+
+        const mapa = {};
+        const publicas = Array.isArray(publicasResposta.data) ? publicasResposta.data : [];
+        const minhas = Array.isArray(minhasResposta.data) ? minhasResposta.data : [];
+
+        publicas.forEach(registro => {
+            const produtoId = Number(registro.produto_id);
+            if (!Number.isFinite(produtoId)) return;
+            const chave = String(produtoId);
+            if (!mapa[chave]) mapa[chave] = [];
+            mapa[chave].push({
+                id: Number(registro.id),
+                clienteId: null,
+                nota: Number(registro.nota) || 0,
+                nome: registro.nome || "",
+                comentario: registro.comentario || "",
+                criadoEm: Date.parse(registro.created_at || "") || Date.now(),
+                atualizadoEm: Date.parse(registro.updated_at || "") || 0
+            });
+        });
+
+        minhas.forEach(registro => {
+            const produtoId = Number(registro.produto_id);
+            if (!Number.isFinite(produtoId)) return;
+            const chave = String(produtoId);
+            if (!mapa[chave]) mapa[chave] = [];
+            const id = Number(registro.id);
+            const existente = mapa[chave].find(item => Number(item.id) === id);
+            if (existente) {
+                existente.clienteId = clienteAvaliacaoId;
+            } else {
+                mapa[chave].push({
+                    id,
+                    clienteId: clienteAvaliacaoId,
+                    nota: Number(registro.nota) || 0,
+                    nome: registro.nome || "",
+                    comentario: registro.comentario || "",
+                    criadoEm: Date.parse(registro.created_at || "") || Date.now(),
+                    atualizadoEm: Date.parse(registro.updated_at || "") || 0
+                });
+            }
+        });
+
+        avaliacoesClientes = mapa;
+        salvarAvaliacoes();
+        return true;
+    } catch (erro) {
+        console.error("Não foi possível carregar as avaliações compartilhadas:", erro);
+        return false;
+    }
+}
+
+async function publicarAvaliacaoNoSupabase(produtoId, nota, nome, comentario) {
+    iniciarSupabaseLoja();
+    const { data, error } = await supabaseClient.rpc("salvar_avaliacao", {
+        p_produto_id: Number(produtoId),
+        p_cliente_id: clienteAvaliacaoId,
+        p_nome: nome || null,
+        p_nota: Number(nota),
+        p_comentario: comentario || null
+    });
+    if (error) throw error;
+    return data;
 }
 
 function obterClienteAvaliacaoId() {
@@ -836,7 +922,7 @@ function renderizarAvaliacoesModal(id) {
 
     if (!listaEl) return;
     if (!lista.length) {
-        listaEl.innerHTML = '<div class="avaliacoes-vazio">Ainda não há avaliações desta peça. ⭐</div>';
+        listaEl.innerHTML = '<div class="avaliacoes-vazio">Ainda não há avaliações desta peça.</div>';
         return;
     }
 
@@ -852,7 +938,7 @@ function renderizarAvaliacoesModal(id) {
     `).join("");
 }
 
-function enviarAvaliacao(event) {
+async function enviarAvaliacao(event) {
     if (event) event.preventDefault();
     const modal = document.getElementById("modal-detalhes");
     const produtoId = Number(modal?.dataset.produtoId);
@@ -865,32 +951,30 @@ function enviarAvaliacao(event) {
 
     const nome = document.getElementById("avaliacao-nome")?.value.trim().slice(0, 40) || "";
     const comentario = document.getElementById("avaliacao-comentario")?.value.trim().slice(0, 300) || "";
-    const chave = String(produtoId);
-    const lista = obterAvaliacoesProduto(produtoId);
-    const indiceExistente = lista.findIndex(item => item.clienteId === clienteAvaliacaoId);
+    const jaExistia = obterAvaliacoesProduto(produtoId).some(item => item.clienteId === clienteAvaliacaoId);
+    const botao = document.getElementById("btn-enviar-avaliacao");
 
-    const avaliacao = {
-        clienteId: clienteAvaliacaoId,
-        nota: notaSelecionada,
-        nome,
-        comentario,
-        criadoEm: Date.now()
-    };
-
-    if (indiceExistente >= 0) {
-        lista[indiceExistente] = avaliacao;
-        mostrarToast("Sua avaliação foi atualizada.");
-    } else {
-        lista.push(avaliacao);
-        mostrarToast("Obrigado pela sua avaliação!");
+    if (botao) {
+        botao.disabled = true;
+        botao.textContent = "Publicando...";
     }
 
-    avaliacoesClientes[chave] = lista;
-    salvarAvaliacoes();
-    renderizarAvaliacoesModal(produtoId);
-    renderizarProdutos(categoriaAtual, { preservarScroll: true });
+    try {
+        await publicarAvaliacaoNoSupabase(produtoId, notaSelecionada, nome, comentario);
+        await carregarAvaliacoesDoSupabase();
+        renderizarAvaliacoesModal(produtoId);
+        renderizarProdutos(categoriaAtual, { preservarScroll: true });
+        mostrarToast(jaExistia ? "Sua avaliação foi atualizada." : "Obrigado pela sua avaliação!");
+    } catch (erro) {
+        console.error(erro);
+        mostrarToast("Não foi possível publicar a avaliação agora. Tente novamente.");
+    } finally {
+        if (botao) {
+            botao.disabled = false;
+            botao.textContent = "Enviar avaliação";
+        }
+    }
 }
-
 
 function alternarSecaoMobile(idConteudo, botao) {
     const conteudo = document.getElementById(idConteudo);
@@ -1146,6 +1230,14 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
     }
 
     renderizarAvaliacoesModal(produto.id);
+    carregarAvaliacoesDoSupabase().then(carregou => {
+        if (!carregou) return;
+        const modalAtual = document.getElementById("modal-detalhes");
+        if (Number(modalAtual?.dataset.produtoId) === Number(produto.id)) {
+            renderizarAvaliacoesModal(produto.id);
+            renderizarProdutos(categoriaAtual, { preservarScroll: true });
+        }
+    });
     modal.classList.add("ativo");
     document.body.style.overflow = "hidden";
     empilharHistoricoUI("detalhes");
@@ -1237,7 +1329,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     atualizarContadoresMobile();
     const primeiroLinkMobile = document.querySelector(".bottom-nav-mobile a");
     if (primeiroLinkMobile) primeiroLinkMobile.classList.add("ativo");
-    salvarAvaliacoes();
     ativarGestosVisualizador();
 
     const carregouBanco = await carregarProdutosDoSupabase();
@@ -1245,6 +1336,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderizarProdutos("todos");
         atualizarInterfaceCarrinho();
         atualizarContadoresMobile();
+    }
+
+    const carregouAvaliacoes = await carregarAvaliacoesDoSupabase();
+    if (carregouAvaliacoes) {
+        renderizarProdutos("todos");
     }
 
     const fotoModal = document.getElementById("modal-foto-bloco");

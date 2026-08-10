@@ -273,3 +273,85 @@ textarea { resize: vertical; }
     .upload-box { grid-template-columns: 105px 1fr; gap: 12px; }
     .login-card { padding: 27px 21px; }
 }
+
+/* =========================================================
+   V22 - AVALIAÇÕES COMPARTILHADAS
+   ========================================================= */
+
+.toolbar-avaliacoes {
+    grid-template-columns: minmax(260px, 1fr) 170px auto;
+}
+
+.avaliacoes-admin-lista {
+    display: grid;
+}
+
+.avaliacao-admin-item {
+    padding: 17px 18px;
+    border-bottom: 1px solid var(--linha);
+}
+
+.avaliacao-admin-item:last-child {
+    border-bottom: 0;
+}
+
+.avaliacao-admin-topo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.avaliacao-admin-topo > div {
+    min-width: 0;
+}
+
+.avaliacao-admin-topo strong {
+    display: block;
+    color: var(--marrom);
+    line-height: 1.35;
+}
+
+.avaliacao-admin-estrelas {
+    display: inline-block;
+    margin-top: 5px;
+    color: #b9822d;
+    letter-spacing: .08em;
+    font-size: 14px;
+}
+
+.avaliacao-admin-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 14px;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.avaliacao-admin-item p {
+    margin: 11px 0 0;
+    color: #584b43;
+    line-height: 1.55;
+    font-size: 13px;
+}
+
+.avaliacao-admin-item p.sem-comentario {
+    color: #9a8d85;
+    font-style: italic;
+}
+
+@media (max-width: 760px) {
+    .toolbar-avaliacoes {
+        grid-template-columns: 1fr;
+    }
+
+    .toolbar-avaliacoes select,
+    .toolbar-avaliacoes .btn-ghost {
+        width: 100%;
+    }
+
+    .avaliacao-admin-item {
+        padding: 15px 13px;
+    }
+}
