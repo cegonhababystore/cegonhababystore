@@ -6,7 +6,7 @@
    3) Troque id, nome, categoria, preço, imagem e descrição.
    ========================================================= */
 
-const PRODUTOS = [
+const PRODUTOS_FALLBACK = [
     // ATENÇÃO: os preços abaixo são PROVISÓRIOS.
     // Troque o campo "preco" assim que você souber o valor real de cada peça.
     {
@@ -136,6 +136,112 @@ const PRODUTOS = [
         descricao: "Romper verde sem mangas com estampa de dinossauros coloridos, botões frontais e fechamento entrepernas. A combinação com o chapéu estampado cria um look divertido para os dias quentes."
     }
 ];
+
+// =========================================================
+// SUPABASE - BASE DE DADOS DA LOJA
+// A publishable key é própria para uso no navegador.
+// A segurança de leitura/escrita continua sendo controlada pelo RLS.
+// =========================================================
+const SUPABASE_URL = "https://nridvmdmnejbanofavli.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iU8gK5XlJUUX0i_F3iZp4g_sDb5iAX_";
+
+// Começamos com os dados locais para o site continuar funcionando mesmo
+// se a internet ou o Supabase estiverem temporariamente indisponíveis.
+let PRODUTOS = PRODUTOS_FALLBACK.map(produto => ({ ...produto }));
+let supabaseClient = null;
+
+function categoriaLabelDoBanco(categoria) {
+    const mapa = {
+        bebe: "Bebês",
+        menina: "Menina",
+        menino: "Menino"
+    };
+    return mapa[categoria] || "Infantil";
+}
+
+function mesclarProdutoDoBanco(registro) {
+    const id = Number(registro.id);
+    const visualLocal = PRODUTOS_FALLBACK.find(produto => Number(produto.id) === id) || {};
+    const precoBanco = normalizarPreco(registro.preco);
+
+    return {
+        ...visualLocal,
+        id,
+        nome: registro.nome || visualLocal.nome || "Produto",
+        categoria: registro.categoria || visualLocal.categoria || "bebe",
+        categoriaLabel: categoriaLabelDoBanco(registro.categoria || visualLocal.categoria),
+        preco: Number.isFinite(precoBanco) ? precoBanco : normalizarPreco(visualLocal.preco),
+        imagem: registro.imagem_principal || visualLocal.imagem || "",
+        descricao: registro.descricao || visualLocal.descricao || "",
+        estoque: Math.max(0, Number.parseInt(registro.estoque ?? 0, 10) || 0),
+        ativo: registro.ativo !== false
+    };
+}
+
+function sincronizarCarrinhoComProdutos() {
+    if (!Array.isArray(carrinho)) return;
+
+    carrinho = carrinho.map(item => {
+        const produto = PRODUTOS.find(p => Number(p.id) === Number(item.id));
+        if (!produto) return item;
+
+        return {
+            ...item,
+            nome: produto.nome,
+            preco: produto.preco,
+            imagem: produto.imagem
+        };
+    });
+
+    salvarCarrinho();
+}
+
+async function carregarProdutosDoSupabase() {
+    try {
+        if (!window.supabase || typeof window.supabase.createClient !== "function") {
+            console.warn("Supabase JS não carregou. Usando catálogo local de segurança.");
+            return false;
+        }
+
+        if (!supabaseClient) {
+            supabaseClient = window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_PUBLISHABLE_KEY,
+                {
+                    auth: {
+                        persistSession: false,
+                        autoRefreshToken: false,
+                        detectSessionInUrl: false
+                    }
+                }
+            );
+        }
+
+        const { data, error } = await supabaseClient
+            .from("produtos")
+            .select("id,nome,descricao,preco,categoria,estoque,imagem_principal,ativo")
+            .eq("ativo", true)
+            .order("id", { ascending: true });
+
+        if (error) throw error;
+        if (!Array.isArray(data) || data.length === 0) {
+            console.warn("Supabase não retornou produtos. Mantendo catálogo local de segurança.");
+            return false;
+        }
+
+        PRODUTOS = data
+            .map(mesclarProdutoDoBanco)
+            .filter(produto => Number.isFinite(produto.id) && produto.ativo);
+
+        sincronizarCarrinhoComProdutos();
+        console.info(`Cegonha Baby Store: ${PRODUTOS.length} produtos carregados do Supabase.`);
+        return true;
+    } catch (erro) {
+        console.error("Não foi possível carregar os produtos do Supabase:", erro);
+        console.info("O site continuará usando o catálogo local de segurança.");
+        return false;
+    }
+}
 
 const NUMERO_WHATSAPP = "5597984154273";
 const CHAVE_CARRINHO = "cegonhaBabyStoreCarrinho";
@@ -1113,7 +1219,8 @@ window.addEventListener("popstate", () => {
     }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    // Renderiza imediatamente o catálogo local e, em seguida, sincroniza com o banco.
     renderizarProdutos("todos");
     atualizarInterfaceCarrinho();
     ativarArrasteComMouse();
@@ -1124,6 +1231,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (primeiroLinkMobile) primeiroLinkMobile.classList.add("ativo");
     salvarAvaliacoes();
     ativarGestosVisualizador();
+
+    const carregouBanco = await carregarProdutosDoSupabase();
+    if (carregouBanco) {
+        renderizarProdutos("todos");
+        atualizarInterfaceCarrinho();
+        atualizarContadoresMobile();
+    }
 
     const fotoModal = document.getElementById("modal-foto-bloco");
     if (fotoModal) {
