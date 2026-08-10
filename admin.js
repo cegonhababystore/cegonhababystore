@@ -8,7 +8,7 @@ let produtosAdmin = [];
 let avaliacoesAdmin = [];
 let pedidosAdmin = [];
 let pedidoItensAdmin = [];
-let viewAdminAtual = "produtos";
+let viewAdminAtual = "resumo";
 let toastAdminTimer = null;
 
 function iniciarSupabaseAdmin() {
@@ -83,7 +83,7 @@ async function exibirPainel(user) {
     document.getElementById("painel-view").hidden = false;
     document.getElementById("admin-email").textContent = user.email || "Administrador";
     await carregarProdutosAdmin();
-    await carregarAvaliacoesAdmin();
+    await carregarResumoAdmin();
 }
 
 function exibirLogin() {
@@ -418,6 +418,106 @@ function labelStatusPedido(status) {
     return mapa[status] || "Novo";
 }
 
+function intervaloHojeISO() {
+    const agora = new Date();
+    const inicio = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate(), 0, 0, 0, 0);
+    const fim = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate() + 1, 0, 0, 0, 0);
+    return { inicio: inicio.toISOString(), fim: fim.toISOString() };
+}
+
+async function carregarResumoAdmin() {
+    const loading = document.getElementById("dashboard-loading");
+    const lista = document.getElementById("dashboard-pedidos-lista");
+    const vazio = document.getElementById("dashboard-pedidos-vazio");
+    if (loading) loading.hidden = false;
+    if (lista) lista.hidden = true;
+    if (vazio) vazio.hidden = true;
+
+    try {
+        const { inicio, fim } = intervaloHojeISO();
+        const [hojeResp, recentesResp, novosResp] = await Promise.all([
+            adminSupabase
+                .from("pedidos")
+                .select("id,total,status,created_at")
+                .gte("created_at", inicio)
+                .lt("created_at", fim),
+            adminSupabase
+                .from("pedidos")
+                .select("id,codigo,cliente_nome,total,status,created_at")
+                .order("created_at", { ascending: false })
+                .limit(5),
+            adminSupabase
+                .from("pedidos")
+                .select("id", { count: "exact", head: true })
+                .eq("status", "novo")
+        ]);
+
+        if (hojeResp.error) throw hojeResp.error;
+        if (recentesResp.error) throw recentesResp.error;
+        if (novosResp.error) throw novosResp.error;
+
+        const pedidosHoje = Array.isArray(hojeResp.data) ? hojeResp.data : [];
+        const recentes = Array.isArray(recentesResp.data) ? recentesResp.data : [];
+        const valorHoje = pedidosHoje
+            .filter(p => p.status !== "cancelado")
+            .reduce((soma, p) => soma + Number(p.total || 0), 0);
+        const estoqueBaixo = produtosAdmin.filter(p => Number(p.estoque || 0) <= 2).length;
+
+        const mapa = {
+            "dash-pedidos-hoje": pedidosHoje.length,
+            "dash-pedidos-novos": Number(novosResp.count || 0),
+            "dash-valor-hoje": formatarMoeda(valorHoje),
+            "dash-estoque-baixo": estoqueBaixo
+        };
+        Object.entries(mapa).forEach(([id, valor]) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = valor;
+        });
+
+        renderizarResumoPedidosRecentes(recentes);
+    } catch (erro) {
+        console.error("Erro ao carregar resumo:", erro);
+        toastAdmin("Não foi possível atualizar o resumo.", true);
+        if (vazio) {
+            vazio.textContent = "Não foi possível carregar os pedidos do resumo.";
+            vazio.hidden = false;
+        }
+    } finally {
+        if (loading) loading.hidden = true;
+    }
+}
+
+function renderizarResumoPedidosRecentes(recentes = []) {
+    const lista = document.getElementById("dashboard-pedidos-lista");
+    const vazio = document.getElementById("dashboard-pedidos-vazio");
+    if (!lista || !vazio) return;
+
+    vazio.hidden = recentes.length > 0;
+    lista.hidden = recentes.length === 0;
+    if (!recentes.length) {
+        lista.innerHTML = "";
+        return;
+    }
+
+    lista.innerHTML = recentes.map(pedido => `
+        <button class="dashboard-pedido-item" type="button" onclick="abrirViewAdmin('pedidos')">
+            <div>
+                <strong>${escaparHtml(pedido.codigo || `Pedido #${pedido.id}`)}</strong>
+                <span>${escaparHtml(pedido.cliente_nome || "Cliente")}</span>
+                <small>${escaparHtml(formatarDataPedido(pedido.created_at))}</small>
+            </div>
+            <div class="dashboard-pedido-direita">
+                <span class="dashboard-status status-${escaparHtml(pedido.status)}">${escaparHtml(labelStatusPedido(pedido.status))}</span>
+                <strong>${formatarMoeda(pedido.total)}</strong>
+            </div>
+        </button>`).join("");
+}
+
+function abrirViewAdmin(view) {
+    const botao = document.querySelector(`.admin-nav .nav-item[data-view="${view}"]`);
+    trocarViewAdmin(view, botao);
+}
+
 function telefonePedidoWhatsapp(telefone) {
     let digitos = String(telefone || "").replace(/\D/g, "");
     if ((digitos.length === 10 || digitos.length === 11) && !digitos.startsWith("55")) digitos = `55${digitos}`;
@@ -588,24 +688,28 @@ function trocarViewAdmin(view, botao) {
     document.querySelectorAll(".admin-nav .nav-item:not(.desabilitado)").forEach(item => item.classList.remove("ativo"));
     if (botao) botao.classList.add("ativo");
 
+    const resumo = document.getElementById("conteudo-resumo");
     const produtos = document.getElementById("conteudo-produtos");
     const estoque = document.getElementById("conteudo-estoque");
     const pedidos = document.getElementById("conteudo-pedidos");
     const avaliacoes = document.getElementById("conteudo-avaliacoes");
+    if (resumo) resumo.hidden = view !== "resumo";
     if (produtos) produtos.hidden = view !== "produtos";
     if (estoque) estoque.hidden = view !== "estoque";
     if (pedidos) pedidos.hidden = view !== "pedidos";
     if (avaliacoes) avaliacoes.hidden = view !== "avaliacoes";
 
     const titulos = {
+        resumo: "Resumo",
         produtos: "Produtos",
         estoque: "Estoque",
         pedidos: "Pedidos",
         avaliacoes: "Avaliações"
     };
-    document.getElementById("titulo-view").textContent = titulos[view] || "Produtos";
+    document.getElementById("titulo-view").textContent = titulos[view] || "Resumo";
     document.body.classList.remove("menu-admin-aberto");
 
+    if (view === "resumo") carregarResumoAdmin();
     if (view === "pedidos") carregarPedidosAdmin();
     if (view === "avaliacoes") carregarAvaliacoesAdmin();
 }

@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./admin.css?v=24">
+    <link rel="stylesheet" href="./admin.css?v=25">
 </head>
 <body>
     <main class="admin-shell">
@@ -44,7 +44,10 @@
                 </div>
 
                 <nav class="admin-nav" aria-label="Menu administrativo">
-                    <button class="nav-item ativo" type="button" data-view="produtos" onclick="trocarViewAdmin('produtos', this)">
+                    <button class="nav-item ativo" type="button" data-view="resumo" onclick="trocarViewAdmin('resumo', this)">
+                        <span>⌂</span> Resumo
+                    </button>
+                    <button class="nav-item" type="button" data-view="produtos" onclick="trocarViewAdmin('produtos', this)">
                         <span>▦</span> Produtos
                     </button>
                     <button class="nav-item" type="button" data-view="estoque" onclick="trocarViewAdmin('estoque', this)">
@@ -69,7 +72,7 @@
                     <button class="menu-mobile" type="button" onclick="alternarMenuAdmin()" aria-label="Abrir menu">☰</button>
                     <div>
                         <p class="eyebrow">CEGONHA BABY STORE</p>
-                        <h1 id="titulo-view">Produtos</h1>
+                        <h1 id="titulo-view">Resumo</h1>
                     </div>
                     <div class="admin-user">
                         <span id="admin-email">Administrador</span>
@@ -77,7 +80,55 @@
                     </div>
                 </header>
 
-                <div id="conteudo-produtos" class="view-conteudo">
+                <div id="conteudo-resumo" class="view-conteudo">
+                    <section class="dashboard-boas-vindas">
+                        <div>
+                            <p class="eyebrow">VISÃO RÁPIDA</p>
+                            <h2>Como está a loja hoje</h2>
+                            <p>Um resumo leve dos pedidos e do estoque, sem carregar dados desnecessários da loja pública.</p>
+                        </div>
+                        <button class="btn-ghost" type="button" onclick="carregarResumoAdmin()">Atualizar resumo</button>
+                    </section>
+
+                    <section class="stats-grid dashboard-stats" aria-label="Resumo geral da loja">
+                        <article><span>Pedidos hoje</span><strong id="dash-pedidos-hoje">0</strong><small>registrados desde 00:00</small></article>
+                        <article><span>Novos pendentes</span><strong id="dash-pedidos-novos">0</strong><small>aguardando atendimento</small></article>
+                        <article><span>Valor em pedidos hoje</span><strong id="dash-valor-hoje">R$ 0,00</strong><small>desconsidera cancelados</small></article>
+                        <article><span>Estoque baixo</span><strong id="dash-estoque-baixo">0</strong><small>produtos com até 2 unidades</small></article>
+                    </section>
+
+                    <div class="dashboard-grid">
+                        <section class="admin-card dashboard-pedidos-card">
+                            <div class="dashboard-card-topo">
+                                <div>
+                                    <h2>Últimos pedidos</h2>
+                                    <p>Os 5 pedidos mais recentes.</p>
+                                </div>
+                                <button class="btn-ghost" type="button" onclick="abrirViewAdmin('pedidos')">Ver todos</button>
+                            </div>
+                            <div id="dashboard-loading" class="estado-lista">Carregando resumo...</div>
+                            <div id="dashboard-pedidos-vazio" class="estado-lista" hidden>Ainda não há pedidos registrados.</div>
+                            <div id="dashboard-pedidos-lista" class="dashboard-pedidos-lista" hidden></div>
+                        </section>
+
+                        <section class="admin-card dashboard-atalhos-card">
+                            <div class="dashboard-card-topo">
+                                <div>
+                                    <h2>Atalhos</h2>
+                                    <p>Acesse o que você usa no dia a dia.</p>
+                                </div>
+                            </div>
+                            <div class="dashboard-atalhos">
+                                <button type="button" onclick="abrirViewAdmin('pedidos')"><span>◫</span><strong>Pedidos</strong><small>Atender e mudar status</small></button>
+                                <button type="button" onclick="abrirViewAdmin('produtos')"><span>▦</span><strong>Produtos</strong><small>Preço, foto e cadastro</small></button>
+                                <button type="button" onclick="abrirViewAdmin('estoque')"><span>▤</span><strong>Estoque</strong><small>Ajustar quantidades</small></button>
+                                <button type="button" onclick="abrirViewAdmin('avaliacoes')"><span>☆</span><strong>Avaliações</strong><small>Ver comentários</small></button>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div id="conteudo-produtos" class="view-conteudo" hidden>
                     <section class="stats-grid" aria-label="Resumo dos produtos">
                         <article><span>Total</span><strong id="stat-total">0</strong><small>produtos cadastrados</small></article>
                         <article><span>Ativos</span><strong id="stat-ativos">0</strong><small>visíveis na loja</small></article>
@@ -263,6 +314,6 @@
     <div id="toast-admin" class="toast-admin" role="status" aria-live="polite"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./admin.js?v=24"></script>
+    <script src="./admin.js?v=25"></script>
 </body>
 </html>
