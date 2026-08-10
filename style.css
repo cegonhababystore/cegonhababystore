@@ -3057,3 +3057,201 @@ footer p {
         padding-bottom: 10px;
     }
 }
+
+/* =========================================================
+   V24 - REGISTRO DE PEDIDO ANTES DO WHATSAPP
+   ========================================================= */
+.pedido-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10080;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(44, 34, 27, .52);
+    backdrop-filter: blur(7px);
+}
+
+.pedido-modal.ativo {
+    display: flex;
+}
+
+.pedido-modal-card {
+    width: min(560px, 100%);
+    max-height: min(760px, calc(100vh - 48px));
+    overflow-y: auto;
+    background: #fffdfb;
+    border: 1px solid rgba(74,55,40,.10);
+    border-radius: 28px;
+    box-shadow: 0 28px 85px rgba(44,34,27,.24);
+    padding: 28px;
+}
+
+.pedido-modal-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(74,55,40,.10);
+}
+
+.pedido-modal-mini {
+    display: block;
+    margin-bottom: 7px;
+    color: #9a7156;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .13em;
+}
+
+.pedido-modal-topo h2 {
+    margin: 0;
+    color: var(--marrom-luxo);
+    font-size: clamp(24px, 4vw, 31px);
+    line-height: 1.15;
+}
+
+.pedido-modal-topo p {
+    margin: 9px 0 0;
+    color: var(--marrom-suave);
+    line-height: 1.55;
+    font-size: 14px;
+}
+
+.pedido-modal-fechar {
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(74,55,40,.12);
+    border-radius: 50%;
+    background: #fff;
+    color: var(--marrom-luxo);
+    font-size: 25px;
+    line-height: 1;
+}
+
+.pedido-form {
+    display: grid;
+    gap: 15px;
+    padding-top: 20px;
+}
+
+.pedido-form label {
+    display: grid;
+    gap: 7px;
+}
+
+.pedido-form label > span {
+    color: var(--marrom-luxo);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.pedido-form label small {
+    color: var(--marrom-suave);
+    font-weight: 500;
+}
+
+.pedido-form input,
+.pedido-form textarea {
+    width: 100%;
+    border: 1px solid rgba(74,55,40,.14);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--marrom-luxo);
+    padding: 13px 14px;
+    outline: none;
+    font: inherit;
+    resize: vertical;
+}
+
+.pedido-form input:focus,
+.pedido-form textarea:focus {
+    border-color: rgba(194,93,57,.55);
+    box-shadow: 0 0 0 4px rgba(194,93,57,.08);
+}
+
+.pedido-resumo-mini {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    margin-top: 2px;
+    padding: 15px 16px;
+    border-radius: 15px;
+    background: #f8f2ec;
+    color: var(--marrom-luxo);
+}
+
+.pedido-resumo-mini span { font-size: 13px; font-weight: 650; }
+.pedido-resumo-mini strong { font-size: 19px; }
+
+.pedido-form-msg {
+    min-height: 18px;
+    margin: 0;
+    color: #a14f46;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.pedido-form-acoes {
+    display: grid;
+    grid-template-columns: .8fr 1.5fr;
+    gap: 10px;
+}
+
+.pedido-btn-secundario,
+.pedido-btn-principal {
+    min-height: 48px;
+    border-radius: 14px;
+    font-weight: 800;
+    border: 1px solid rgba(74,55,40,.14);
+}
+
+.pedido-btn-secundario {
+    background: #fff;
+    color: var(--marrom-luxo);
+}
+
+.pedido-btn-principal {
+    border-color: var(--marrom-luxo);
+    background: var(--marrom-luxo);
+    color: #fff;
+}
+
+.pedido-btn-principal:disabled {
+    opacity: .65;
+    cursor: wait;
+}
+
+@media (max-width: 600px) {
+    .pedido-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .pedido-modal-card {
+        width: 100%;
+        max-height: 88dvh;
+        border-radius: 24px 24px 0 0;
+        padding: 22px 18px calc(22px + env(safe-area-inset-bottom));
+    }
+
+    .pedido-modal-topo {
+        gap: 12px;
+    }
+
+    .pedido-modal-topo p {
+        font-size: 13px;
+    }
+
+    .pedido-form-acoes {
+        grid-template-columns: 1fr;
+    }
+
+    .pedido-btn-principal {
+        order: -1;
+    }
+}

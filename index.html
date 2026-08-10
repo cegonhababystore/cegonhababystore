@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=23">
+    <link rel="stylesheet" href="./style.css?v=24">
 </head>
 <body>
 
@@ -356,6 +356,48 @@
         </div>
     </div>
 
+    <div id="pedido-modal" class="pedido-modal" aria-hidden="true" onclick="fecharPedidoAoClicarFora(event)">
+        <section class="pedido-modal-card" role="dialog" aria-modal="true" aria-labelledby="pedido-modal-titulo">
+            <div class="pedido-modal-topo">
+                <div>
+                    <span class="pedido-modal-mini">FINALIZAR PEDIDO</span>
+                    <h2 id="pedido-modal-titulo">Só falta seus dados</h2>
+                    <p>O pedido será registrado e, em seguida, abriremos o WhatsApp para você finalizar com a loja.</p>
+                </div>
+                <button type="button" class="pedido-modal-fechar" onclick="fecharPedidoModal()" aria-label="Fechar">×</button>
+            </div>
+
+            <form id="pedido-form" class="pedido-form" onsubmit="confirmarPedidoWhatsApp(event)">
+                <label>
+                    <span>Seu nome *</span>
+                    <input id="pedido-cliente-nome" type="text" maxlength="80" autocomplete="name" required placeholder="Como podemos chamar você?">
+                </label>
+
+                <label>
+                    <span>Telefone / WhatsApp *</span>
+                    <input id="pedido-cliente-telefone" type="tel" maxlength="20" autocomplete="tel" inputmode="tel" required placeholder="(97) 99999-9999">
+                </label>
+
+                <label>
+                    <span>Observação <small>(opcional)</small></span>
+                    <textarea id="pedido-observacao" maxlength="500" rows="3" placeholder="Ex.: preferência de cor, retirada, presente..."></textarea>
+                </label>
+
+                <div class="pedido-resumo-mini">
+                    <span>Total do pedido</span>
+                    <strong id="pedido-modal-total">R$ 0,00</strong>
+                </div>
+
+                <p id="pedido-form-msg" class="pedido-form-msg" role="status"></p>
+
+                <div class="pedido-form-acoes">
+                    <button type="button" class="pedido-btn-secundario" onclick="fecharPedidoModal()">Voltar</button>
+                    <button id="pedido-confirmar-btn" type="submit" class="pedido-btn-principal">Registrar e abrir WhatsApp</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
     <div id="toast-carrinho" class="toast-carrinho" aria-live="polite"></div>
 
     <a href="https://wa.me/5597984154273?text=Olá!%20Gostaria%20de%20mais%20informações."
@@ -391,6 +433,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./script.js?v=23"></script>
+    <script src="./script.js?v=24"></script>
 </body>
 </html>

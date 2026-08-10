@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./admin.css?v=22">
+    <link rel="stylesheet" href="./admin.css?v=24">
 </head>
 <body>
     <main class="admin-shell">
@@ -50,8 +50,8 @@
                     <button class="nav-item" type="button" data-view="estoque" onclick="trocarViewAdmin('estoque', this)">
                         <span>▤</span> Estoque
                     </button>
-                    <button class="nav-item desabilitado" type="button" disabled title="Será habilitado quando criarmos a base de pedidos">
-                        <span>◫</span> Pedidos <small>em breve</small>
+                    <button class="nav-item" type="button" data-view="pedidos" onclick="trocarViewAdmin('pedidos', this)">
+                        <span>◫</span> Pedidos
                     </button>
                     <button class="nav-item" type="button" data-view="avaliacoes" onclick="trocarViewAdmin('avaliacoes', this)">
                         <span>☆</span> Avaliações
@@ -115,6 +115,36 @@
                             <button class="btn-ghost" type="button" onclick="carregarProdutosAdmin()">Atualizar</button>
                         </div>
                         <div id="estoque-lista" class="estoque-lista"></div>
+                    </section>
+                </div>
+
+                <div id="conteudo-pedidos" class="view-conteudo" hidden>
+                    <section class="stats-grid stats-pedidos" aria-label="Resumo dos pedidos">
+                        <article><span>Total</span><strong id="stat-pedidos-total">0</strong><small>pedidos registrados</small></article>
+                        <article><span>Novos</span><strong id="stat-pedidos-novos">0</strong><small>aguardando atendimento</small></article>
+                        <article><span>Em andamento</span><strong id="stat-pedidos-andamento">0</strong><small>confirmados ou preparando</small></article>
+                        <article><span>Valor registrado</span><strong id="stat-pedidos-valor">R$ 0,00</strong><small>exceto cancelados</small></article>
+                    </section>
+
+                    <section class="admin-card">
+                        <div class="toolbar toolbar-pedidos">
+                            <div class="busca-admin">
+                                <span>⌕</span>
+                                <input id="busca-pedido" type="search" placeholder="Buscar código, cliente ou telefone..." oninput="renderizarPedidosAdmin()">
+                            </div>
+                            <select id="filtro-pedido-status" onchange="renderizarPedidosAdmin()" aria-label="Filtrar pedidos por status">
+                                <option value="todos">Todos os status</option>
+                                <option value="novo">Novos</option>
+                                <option value="confirmado">Confirmados</option>
+                                <option value="preparando">Preparando</option>
+                                <option value="entregue">Entregues</option>
+                                <option value="cancelado">Cancelados</option>
+                            </select>
+                            <button class="btn-ghost" type="button" onclick="carregarPedidosAdmin()">Atualizar</button>
+                        </div>
+                        <div id="pedidos-loading" class="estado-lista" hidden>Carregando pedidos...</div>
+                        <div id="pedidos-vazio" class="estado-lista" hidden>Nenhum pedido encontrado.</div>
+                        <div id="pedidos-admin-lista" class="pedidos-admin-lista"></div>
                     </section>
                 </div>
 
@@ -233,6 +263,6 @@
     <div id="toast-admin" class="toast-admin" role="status" aria-live="polite"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./admin.js?v=22"></script>
+    <script src="./admin.js?v=24"></script>
 </body>
 </html>

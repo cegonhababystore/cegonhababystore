@@ -260,6 +260,7 @@ const CHAVE_CARRINHO = "cegonhaBabyStoreCarrinho";
 const CHAVE_FAVORITOS = "cegonhaBabyStoreFavoritos";
 const CHAVE_AVALIACOES = "cegonhaBabyStoreAvaliacoes";
 const CHAVE_CLIENTE_AVALIACAO = "cegonhaBabyStoreClienteAvaliacao";
+const CHAVE_DADOS_PEDIDO = "cegonhaBabyStoreDadosPedido";
 
 let carrinho = carregarCarrinho();
 let favoritos = carregarFavoritos();
@@ -269,6 +270,7 @@ let notaSelecionada = 0;
 let categoriaAtual = "todos";
 let modoFavoritos = false;
 let mouseArrastou = false;
+let pedidoTokenAtual = null;
 
 // Integra modais e sacola com o botão VOLTAR do celular/navegador.
 const CHAVE_HISTORICO_UI = "cegonhaUI";
@@ -860,28 +862,209 @@ function ativarArrasteComMouse() {
     lista.addEventListener("dragstart", event => event.preventDefault());
 }
 
+function carregarDadosPedidoSalvos() {
+    try {
+        const dados = JSON.parse(localStorage.getItem(CHAVE_DADOS_PEDIDO) || "{}");
+        return dados && typeof dados === "object" ? dados : {};
+    } catch (_) {
+        return {};
+    }
+}
+
+function salvarDadosPedidoLocal(nome, telefone) {
+    try {
+        localStorage.setItem(CHAVE_DADOS_PEDIDO, JSON.stringify({ nome, telefone }));
+    } catch (_) {}
+}
+
+function gerarTokenPedido() {
+    if (window.crypto?.randomUUID) return crypto.randomUUID();
+    return `pedido-${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+}
+
+function totalCarrinhoAtual() {
+    return carrinho.reduce((soma, item) => soma + (normalizarPreco(item.preco) || 0) * (Number(item.quantidade) || 1), 0);
+}
+
+function abrirPedidoModal() {
+    const modal = document.getElementById("pedido-modal");
+    if (!modal || carrinho.length === 0) return;
+
+    const dados = carregarDadosPedidoSalvos();
+    const nome = document.getElementById("pedido-cliente-nome");
+    const telefone = document.getElementById("pedido-cliente-telefone");
+    const observacao = document.getElementById("pedido-observacao");
+    const msg = document.getElementById("pedido-form-msg");
+    const total = document.getElementById("pedido-modal-total");
+
+    pedidoTokenAtual = gerarTokenPedido();
+    if (nome) nome.value = dados.nome || "";
+    if (telefone) telefone.value = dados.telefone || "";
+    if (observacao) observacao.value = "";
+    if (msg) msg.textContent = "";
+    if (total) total.textContent = moeda(totalCarrinhoAtual());
+
+    alternarCarrinho(false, true);
+
+    if (estadoHistoricoUI() === "carrinho") {
+        const estadoAtual = (history.state && typeof history.state === "object") ? history.state : {};
+        history.replaceState({ ...estadoAtual, [CHAVE_HISTORICO_UI]: "pedido" }, "", window.location.href);
+    } else {
+        empilharHistoricoUI("pedido");
+    }
+
+    modal.classList.add("ativo");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    setTimeout(() => (nome || telefone)?.focus(), 50);
+}
+
+function fecharPedidoModal(vindoDoHistorico = false) {
+    const modal = document.getElementById("pedido-modal");
+    if (!modal) return;
+
+    if (!vindoDoHistorico && voltarHistoricoSeFor("pedido")) return;
+
+    modal.classList.remove("ativo");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    pedidoTokenAtual = null;
+}
+
+function fecharPedidoAoClicarFora(event) {
+    if (event.target?.id === "pedido-modal") fecharPedidoModal();
+}
+
 function enviarPedidoWhatsApp(event) {
     if (event) event.preventDefault();
     if (carrinho.length === 0) {
         alert("Sua sacola está vazia!");
         return;
     }
+    abrirPedidoModal();
+}
 
-    let texto = "*Novo Pedido - Cegonha Baby Store*\n\n";
-    texto += "Olá! Gostaria de encomendar as seguintes peças:\n\n";
+function montarMensagemPedidoWhatsApp({ codigo, nome, telefone, observacao, total }) {
+    let texto = `*Pedido ${codigo || "Cegonha Baby Store"}*\n\n`;
+    texto += `Cliente: *${nome}*\n`;
+    texto += `Contato: ${telefone}\n\n`;
+    texto += "Gostaria de finalizar as seguintes peças:\n\n";
 
-    let total = 0;
     carrinho.forEach(item => {
         const subtotal = item.preco * item.quantidade;
-        total += subtotal;
         texto += `• *${item.quantidade}x* ${item.nome} — ${moeda(subtotal)}\n`;
     });
 
     texto += `\n*Total do pedido:* ${moeda(total)}`;
-    texto += "\n\nAguardo as instruções para finalizar.";
+    if (observacao) texto += `\n\n*Observação:* ${observacao}`;
+    texto += "\n\nO pedido já foi registrado no site. Aguardo as instruções para finalizar.";
+    return texto;
+}
 
-    const linkFinal = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(texto)}`;
-    window.open(linkFinal, "_blank", "noopener,noreferrer");
+async function confirmarPedidoWhatsApp(event) {
+    if (event) event.preventDefault();
+    if (carrinho.length === 0) {
+        mostrarToast("Sua sacola está vazia.");
+        fecharPedidoModal();
+        return;
+    }
+
+    const nome = document.getElementById("pedido-cliente-nome")?.value.trim() || "";
+    const telefone = document.getElementById("pedido-cliente-telefone")?.value.trim() || "";
+    const observacao = document.getElementById("pedido-observacao")?.value.trim() || "";
+    const msg = document.getElementById("pedido-form-msg");
+    const botao = document.getElementById("pedido-confirmar-btn");
+    const telefoneDigitos = telefone.replace(/\D/g, "");
+
+    if (nome.length < 2) {
+        if (msg) msg.textContent = "Informe seu nome.";
+        return;
+    }
+    if (telefoneDigitos.length < 8) {
+        if (msg) msg.textContent = "Informe um telefone/WhatsApp válido.";
+        return;
+    }
+
+    if (!pedidoTokenAtual) pedidoTokenAtual = gerarTokenPedido();
+    salvarDadosPedidoLocal(nome, telefone);
+
+    // Abrimos a nova guia durante o clique para evitar bloqueio de pop-up após a chamada assíncrona.
+    let janelaWhats = null;
+    try {
+        janelaWhats = window.open("about:blank", "_blank");
+        if (janelaWhats) janelaWhats.opener = null;
+    } catch (_) {}
+
+    if (botao) {
+        botao.disabled = true;
+        botao.textContent = "Registrando...";
+    }
+    if (msg) msg.textContent = "Registrando seu pedido...";
+
+    try {
+        iniciarSupabaseLoja();
+        const itens = carrinho.map(item => ({
+            produto_id: Number(item.id),
+            quantidade: Math.max(1, Number.parseInt(item.quantidade, 10) || 1)
+        }));
+
+        const { data, error } = await supabaseClient.rpc("criar_pedido", {
+            p_token: pedidoTokenAtual,
+            p_cliente_id: clienteAvaliacaoId,
+            p_cliente_nome: nome,
+            p_cliente_telefone: telefone,
+            p_observacao: observacao,
+            p_itens: itens
+        });
+        if (error) throw error;
+
+        const registro = Array.isArray(data) ? data[0] : data;
+        const codigo = registro?.codigo || "CEGONHA";
+        const totalServidor = normalizarPreco(registro?.total);
+        const total = Number.isFinite(totalServidor) ? totalServidor : totalCarrinhoAtual();
+        const texto = montarMensagemPedidoWhatsApp({ codigo, nome, telefone, observacao, total });
+        const linkFinal = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(texto)}`;
+
+        carrinho = [];
+        salvarCarrinho();
+        atualizarInterfaceCarrinho();
+        atualizarContadoresMobile();
+
+        fecharPedidoModal(true);
+        if (estadoHistoricoUI() === "pedido") {
+            const estadoAtual = (history.state && typeof history.state === "object") ? history.state : {};
+            history.replaceState({ ...estadoAtual, [CHAVE_HISTORICO_UI]: null }, "", window.location.href);
+        }
+        mostrarToast(`Pedido ${codigo} registrado com sucesso.`);
+
+        if (janelaWhats && !janelaWhats.closed) {
+            janelaWhats.location.href = linkFinal;
+        } else {
+            window.location.href = linkFinal;
+        }
+    } catch (erro) {
+        console.error("Falha ao registrar pedido:", erro);
+        if (janelaWhats && !janelaWhats.closed) janelaWhats.close();
+        if (msg) msg.textContent = "Não foi possível registrar agora. Tente novamente em instantes.";
+
+        const continuar = window.confirm("Não conseguimos registrar o pedido no banco agora. Deseja abrir o WhatsApp mesmo assim?");
+        if (continuar) {
+            const texto = montarMensagemPedidoWhatsApp({
+                codigo: "Cegonha Baby Store",
+                nome,
+                telefone,
+                observacao,
+                total: totalCarrinhoAtual()
+            });
+            const linkFinal = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(texto)}`;
+            window.location.href = linkFinal;
+        }
+    } finally {
+        if (botao) {
+            botao.disabled = false;
+            botao.textContent = "Registrar e abrir WhatsApp";
+        }
+    }
 }
 
 function selecionarNota(nota) {
@@ -1283,6 +1466,11 @@ function fecharContatoAoClicarFora(event) {
 
 document.addEventListener("keydown", event => {
     if (event.key === "Escape") {
+        const pedido = document.getElementById("pedido-modal");
+        if (pedido?.classList.contains("ativo")) {
+            fecharPedidoModal();
+            return;
+        }
         const viewer = document.getElementById("visualizador-imagem");
         if (viewer?.classList.contains("ativo")) {
             fecharVisualizadorImagem();
@@ -1295,6 +1483,12 @@ document.addEventListener("keydown", event => {
 });
 
 window.addEventListener("popstate", () => {
+    const pedido = document.getElementById("pedido-modal");
+    if (pedido?.classList.contains("ativo")) {
+        fecharPedidoModal(true);
+        return;
+    }
+
     const viewer = document.getElementById("visualizador-imagem");
     if (viewer?.classList.contains("ativo")) {
         fecharVisualizadorImagem(true);

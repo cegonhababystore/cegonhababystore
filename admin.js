@@ -6,6 +6,8 @@ let adminSupabase = null;
 let adminUser = null;
 let produtosAdmin = [];
 let avaliacoesAdmin = [];
+let pedidosAdmin = [];
+let pedidoItensAdmin = [];
 let viewAdminAtual = "produtos";
 let toastAdminTimer = null;
 
@@ -134,6 +136,8 @@ async function sairAdmin() {
     try { await adminSupabase.auth.signOut(); } catch (_) {}
     produtosAdmin = [];
     avaliacoesAdmin = [];
+    pedidosAdmin = [];
+    pedidoItensAdmin = [];
     exibirLogin();
     mostrarMensagemLogin("Você saiu do painel.", true);
 }
@@ -402,6 +406,183 @@ async function excluirAvaliacaoAdmin(id) {
     }
 }
 
+
+function labelStatusPedido(status) {
+    const mapa = {
+        novo: "Novo",
+        confirmado: "Confirmado",
+        preparando: "Preparando",
+        entregue: "Entregue",
+        cancelado: "Cancelado"
+    };
+    return mapa[status] || "Novo";
+}
+
+function telefonePedidoWhatsapp(telefone) {
+    let digitos = String(telefone || "").replace(/\D/g, "");
+    if ((digitos.length === 10 || digitos.length === 11) && !digitos.startsWith("55")) digitos = `55${digitos}`;
+    return digitos;
+}
+
+function formatarDataPedido(valor) {
+    const data = new Date(valor);
+    if (Number.isNaN(data.getTime())) return "—";
+    return data.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
+
+function itensDoPedido(pedidoId) {
+    return pedidoItensAdmin.filter(item => Number(item.pedido_id) === Number(pedidoId));
+}
+
+async function carregarPedidosAdmin() {
+    const loading = document.getElementById("pedidos-loading");
+    if (loading) loading.hidden = false;
+
+    try {
+        const [pedidosResp, itensResp] = await Promise.all([
+            adminSupabase
+                .from("pedidos")
+                .select("id,created_at,updated_at,codigo,cliente_nome,cliente_telefone,observacao,total,status,origem")
+                .order("created_at", { ascending: false }),
+            adminSupabase
+                .from("pedido_itens")
+                .select("id,pedido_id,produto_id,nome_produto,preco_unitario,quantidade,subtotal")
+                .order("id", { ascending: true })
+        ]);
+
+        if (pedidosResp.error) throw pedidosResp.error;
+        if (itensResp.error) throw itensResp.error;
+
+        pedidosAdmin = Array.isArray(pedidosResp.data) ? pedidosResp.data : [];
+        pedidoItensAdmin = Array.isArray(itensResp.data) ? itensResp.data : [];
+        atualizarResumoPedidos();
+        renderizarPedidosAdmin();
+    } catch (erro) {
+        console.error("Erro ao carregar pedidos:", erro);
+        toastAdmin("Não foi possível carregar os pedidos.", true);
+        const vazio = document.getElementById("pedidos-vazio");
+        if (vazio) {
+            vazio.textContent = "Erro ao carregar pedidos. Confira se o SQL da V24 foi executado.";
+            vazio.hidden = false;
+        }
+    } finally {
+        if (loading) loading.hidden = true;
+    }
+}
+
+function atualizarResumoPedidos() {
+    const total = pedidosAdmin.length;
+    const novos = pedidosAdmin.filter(p => p.status === "novo").length;
+    const andamento = pedidosAdmin.filter(p => p.status === "confirmado" || p.status === "preparando").length;
+    const valor = pedidosAdmin
+        .filter(p => p.status !== "cancelado")
+        .reduce((soma, p) => soma + Number(p.total || 0), 0);
+
+    const mapa = {
+        "stat-pedidos-total": total,
+        "stat-pedidos-novos": novos,
+        "stat-pedidos-andamento": andamento,
+        "stat-pedidos-valor": formatarMoeda(valor)
+    };
+    Object.entries(mapa).forEach(([id, valorEl]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = valorEl;
+    });
+}
+
+function pedidosFiltradosAdmin() {
+    const busca = (document.getElementById("busca-pedido")?.value || "").trim().toLowerCase();
+    const status = document.getElementById("filtro-pedido-status")?.value || "todos";
+
+    return pedidosAdmin.filter(pedido => {
+        const bateStatus = status === "todos" || pedido.status === status;
+        const texto = `${pedido.codigo || ""} ${pedido.cliente_nome || ""} ${pedido.cliente_telefone || ""}`.toLowerCase();
+        const bateBusca = !busca || texto.includes(busca);
+        return bateStatus && bateBusca;
+    });
+}
+
+function renderizarPedidosAdmin() {
+    const lista = document.getElementById("pedidos-admin-lista");
+    const vazio = document.getElementById("pedidos-vazio");
+    if (!lista || !vazio) return;
+
+    const filtrados = pedidosFiltradosAdmin();
+    vazio.hidden = filtrados.length > 0;
+    if (!filtrados.length) {
+        vazio.textContent = pedidosAdmin.length ? "Nenhum pedido corresponde ao filtro." : "Ainda não há pedidos registrados.";
+        lista.innerHTML = "";
+        return;
+    }
+
+    lista.innerHTML = filtrados.map(pedido => {
+        const itens = itensDoPedido(pedido.id);
+        const telefoneWa = telefonePedidoWhatsapp(pedido.cliente_telefone);
+        const itensHtml = itens.length
+            ? itens.map(item => `
+                <div class="pedido-item-linha">
+                    <span>${escaparHtml(item.quantidade)}x ${escaparHtml(item.nome_produto)}</span>
+                    <strong>${formatarMoeda(item.subtotal)}</strong>
+                </div>`).join("")
+            : '<div class="pedido-item-linha pedido-sem-itens">Itens não disponíveis.</div>';
+        const observacao = String(pedido.observacao || "").trim();
+
+        return `
+            <article class="pedido-admin-card status-${escaparHtml(pedido.status)}">
+                <div class="pedido-admin-topo">
+                    <div>
+                        <span class="pedido-codigo">${escaparHtml(pedido.codigo || `Pedido #${pedido.id}`)}</span>
+                        <strong>${escaparHtml(pedido.cliente_nome)}</strong>
+                        <small>${escaparHtml(formatarDataPedido(pedido.created_at))}</small>
+                    </div>
+                    <select class="pedido-status-select" aria-label="Status do pedido ${escaparHtml(pedido.codigo || pedido.id)}" onchange="alterarStatusPedido(${Number(pedido.id)}, this.value, this)">
+                        ${["novo","confirmado","preparando","entregue","cancelado"].map(status => `<option value="${status}" ${pedido.status === status ? "selected" : ""}>${labelStatusPedido(status)}</option>`).join("")}
+                    </select>
+                </div>
+
+                <div class="pedido-admin-contato">
+                    <span>${escaparHtml(pedido.cliente_telefone)}</span>
+                    ${telefoneWa ? `<a href="https://wa.me/${telefoneWa}" target="_blank" rel="noopener noreferrer">Abrir WhatsApp</a>` : ""}
+                </div>
+
+                <div class="pedido-admin-itens">${itensHtml}</div>
+                ${observacao ? `<p class="pedido-observacao"><strong>Observação:</strong> ${escaparHtml(observacao)}</p>` : ""}
+
+                <div class="pedido-admin-total">
+                    <span>${itens.length} ${itens.length === 1 ? "item" : "itens"}</span>
+                    <strong>${formatarMoeda(pedido.total)}</strong>
+                </div>
+            </article>`;
+    }).join("");
+}
+
+async function alterarStatusPedido(id, novoStatus, selectEl) {
+    const pedido = pedidosAdmin.find(p => Number(p.id) === Number(id));
+    if (!pedido) return;
+    const statusAnterior = pedido.status;
+
+    if (selectEl) selectEl.disabled = true;
+    try {
+        const { error } = await adminSupabase
+            .from("pedidos")
+            .update({ status: novoStatus, updated_at: new Date().toISOString() })
+            .eq("id", Number(id));
+        if (error) throw error;
+
+        pedido.status = novoStatus;
+        atualizarResumoPedidos();
+        renderizarPedidosAdmin();
+        toastAdmin(`Pedido ${pedido.codigo || id}: ${labelStatusPedido(novoStatus)}.`);
+    } catch (erro) {
+        console.error("Erro ao alterar status do pedido:", erro);
+        pedido.status = statusAnterior;
+        if (selectEl) selectEl.value = statusAnterior;
+        toastAdmin("Não foi possível alterar o status do pedido.", true);
+    } finally {
+        if (selectEl) selectEl.disabled = false;
+    }
+}
+
 function trocarViewAdmin(view, botao) {
     viewAdminAtual = view;
     document.querySelectorAll(".admin-nav .nav-item:not(.desabilitado)").forEach(item => item.classList.remove("ativo"));
@@ -409,19 +590,23 @@ function trocarViewAdmin(view, botao) {
 
     const produtos = document.getElementById("conteudo-produtos");
     const estoque = document.getElementById("conteudo-estoque");
+    const pedidos = document.getElementById("conteudo-pedidos");
     const avaliacoes = document.getElementById("conteudo-avaliacoes");
     if (produtos) produtos.hidden = view !== "produtos";
     if (estoque) estoque.hidden = view !== "estoque";
+    if (pedidos) pedidos.hidden = view !== "pedidos";
     if (avaliacoes) avaliacoes.hidden = view !== "avaliacoes";
 
     const titulos = {
         produtos: "Produtos",
         estoque: "Estoque",
+        pedidos: "Pedidos",
         avaliacoes: "Avaliações"
     };
     document.getElementById("titulo-view").textContent = titulos[view] || "Produtos";
     document.body.classList.remove("menu-admin-aberto");
 
+    if (view === "pedidos") carregarPedidosAdmin();
     if (view === "avaliacoes") carregarAvaliacoesAdmin();
 }
 
