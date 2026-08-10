@@ -224,11 +224,13 @@ async function carregarProdutosDoSupabase() {
             .order("id", { ascending: true });
 
         if (error) throw error;
-        if (!Array.isArray(data) || data.length === 0) {
-            console.warn("Supabase não retornou produtos. Mantendo catálogo local de segurança.");
+        if (!Array.isArray(data)) {
+            console.warn("Supabase retornou uma resposta inesperada. Mantendo catálogo local de segurança.");
             return false;
         }
 
+        // Resposta vazia sem erro é válida: significa que não há produtos ativos.
+        // Não usamos o fallback nesse caso, pois isso faria produtos desativados reaparecerem.
         PRODUTOS = data
             .map(mesclarProdutoDoBanco)
             .filter(produto => Number.isFinite(produto.id) && produto.ativo);
@@ -518,6 +520,12 @@ function atualizarContadoresMobile() {
 function setNavMobileAtivo(elemento) {
     document.querySelectorAll(".bottom-nav-mobile a").forEach(link => link.classList.remove("ativo"));
     if (elemento) elemento.classList.add("ativo");
+}
+
+function ativarMenuPorHref(href, elementoMobile) {
+    const linkDesktop = document.querySelector(`header nav a[href="${href}"]`);
+    if (linkDesktop) gerenciarMenuAtivo(linkDesktop);
+    setNavMobileAtivo(elementoMobile);
 }
 
 function abrirFavoritosMobile(elemento) {

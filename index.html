@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=20">
+    <link rel="stylesheet" href="./style.css?v=21">
 </head>
 <body>
 
@@ -369,10 +369,10 @@
     </a>
 
     <nav class="bottom-nav-mobile" aria-label="Navegação rápida mobile">
-        <a href="#inicio" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href='#inicio']')); setNavMobileAtivo(this)">
+        <a href="#inicio" onclick="ativarMenuPorHref('#inicio', this)">
             <span class="mobile-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5v8a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></span><span>Início</span>
         </a>
-        <a href="#categorias" onclick="gerenciarMenuAtivo(document.querySelector('header nav a[href='#produtos']')); setNavMobileAtivo(this)">
+        <a href="#categorias" onclick="ativarMenuPorHref('#produtos', this)">
             <span class="mobile-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16l-1 13H5zM8 7a4 4 0 0 1 8 0"/></svg></span><span>Produtos</span>
         </a>
         <a href="javascript:void(0)" onclick="abrirFavoritosMobile(this)">
@@ -391,6 +391,6 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./script.js?v=20"></script>
+    <script src="./script.js?v=21"></script>
 </body>
 </html>

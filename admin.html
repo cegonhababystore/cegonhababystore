@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4a3728">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Cegonha Admin | Painel da Loja</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./admin.css?v=21">
+</head>
+<body>
+    <main class="admin-shell">
+        <section id="login-view" class="login-view">
+            <div class="login-card">
+                <img src="./logo.jpg" alt="Cegonha Baby Store" class="login-logo">
+                <p class="eyebrow">ÁREA RESTRITA</p>
+                <h1>Cegonha Admin</h1>
+                <p class="login-subtitulo">Entre com a conta administrativa para gerenciar produtos e estoque.</p>
+
+                <form id="login-form" class="login-form">
+                    <label>
+                        <span>E-mail</span>
+                        <input id="login-email" type="email" autocomplete="username" required placeholder="seu@email.com">
+                    </label>
+                    <label>
+                        <span>Senha</span>
+                        <input id="login-senha" type="password" autocomplete="current-password" required placeholder="Sua senha">
+                    </label>
+                    <button id="login-btn" class="btn-primary btn-full" type="submit">Entrar no painel</button>
+                </form>
+                <p id="login-msg" class="form-msg" role="status"></p>
+                <a class="voltar-loja" href="./index.html">← Voltar para a loja</a>
+            </div>
+        </section>
+
+        <section id="painel-view" class="painel-view" hidden>
+            <aside class="admin-sidebar">
+                <div class="admin-brand">
+                    <img src="./logo.jpg" alt="Cegonha Baby Store">
+                    <div><strong>Cegonha</strong><span>Admin</span></div>
+                </div>
+
+                <nav class="admin-nav" aria-label="Menu administrativo">
+                    <button class="nav-item ativo" type="button" data-view="produtos" onclick="trocarViewAdmin('produtos', this)">
+                        <span>▦</span> Produtos
+                    </button>
+                    <button class="nav-item" type="button" data-view="estoque" onclick="trocarViewAdmin('estoque', this)">
+                        <span>▤</span> Estoque
+                    </button>
+                    <button class="nav-item desabilitado" type="button" disabled title="Será habilitado quando criarmos a base de pedidos">
+                        <span>◫</span> Pedidos <small>em breve</small>
+                    </button>
+                    <button class="nav-item desabilitado" type="button" disabled title="Será habilitado quando migrarmos as avaliações para o banco">
+                        <span>☆</span> Avaliações <small>em breve</small>
+                    </button>
+                </nav>
+
+                <div class="sidebar-rodape">
+                    <a href="./index.html" target="_blank" rel="noopener">Abrir loja ↗</a>
+                    <button type="button" onclick="sairAdmin()">Sair</button>
+                </div>
+            </aside>
+
+            <div class="admin-main">
+                <header class="admin-header">
+                    <button class="menu-mobile" type="button" onclick="alternarMenuAdmin()" aria-label="Abrir menu">☰</button>
+                    <div>
+                        <p class="eyebrow">CEGONHA BABY STORE</p>
+                        <h1 id="titulo-view">Produtos</h1>
+                    </div>
+                    <div class="admin-user">
+                        <span id="admin-email">Administrador</span>
+                        <button class="btn-ghost" type="button" onclick="sairAdmin()">Sair</button>
+                    </div>
+                </header>
+
+                <div id="conteudo-produtos" class="view-conteudo">
+                    <section class="stats-grid" aria-label="Resumo dos produtos">
+                        <article><span>Total</span><strong id="stat-total">0</strong><small>produtos cadastrados</small></article>
+                        <article><span>Ativos</span><strong id="stat-ativos">0</strong><small>visíveis na loja</small></article>
+                        <article><span>Inativos</span><strong id="stat-inativos">0</strong><small>ocultos da loja</small></article>
+                        <article><span>Estoque baixo</span><strong id="stat-baixo">0</strong><small>até 2 unidades</small></article>
+                    </section>
+
+                    <section class="admin-card">
+                        <div class="toolbar">
+                            <div class="busca-admin">
+                                <span>⌕</span>
+                                <input id="busca-produto" type="search" placeholder="Buscar produto..." oninput="renderizarListaProdutos()">
+                            </div>
+                            <select id="filtro-status" onchange="renderizarListaProdutos()" aria-label="Filtrar status">
+                                <option value="todos">Todos</option>
+                                <option value="ativos">Ativos</option>
+                                <option value="inativos">Inativos</option>
+                            </select>
+                            <button class="btn-primary" type="button" onclick="abrirFormProduto()">+ Adicionar produto</button>
+                        </div>
+
+                        <div id="produtos-loading" class="estado-lista">Carregando produtos...</div>
+                        <div id="produtos-vazio" class="estado-lista" hidden>Nenhum produto encontrado.</div>
+                        <div id="produtos-lista" class="produtos-admin-lista" hidden></div>
+                    </section>
+                </div>
+
+                <div id="conteudo-estoque" class="view-conteudo" hidden>
+                    <section class="admin-card">
+                        <div class="estoque-cabecalho">
+                            <div>
+                                <h2>Controle rápido de estoque</h2>
+                                <p>Use os botões para ajustar a quantidade sem abrir a edição completa.</p>
+                            </div>
+                            <button class="btn-ghost" type="button" onclick="carregarProdutosAdmin()">Atualizar</button>
+                        </div>
+                        <div id="estoque-lista" class="estoque-lista"></div>
+                    </section>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="produto-modal" class="modal-admin" aria-hidden="true">
+        <div class="modal-admin-overlay" onclick="fecharFormProduto()"></div>
+        <section class="modal-admin-card" role="dialog" aria-modal="true" aria-labelledby="form-titulo">
+            <div class="modal-admin-topo">
+                <div>
+                    <p class="eyebrow">PRODUTO</p>
+                    <h2 id="form-titulo">Adicionar produto</h2>
+                </div>
+                <button class="modal-fechar" type="button" onclick="fecharFormProduto()" aria-label="Fechar">×</button>
+            </div>
+
+            <form id="produto-form" class="produto-form">
+                <input id="produto-id" type="hidden">
+                <input id="produto-imagem-atual" type="hidden">
+
+                <div class="form-grid">
+                    <label class="campo campo-full">
+                        <span>Nome do produto *</span>
+                        <input id="produto-nome" type="text" maxlength="120" required>
+                    </label>
+
+                    <label class="campo">
+                        <span>Preço (R$) *</span>
+                        <input id="produto-preco" type="number" min="0" step="0.01" inputmode="decimal" required>
+                    </label>
+
+                    <label class="campo">
+                        <span>Categoria *</span>
+                        <select id="produto-categoria" required>
+                            <option value="bebe">Bebês</option>
+                            <option value="menina">Meninas</option>
+                            <option value="menino">Meninos</option>
+                        </select>
+                    </label>
+
+                    <label class="campo">
+                        <span>Estoque</span>
+                        <input id="produto-estoque" type="number" min="0" step="1" value="0">
+                    </label>
+
+                    <label class="campo campo-switch">
+                        <span>Visível na loja</span>
+                        <input id="produto-ativo" type="checkbox" checked>
+                        <i aria-hidden="true"></i>
+                    </label>
+
+                    <label class="campo campo-full">
+                        <span>Descrição</span>
+                        <textarea id="produto-descricao" rows="5" maxlength="1200" placeholder="Descreva a peça..."></textarea>
+                    </label>
+
+                    <div class="campo campo-full campo-imagem">
+                        <span>Foto do produto</span>
+                        <div class="upload-box">
+                            <div class="preview-wrap">
+                                <img id="produto-preview" src="./logo.jpg" alt="Prévia da imagem">
+                            </div>
+                            <div class="upload-acoes">
+                                <label class="btn-upload" for="produto-imagem">Escolher foto</label>
+                                <input id="produto-imagem" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+                                <small>JPG, PNG ou WEBP. Máximo recomendado: 5 MB.</small>
+                                <label class="campo-url">
+                                    <span>ou URL/arquivo existente</span>
+                                    <input id="produto-imagem-url" type="text" placeholder="https://... ou ./foto.jpeg">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p id="produto-form-msg" class="form-msg" role="status"></p>
+                <div class="form-acoes">
+                    <button class="btn-ghost" type="button" onclick="fecharFormProduto()">Cancelar</button>
+                    <button id="produto-salvar" class="btn-primary" type="submit">Salvar produto</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <div id="toast-admin" class="toast-admin" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./admin.js?v=21"></script>
+</body>
+</html>
