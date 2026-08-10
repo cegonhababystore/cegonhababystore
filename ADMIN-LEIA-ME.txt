@@ -1,0 +1,44 @@
+CEGONHA BABY STORE - PAINEL ADMIN V21
+
+O painel fica em:
+/admin.html
+
+ANTES DE USAR:
+1. No Supabase, execute 01-configurar-painel-admin.sql no SQL Editor.
+2. Vá em Authentication > Users e crie/convide a conta que será administradora.
+3. Confirme o e-mail e defina uma senha.
+4. Copie o User ID/UUID dessa conta.
+5. Abra 02-tornar-usuario-admin.sql, troque COLE_SEU_UUID_AQUI pelo UUID e execute.
+6. Em Authentication, desative novos cadastros públicos se você ainda não for criar contas de clientes.
+7. Suba todos os arquivos desta pasta para a Vercel.
+8. Acesse https://SEU-SITE/admin.html e faça login.
+
+O QUE JÁ FUNCIONA NO PAINEL:
+- Login por e-mail e senha usando Supabase Auth.
+- Ver produtos ativos e inativos.
+- Buscar e filtrar produtos.
+- Adicionar produtos.
+- Editar nome, descrição, preço, categoria, estoque e status.
+- Enviar imagem diretamente para o Supabase Storage.
+- Excluir produtos.
+- Controle rápido de estoque com + e -.
+- Painel responsivo para celular.
+
+SEGURANÇA:
+- O navegador usa apenas a Publishable Key.
+- A chave secreta/service_role NÃO está no site.
+- As escritas são protegidas por RLS.
+- Somente usuários presentes na tabela administradores podem alterar produtos.
+
+AINDA NÃO IMPLEMENTADO:
+- Pedidos no banco.
+- Avaliações compartilhadas no banco.
+- Contas de clientes.
+- Baixa automática de estoque ao finalizar pedido.
+
+OBSERVAÇÃO:
+As imagens antigas continuam funcionando a partir da pasta do site. Novas imagens enviadas pelo painel passam a ficar no Supabase Storage.
+
+ATUALIZAÇÃO V22 — AVALIAÇÕES
+Depois de executar 03-avaliacoes-compartilhadas.sql, a seção Avaliações do painel fica ativa.
+Ela permite consultar avaliações compartilhadas, filtrar por nota e excluir comentários/avaliações quando necessário.

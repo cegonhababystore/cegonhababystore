@@ -3255,3 +3255,98 @@ footer p {
         order: -1;
     }
 }
+
+
+/* =========================================================
+   V26 - BUSCA DE PRODUTOS + DESEMPENHO
+   ========================================================= */
+.busca-produtos-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: 4px 0 20px;
+}
+
+.busca-produtos-campo {
+    width: min(520px, 100%);
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px 0 14px;
+    border: 1px solid var(--borda);
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(74, 55, 40, .05);
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.busca-produtos-campo:focus-within {
+    border-color: rgba(74, 55, 40, .34);
+    box-shadow: 0 10px 26px rgba(74, 55, 40, .09);
+}
+
+.busca-produtos-campo svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    color: var(--marrom-suave);
+    flex: 0 0 auto;
+}
+
+.busca-produtos-campo input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--marrom-luxo);
+    font: inherit;
+    min-width: 0;
+}
+
+.busca-produtos-campo input::-webkit-search-cancel-button {
+    display: none;
+}
+
+.busca-produtos-campo button {
+    border: 0;
+    background: transparent;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--marrom-suave);
+    font-size: 22px;
+    line-height: 1;
+}
+
+.busca-produtos-campo button:hover {
+    background: rgba(74, 55, 40, .06);
+}
+
+#resultado-busca-produtos {
+    color: var(--marrom-suave);
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    .busca-produtos-area {
+        display: block;
+        margin: 2px 0 16px;
+    }
+
+    .busca-produtos-campo {
+        width: 100%;
+        min-height: 46px;
+    }
+
+    #resultado-busca-produtos {
+        display: block;
+        margin: 7px 4px 0;
+        white-space: normal;
+    }
+}

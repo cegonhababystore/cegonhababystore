@@ -16,7 +16,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Menino",
         preco: 89.90,
         precoAntigo: 99.90,
-        imagem: "./fotovitrine1m.jpeg",
+        imagem: "./fotovitrine1m.webp",
         badge: "Mais vendido",
         tipoBadge: "sucesso",
         chamada: "Peça queridinha da semana",
@@ -30,7 +30,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Menina",
         preco: 79.90,
         precoAntigo: 89.90,
-        imagem: "./Body Feminino Laranja Premium.jpeg",
+        imagem: "./body-feminino-laranja-premium.webp",
         badge: "Oferta",
         tipoBadge: "oferta",
         chamada: "Romântico e delicado",
@@ -44,7 +44,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Menina",
         preco: 129.90,
         precoAntigo: 149.90,
-        imagem: "./macacão rosa com corações.jpeg",
+        imagem: "./macacao-coracoes-rosa.webp",
         badge: "Aconchego",
         tipoBadge: "novidade",
         chamada: "Perfeito para dias mais fresquinhos",
@@ -58,7 +58,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Bebês",
         preco: 79.90,
         precoAntigo: null,
-        imagem: "./macacão feminino bege.jpeg",
+        imagem: "./macacao-curto-rosa.webp",
         badge: "Novo",
         tipoBadge: "novidade",
         chamada: "Modelo clássico e delicado",
@@ -72,7 +72,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Menina",
         preco: 109.90,
         precoAntigo: 119.90,
-        imagem: "./conjunto-batinha-xadrez.jpeg",
+        imagem: "./conjunto-batinha-xadrez.webp",
         badge: "Destaque",
         tipoBadge: "sucesso",
         chamada: "Encanta em fotos e passeios",
@@ -86,7 +86,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Menino",
         preco: 149.90,
         precoAntigo: 169.90,
-        imagem: "./conjunto-polo-jardineira-linho.jpeg",
+        imagem: "./conjunto-polo-jardineira-linho.webp",
         badge: "Elegante",
         tipoBadge: "oferta",
         chamada: "Ideal para ocasiões especiais",
@@ -100,7 +100,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Bebês",
         preco: 99.90,
         precoAntigo: null,
-        imagem: "./macacao-ursinho-soft.jpeg",
+        imagem: "./macacao-ursinho-soft.webp",
         badge: "Fofo demais",
         tipoBadge: "sucesso",
         chamada: "Uma das peças mais adoráveis da loja",
@@ -114,7 +114,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Menina",
         preco: 74.90,
         precoAntigo: 84.90,
-        imagem: "./romper-ciganinha-floral.jpeg.jpeg",
+        imagem: "./romper-ciganinha-floral.webp",
         badge: "Últimas unidades",
         tipoBadge: "urgencia",
         chamada: "Visual floral com muito charme",
@@ -128,7 +128,7 @@ const PRODUTOS_FALLBACK = [
         categoriaLabel: "Menino",
         preco: 89.90,
         precoAntigo: null,
-        imagem: "./romper-dinossauros-chapeu.jpeg",
+        imagem: "./romper-dinossauros-chapeu.webp",
         badge: "Novo",
         tipoBadge: "novidade",
         chamada: "Look divertido para dias quentes",
@@ -172,6 +172,29 @@ function iniciarSupabaseLoja() {
     return supabaseClient;
 }
 
+// V26: usa versões WebP menores para as imagens locais conhecidas.
+// Imagens enviadas pelo painel/Supabase continuam funcionando normalmente.
+const IMAGENS_LOCAIS_OTIMIZADAS = {
+    "fotovitrine1m.jpeg": "./fotovitrine1m.webp",
+    "Body Feminino Laranja Premium.jpeg": "./body-feminino-laranja-premium.webp",
+    "macacão rosa com corações.jpeg": "./macacao-coracoes-rosa.webp",
+    "macacão feminino bege.jpeg": "./macacao-curto-rosa.webp",
+    "conjunto-batinha-xadrez.jpeg": "./conjunto-batinha-xadrez.webp",
+    "conjunto-polo-jardineira-linho.jpeg": "./conjunto-polo-jardineira-linho.webp",
+    "macacao-ursinho-soft.jpeg": "./macacao-ursinho-soft.webp",
+    "romper-ciganinha-floral.jpeg.jpeg": "./romper-ciganinha-floral.webp",
+    "romper-dinossauros-chapeu.jpeg": "./romper-dinossauros-chapeu.webp"
+};
+
+function normalizarImagemLoja(url) {
+    const valor = String(url || "").trim();
+    if (!valor) return "";
+    if (/^(https?:|data:|blob:)/i.test(valor)) return valor;
+
+    const chave = valor.replace(/^\.?\//, "");
+    return IMAGENS_LOCAIS_OTIMIZADAS[chave] || valor;
+}
+
 function categoriaLabelDoBanco(categoria) {
     const mapa = {
         bebe: "Bebês",
@@ -193,7 +216,7 @@ function mesclarProdutoDoBanco(registro) {
         categoria: registro.categoria || visualLocal.categoria || "bebe",
         categoriaLabel: categoriaLabelDoBanco(registro.categoria || visualLocal.categoria),
         preco: Number.isFinite(precoBanco) ? precoBanco : normalizarPreco(visualLocal.preco),
-        imagem: registro.imagem_principal || visualLocal.imagem || "",
+        imagem: normalizarImagemLoja(registro.imagem_principal || visualLocal.imagem || ""),
         descricao: registro.descricao || visualLocal.descricao || "",
         estoque: Math.max(0, Number.parseInt(registro.estoque ?? 0, 10) || 0),
         ativo: registro.ativo !== false
@@ -269,6 +292,7 @@ let clienteAvaliacaoId = obterClienteAvaliacaoId();
 let notaSelecionada = 0;
 let categoriaAtual = "todos";
 let modoFavoritos = false;
+let termoBuscaAtual = "";
 let mouseArrastou = false;
 let pedidoTokenAtual = null;
 
@@ -522,6 +546,34 @@ function isFavorito(id) {
     return favoritos.includes(Number(id));
 }
 
+
+function normalizarTextoBusca(texto) {
+    return String(texto || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim();
+}
+
+function pesquisarProdutos(valor) {
+    termoBuscaAtual = normalizarTextoBusca(valor);
+    const limpar = document.getElementById("limpar-busca-produtos");
+    if (limpar) limpar.hidden = !termoBuscaAtual;
+    renderizarProdutos(categoriaAtual);
+}
+
+function limparBuscaProdutos() {
+    termoBuscaAtual = "";
+    const campo = document.getElementById("busca-produtos");
+    const limpar = document.getElementById("limpar-busca-produtos");
+    if (campo) {
+        campo.value = "";
+        campo.focus();
+    }
+    if (limpar) limpar.hidden = true;
+    renderizarProdutos(categoriaAtual);
+}
+
 function renderizarProdutos(categoria = categoriaAtual, opcoes = {}) {
     categoriaAtual = categoria;
     const lista = document.getElementById("lista-produtos");
@@ -538,10 +590,32 @@ function renderizarProdutos(categoria = categoriaAtual, opcoes = {}) {
         produtosFiltrados = produtosFiltrados.filter(produto => isFavorito(produto.id));
     }
 
+    if (termoBuscaAtual) {
+        produtosFiltrados = produtosFiltrados.filter(produto => {
+            const texto = normalizarTextoBusca([
+                produto.nome,
+                produto.descricao,
+                produto.categoria,
+                produto.categoriaLabel,
+                produto.chamada
+            ].filter(Boolean).join(" "));
+            return texto.includes(termoBuscaAtual);
+        });
+    }
+
+    const resultadoBusca = document.getElementById("resultado-busca-produtos");
+    if (resultadoBusca) {
+        const total = produtosFiltrados.length;
+        resultadoBusca.textContent = termoBuscaAtual
+            ? `${total} ${total === 1 ? "produto encontrado" : "produtos encontrados"}`
+            : "";
+    }
+
     if (produtosFiltrados.length === 0) {
-        lista.innerHTML = modoFavoritos
-            ? '<div class="sem-produtos">Você ainda não salvou favoritos.</div>'
-            : '<div class="sem-produtos">Nenhum produto encontrado nesta categoria.</div>';
+        const mensagem = termoBuscaAtual
+            ? 'Nenhum produto combina com sua busca.'
+            : (modoFavoritos ? 'Você ainda não salvou favoritos.' : 'Nenhum produto encontrado nesta categoria.');
+        lista.innerHTML = `<div class="sem-produtos">${mensagem}</div>`;
         return;
     }
 
@@ -563,6 +637,7 @@ function renderizarProdutos(categoria = categoriaAtual, opcoes = {}) {
                         src="${produto.imagem}"
                         alt="${produto.nome}"
                         loading="lazy"
+                        decoding="async"
                         draggable="false"
                         onerror="imagemComErro(this, '${escaparTexto(produto.nome)}')"
                     >
