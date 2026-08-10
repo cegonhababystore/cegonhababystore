@@ -186,6 +186,15 @@ const IMAGENS_LOCAIS_OTIMIZADAS = {
     "romper-dinossauros-chapeu.jpeg": "./romper-dinossauros-chapeu.webp"
 };
 
+// V27: os cards usam WebP leve, mas os detalhes/zoom usam o arquivo original.
+// Para imagens novas hospedadas no Supabase Storage, a mesma URL é usada nos dois casos.
+const IMAGENS_LOCAIS_ORIGINAIS_POR_OTIMIZADA = Object.fromEntries(
+    Object.entries(IMAGENS_LOCAIS_OTIMIZADAS).map(([original, otimizada]) => [
+        otimizada.replace(/^\.?\//, ""),
+        `./${original}`
+    ])
+);
+
 function normalizarImagemLoja(url) {
     const valor = String(url || "").trim();
     if (!valor) return "";
@@ -193,6 +202,16 @@ function normalizarImagemLoja(url) {
 
     const chave = valor.replace(/^\.?\//, "");
     return IMAGENS_LOCAIS_OTIMIZADAS[chave] || valor;
+}
+
+function normalizarImagemOriginal(url) {
+    const valor = String(url || "").trim();
+    if (!valor) return "";
+    if (/^(https?:|data:|blob:)/i.test(valor)) return valor;
+
+    const chave = valor.replace(/^\.?\//, "");
+    if (IMAGENS_LOCAIS_OTIMIZADAS[chave]) return `./${chave}`;
+    return IMAGENS_LOCAIS_ORIGINAIS_POR_OTIMIZADA[chave] || valor;
 }
 
 function categoriaLabelDoBanco(categoria) {
@@ -217,6 +236,7 @@ function mesclarProdutoDoBanco(registro) {
         categoriaLabel: categoriaLabelDoBanco(registro.categoria || visualLocal.categoria),
         preco: Number.isFinite(precoBanco) ? precoBanco : normalizarPreco(visualLocal.preco),
         imagem: normalizarImagemLoja(registro.imagem_principal || visualLocal.imagem || ""),
+        imagemOriginal: normalizarImagemOriginal(registro.imagem_principal || visualLocal.imagemOriginal || visualLocal.imagem || ""),
         descricao: registro.descricao || visualLocal.descricao || "",
         estoque: Math.max(0, Number.parseInt(registro.estoque ?? 0, 10) || 0),
         ativo: registro.ativo !== false
@@ -1457,7 +1477,9 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
     fotoBloco.querySelectorAll(".fallback-foto").forEach(el => el.remove());
     img.style.display = "block";
     img.dataset.erroTratado = "nao";
-    img.src = produto.imagem;
+    // Detalhes e visualizador recebem a foto original em qualidade máxima.
+    // A vitrine continua usando a versão WebP mais leve.
+    img.src = normalizarImagemOriginal(produto.imagemOriginal || produto.imagem);
     img.alt = produto.nome;
     img.onerror = () => imagemComErro(img, produto.nome);
 
