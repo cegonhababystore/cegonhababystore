@@ -134,6 +134,188 @@ const PRODUTOS_FALLBACK = [
         chamada: "Look divertido para dias quentes",
         avaliacoes: 6,
         descricao: "Romper verde sem mangas com estampa de dinossauros coloridos, botões frontais e fechamento entrepernas. A combinação com o chapéu estampado cria um look divertido para os dias quentes."
+    },
+    {
+        id: 10,
+        nome: "Conjunto Chuva de Amor Rosa e Cinza",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 89.90,
+        precoAntigo: null,
+        imagem: "./conjunto-chuva-de-amor-rosa-cinza.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Laços e babados em uma combinação delicada",
+        avaliacoes: 0,
+        descricao: "Conjunto infantil em rosa e cinza, com blusa de mangas com babados e laço frontal, acompanhado de peça inferior com suspensórios, babados e laços. A estampa de nuvens e pequenos corações deixa o visual ainda mais delicado."
+    },
+    {
+        id: 11,
+        nome: "Conjunto Azul com Calça Xadrez Preto e Branco",
+        categoria: "menino",
+        categoriaLabel: "Menino",
+        preco: 119.90,
+        precoAntigo: null,
+        imagem: "./conjunto-azul-xadrez-preto-branco.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Visual moderno para os dias mais fresquinhos",
+        avaliacoes: 0,
+        descricao: "Conjunto infantil com blusa azul de manga longa, detalhe contrastante nos ombros e bolso frontal com aplicação divertida, acompanhado de calça xadrez em preto e branco."
+    },
+    {
+        id: 12,
+        nome: "Conjunto Moranguinhos Vermelho com Jardineira",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 99.90,
+        precoAntigo: null,
+        imagem: "./conjunto-moranguinhos-vermelho.webp",
+        badge: "Destaque",
+        tipoBadge: "sucesso",
+        chamada: "Moranguinhos, laços e babados cheios de charme",
+        avaliacoes: 0,
+        descricao: "Conjunto infantil em vermelho e branco, com blusa de babados e jardineira estampada com morangos. Os laços vermelhos e as camadas de babados completam o visual delicado."
+    },
+    {
+        id: 13,
+        nome: "Romper Corações Terracota com Babados",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 89.90,
+        precoAntigo: null,
+        imagem: "./romper-coracoes-terracota.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Tons terrosos com um toque romântico",
+        avaliacoes: 0,
+        descricao: "Romper infantil em terracota e creme, com estampa de corações na parte superior, mangas com babados, suspensórios decorativos, laços frontais e saia em camadas."
+    },
+    {
+        id: 14,
+        nome: "Vestido Listrado Rosa com Laço",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 94.90,
+        precoAntigo: null,
+        imagem: "./vestido-listrado-rosa-laco.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Clássico, leve e delicado",
+        avaliacoes: 0,
+        descricao: "Vestido infantil rosa e branco com listras verticais, alças finas e laço grande na parte frontal. A saia ampla cria um visual clássico e delicado."
+    },
+    {
+        id: 15,
+        nome: "Macacão Bege com Detalhe Xadrez",
+        categoria: "bebe",
+        categoriaLabel: "Bebês",
+        preco: 109.90,
+        precoAntigo: null,
+        imagem: "./macacao-bege-detalhe-xadrez.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Um modelo clássico em tons suaves",
+        avaliacoes: 0,
+        descricao: "Macacão longo bege com gola, fechamento frontal por botões e detalhes coloridos em estampa xadrez. Os pezinhos fechados e os acabamentos contrastantes completam o visual."
+    },
+    {
+        id: 16,
+        nome: "Romper Rosa Texturizado com Babados",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 84.90,
+        precoAntigo: null,
+        imagem: "./romper-rosa-texturizado-babados.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Delicadeza em cada babado",
+        avaliacoes: 0,
+        descricao: "Romper infantil rosa com textura marcada, mangas curtas com babados, três botões frontais e saia em camadas. O fechamento inferior facilita o uso no dia a dia."
+    },
+    {
+        id: 17,
+        nome: "Vestido Xadrez Azul com Laços Rosa",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 99.90,
+        precoAntigo: null,
+        imagem: "./vestido-xadrez-azul-lacos-rosa.webp",
+        badge: "Destaque",
+        tipoBadge: "sucesso",
+        chamada: "Xadrez clássico com laços delicados",
+        avaliacoes: 0,
+        descricao: "Vestido infantil xadrez em azul e branco, com gola branca arredondada, mangas curtas e dois laços rosa na cintura. A saia ampla dá um acabamento clássico ao modelo."
+    },
+    {
+        id: 18,
+        nome: "Kit Macacão Ursinho Bege com Touca e Babador",
+        categoria: "bebe",
+        categoriaLabel: "Bebês",
+        preco: 119.90,
+        precoAntigo: null,
+        imagem: "./kit-macacao-ursinho-bege.webp",
+        badge: "Kit",
+        tipoBadge: "sucesso",
+        chamada: "Conjunto coordenado para os pequenos",
+        avaliacoes: 0,
+        descricao: "Kit infantil em bege e marrom com macacão de manga longa estampado com ursinho, acompanhado de touca com orelhinhas e babador coordenado."
+    },
+    {
+        id: 19,
+        nome: "Vestido Rosa Bordado com Babados",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 99.90,
+        precoAntigo: null,
+        imagem: "./vestido-rosa-bordado-babados.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Romântico e delicado para ocasiões especiais",
+        avaliacoes: 0,
+        descricao: "Vestido infantil rosa com detalhes vazados bordados, alças largas com babados e barra recortada. O modelo aparece de frente e de costas na imagem para destacar o acabamento."
+    },
+    {
+        id: 20,
+        nome: "Romper Floral Verde Jardim",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 89.90,
+        precoAntigo: null,
+        imagem: "./romper-floral-verde-jardim.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Flores suaves em uma combinação alegre",
+        avaliacoes: 0,
+        descricao: "Romper infantil verde com parte superior floral em tons de rosa e verde, mangas amplas com babados e laço frontal. O contraste entre o floral e o verde cria um visual leve e delicado."
+    },
+    {
+        id: 21,
+        nome: "Conjunto Pijama Cachorrinhos Rosa",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 79.90,
+        precoAntigo: null,
+        imagem: "./conjunto-pijama-cachorrinhos-rosa.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Conforto com estampa divertida",
+        avaliacoes: 0,
+        descricao: "Conjunto infantil rosa com camiseta de manga curta estampada com cachorrinhos e pequenas patinhas, acompanhado de short liso no mesmo tom."
+    },
+    {
+        id: 22,
+        nome: "Conjunto Batinha Creme com Flores Bordadas",
+        categoria: "menina",
+        categoriaLabel: "Menina",
+        preco: 89.90,
+        precoAntigo: null,
+        imagem: "./conjunto-batinha-creme-flores.webp",
+        badge: "Novo",
+        tipoBadge: "novidade",
+        chamada: "Flores bordadas em um visual delicado",
+        avaliacoes: 0,
+        descricao: "Conjunto infantil em creme com batinha de manga curta e bloomer coordenado. Os bordados florais em tons de laranja aparecem na parte superior e na peça inferior, acompanhados de acabamento delicado nas bordas."
     }
 ];
 
@@ -183,10 +365,23 @@ const IMAGENS_LOCAIS_OTIMIZADAS = {
     "conjunto-polo-jardineira-linho.jpeg": "./conjunto-polo-jardineira-linho.webp",
     "macacao-ursinho-soft.jpeg": "./macacao-ursinho-soft.webp",
     "romper-ciganinha-floral.jpeg.jpeg": "./romper-ciganinha-floral.webp",
-    "romper-dinossauros-chapeu.jpeg": "./romper-dinossauros-chapeu.webp"
+    "romper-dinossauros-chapeu.jpeg": "./romper-dinossauros-chapeu.webp",
+    "conjunto-chuva-de-amor-rosa-cinza.jpeg": "./conjunto-chuva-de-amor-rosa-cinza.webp",
+    "conjunto-azul-xadrez-preto-branco.jpeg": "./conjunto-azul-xadrez-preto-branco.webp",
+    "conjunto-moranguinhos-vermelho.jpeg": "./conjunto-moranguinhos-vermelho.webp",
+    "romper-coracoes-terracota.jpeg": "./romper-coracoes-terracota.webp",
+    "vestido-listrado-rosa-laco.jpeg": "./vestido-listrado-rosa-laco.webp",
+    "macacao-bege-detalhe-xadrez.jpeg": "./macacao-bege-detalhe-xadrez.webp",
+    "romper-rosa-texturizado-babados.jpeg": "./romper-rosa-texturizado-babados.webp",
+    "vestido-xadrez-azul-lacos-rosa.jpeg": "./vestido-xadrez-azul-lacos-rosa.webp",
+    "kit-macacao-ursinho-bege.jpeg": "./kit-macacao-ursinho-bege.webp",
+    "vestido-rosa-bordado-babados.jpeg": "./vestido-rosa-bordado-babados.webp",
+    "romper-floral-verde-jardim.jpeg": "./romper-floral-verde-jardim.webp",
+    "conjunto-pijama-cachorrinhos-rosa.jpeg": "./conjunto-pijama-cachorrinhos-rosa.webp",
+    "conjunto-batinha-creme-flores.jpeg": "./conjunto-batinha-creme-flores.webp"
 };
 
-// V27: os cards usam WebP leve, mas os detalhes/zoom usam o arquivo original.
+// V28: os cards usam WebP leve, mas os detalhes/zoom usam o arquivo original.
 // Para imagens novas hospedadas no Supabase Storage, a mesma URL é usada nos dois casos.
 const IMAGENS_LOCAIS_ORIGINAIS_POR_OTIMIZADA = Object.fromEntries(
     Object.entries(IMAGENS_LOCAIS_OTIMIZADAS).map(([original, otimizada]) => [
@@ -225,7 +420,17 @@ function categoriaLabelDoBanco(categoria) {
 
 function mesclarProdutoDoBanco(registro) {
     const id = Number(registro.id);
-    const visualLocal = PRODUTOS_FALLBACK.find(produto => Number(produto.id) === id) || {};
+    const nomeBanco = String(registro.nome || "").trim().toLocaleLowerCase("pt-BR");
+    const imagemBanco = String(registro.imagem_principal || "").replace(/^\.?\//, "").trim().toLocaleLowerCase("pt-BR");
+    const visualLocal = PRODUTOS_FALLBACK.find(produto => {
+        if (Number(produto.id) === id) return true;
+        const nomeLocal = String(produto.nome || "").trim().toLocaleLowerCase("pt-BR");
+        const imagemLocalOriginal = String(normalizarImagemOriginal(produto.imagemOriginal || produto.imagem || ""))
+            .replace(/^\.?\//, "")
+            .trim()
+            .toLocaleLowerCase("pt-BR");
+        return (nomeBanco && nomeLocal === nomeBanco) || (imagemBanco && imagemLocalOriginal === imagemBanco);
+    }) || {};
     const precoBanco = normalizarPreco(registro.preco);
 
     return {
