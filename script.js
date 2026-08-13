@@ -1,14 +1,5 @@
-/* =========================================================
-   CEGONHA BABY STORE
-   COMO ADICIONAR NOVOS PRODUTOS NO FUTURO:
-   1) Coloque a foto na mesma pasta do site.
-   2) Copie UM objeto dentro da lista PRODUTOS abaixo.
-   3) Troque id, nome, categoria, preço, imagem e descrição.
-   ========================================================= */
-
 const PRODUTOS_FALLBACK = [
-    // ATENÇÃO: os preços abaixo são PROVISÓRIOS.
-    // Troque o campo "preco" assim que você souber o valor real de cada peça.
+    // os preços são PROVISÓRIOS.
     {
         id: 1,
         nome: "Conjunto Pijama Golfinhos Azul",
@@ -319,15 +310,15 @@ const PRODUTOS_FALLBACK = [
     }
 ];
 
-// =========================================================
+
 // SUPABASE - BASE DE DADOS DA LOJA
 // A publishable key é própria para uso no navegador.
 // A segurança de leitura/escrita continua sendo controlada pelo RLS.
-// =========================================================
+
 const SUPABASE_URL = "https://nridvmdmnejbanofavli.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iU8gK5XlJUUX0i_F3iZp4g_sDb5iAX_";
 
-// Começamos com os dados locais para o site continuar funcionando mesmo
+//dados locais para o site continuar funcionando mesmo
 // se a internet ou o Supabase estiverem temporariamente indisponíveis.
 let PRODUTOS = PRODUTOS_FALLBACK.map(produto => ({ ...produto }));
 let supabaseClient = null;
