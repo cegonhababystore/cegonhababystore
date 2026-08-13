@@ -1,5 +1,14 @@
+/* =========================================================
+   CEGONHA BABY STORE
+   COMO ADICIONAR NOVOS PRODUTOS NO FUTURO:
+   1) Coloque a foto na mesma pasta do site.
+   2) Copie UM objeto dentro da lista PRODUTOS abaixo.
+   3) Troque id, nome, categoria, preço, imagem e descrição.
+   ========================================================= */
+
 const PRODUTOS_FALLBACK = [
-    // os preços são PROVISÓRIOS.
+    // ATENÇÃO: os preços abaixo são PROVISÓRIOS.
+    // Troque o campo "preco" assim que você souber o valor real de cada peça.
     {
         id: 1,
         nome: "Conjunto Pijama Golfinhos Azul",
@@ -310,15 +319,15 @@ const PRODUTOS_FALLBACK = [
     }
 ];
 
-
+// =========================================================
 // SUPABASE - BASE DE DADOS DA LOJA
 // A publishable key é própria para uso no navegador.
 // A segurança de leitura/escrita continua sendo controlada pelo RLS.
-
+// =========================================================
 const SUPABASE_URL = "https://nridvmdmnejbanofavli.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_iU8gK5XlJUUX0i_F3iZp4g_sDb5iAX_";
 
-//dados locais para o site continuar funcionando mesmo
+// Começamos com os dados locais para o site continuar funcionando mesmo
 // se a internet ou o Supabase estiverem temporariamente indisponíveis.
 let PRODUTOS = PRODUTOS_FALLBACK.map(produto => ({ ...produto }));
 let supabaseClient = null;
@@ -901,7 +910,43 @@ function setNavMobileAtivo(elemento) {
     if (elemento) elemento.classList.add("ativo");
 }
 
+function restaurarCatalogoCompleto() {
+    // Reset TOTAL do estado da vitrine. Não depende do valor atual de modoFavoritos.
+    modoFavoritos = false;
+    categoriaAtual = "todos";
+    termoBuscaAtual = "";
+
+    document.querySelectorAll(".btn-filtro").forEach(btn => btn.classList.remove("ativo"));
+    const btnTodos = document.querySelector('.btn-filtro[data-categoria="todos"]');
+    if (btnTodos) btnTodos.classList.add("ativo");
+
+    const campoBusca = document.getElementById("busca-produtos");
+    const botaoLimpar = document.getElementById("limpar-busca-produtos");
+    const resultadoBusca = document.getElementById("resultado-busca-produtos");
+    if (campoBusca) campoBusca.value = "";
+    if (botaoLimpar) botaoLimpar.hidden = true;
+    if (resultadoBusca) resultadoBusca.textContent = "";
+
+    renderizarProdutos("todos");
+}
+
+function mostrarTodosProdutosMobile(elementoMobile) {
+    // O botão Produtos sempre força o catálogo completo, mesmo se o estado visual
+    // e a variável modoFavoritos tiverem ficado fora de sincronia.
+    restaurarCatalogoCompleto();
+    setNavMobileAtivo(elementoMobile);
+
+    const linkDesktop = document.querySelector('header nav a[href="#produtos"]');
+    if (linkDesktop) gerenciarMenuAtivo(linkDesktop);
+
+    const ancora = document.getElementById("categorias");
+    if (ancora) ancora.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function ativarMenuPorHref(href, elementoMobile) {
+    // Início também sai de Favoritos e restaura o catálogo completo.
+    restaurarCatalogoCompleto();
+
     const linkDesktop = document.querySelector(`header nav a[href="${href}"]`);
     if (linkDesktop) gerenciarMenuAtivo(linkDesktop);
     setNavMobileAtivo(elementoMobile);
