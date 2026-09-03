@@ -1,0 +1,25 @@
+CEGONHA BABY STORE — V26
+
+Esta versão NÃO adiciona galeria de várias fotos.
+
+Melhorias desta versão:
+- Busca de produtos por nome, descrição e categoria.
+- Busca funciona junto com os filtros e favoritos.
+- Imagens locais principais convertidas para WebP para reduzir o tráfego.
+- Lazy loading e decoding assíncrono em imagens abaixo da dobra.
+- Preconexão com Supabase e CDN para reduzir espera inicial.
+- Mantidos produtos, pedidos, avaliações, painel administrativo, estoque manual, favoritos, sacola, WhatsApp e zoom.
+
+BANCO DE DADOS
+Nenhum SQL novo é necessário nesta versão.
+Não rode arquivos antigos novamente.
+
+PUBLICAÇÃO
+1. Extraia o ZIP.
+2. Substitua os arquivos do repositório GitHub pelos arquivos desta pasta.
+3. Faça o commit.
+4. Aguarde o deploy automático da Vercel.
+5. No site, pesquise por termos como: macacão, rosa, menino ou dinossauro.
+
+OBSERVAÇÃO
+Os arquivos JPEG antigos foram mantidos no pacote por segurança/compatibilidade, mas a loja pública usa as versões WebP menores para as imagens locais conhecidas.

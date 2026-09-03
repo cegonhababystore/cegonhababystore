@@ -1,0 +1,28 @@
+CEGONHA BABY STORE — V25 | RESUMO DO PAINEL
+
+O que mudou:
+- Nova tela "Resumo" como página inicial do painel administrativo.
+- Pedidos de hoje.
+- Novos pedidos pendentes.
+- Valor em pedidos registrados hoje (cancelados não entram no valor).
+- Quantidade de produtos com estoque baixo (até 2 unidades).
+- Lista dos 5 pedidos mais recentes.
+- Atalhos para Pedidos, Produtos, Estoque e Avaliações.
+
+Otimização:
+- As avaliações não são mais carregadas automaticamente ao entrar no painel.
+- Elas só são buscadas quando a aba Avaliações é aberta.
+- A tela Resumo usa consultas pequenas e específicas ao Supabase.
+- Nada foi alterado na loja pública e não há SQL novo nesta versão.
+
+COMO ATUALIZAR PELO GITHUB
+1. Extraia o ZIP da V25.
+2. No mesmo repositório conectado à Vercel, substitua os arquivos da versão anterior pelos da V25.
+3. Faça o commit.
+4. Aguarde o deploy automático da Vercel.
+5. Abra /admin.html e confira a nova aba Resumo.
+
+IMPORTANTE
+- Não precisa executar novamente os SQL 01, 02, 03 ou 04.
+- O registro de pedidos da V24 continua igual.
+- Estoque continua manual, como combinado.

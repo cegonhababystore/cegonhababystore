@@ -1,0 +1,38 @@
+CEGONHA BABY STORE — V24 REGISTRO DE PEDIDOS
+
+O que mudou
+- O botão "Finalizar Pedido via WhatsApp" abre um formulário curto com nome, telefone e observação.
+- O pedido é registrado no Supabase antes de abrir o WhatsApp.
+- O total é recalculado no banco usando os preços atuais dos produtos.
+- Cada pedido recebe um código como CEG-000001.
+- O painel administrativo agora possui a aba Pedidos.
+- No painel é possível buscar pedidos, filtrar por status, abrir o WhatsApp do cliente e alterar o status.
+- Status disponíveis: Novo, Confirmado, Preparando, Entregue e Cancelado.
+- Duplo clique no botão não duplica o mesmo pedido porque cada tentativa usa um token único/idempotente.
+- O carrinho é limpo apenas depois que o banco confirma o registro do pedido.
+
+PASSO 1 — SUPABASE
+Abra Supabase > SQL Editor > New query.
+Execute TODO o arquivo:
+04-registro-pedidos.sql
+
+Não precisa rodar novamente os SQL 01, 02 ou 03 se eles já foram executados anteriormente.
+
+PASSO 2 — GITHUB
+Substitua os arquivos do site pelos arquivos desta pasta e faça o commit.
+A Vercel fará o deploy automaticamente se o repositório estiver conectado.
+
+PASSO 3 — TESTE
+1. Coloque um produto na sacola.
+2. Clique em Finalizar Pedido via WhatsApp.
+3. Informe nome e telefone.
+4. Clique em Registrar e abrir WhatsApp.
+5. Confirme se aparece um código CEG-xxxxxx na mensagem.
+6. Entre em /admin.html > Pedidos.
+7. Confirme se o pedido apareceu e teste a mudança de status.
+
+IMPORTANTE
+- Nesta V24, o estoque NÃO é diminuído automaticamente ao registrar o pedido.
+  Isso foi intencional para evitar alterar o estoque antes de a venda ser confirmada no WhatsApp.
+- Pedidos cancelados deixam de contar no valor registrado exibido no resumo.
+- Nome e telefone dos clientes não ficam expostos publicamente. As tabelas de pedidos são protegidas por RLS e somente o painel administrador pode consultá-las.

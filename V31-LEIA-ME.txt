@@ -1,0 +1,18 @@
+CEGONHA BABY STORE - V31
+
+Esta versão é a V30 completa + favicon da loja integrado.
+
+Novos arquivos:
+- favicon.png
+- favicon.ico
+- apple-touch-icon.png
+
+O index.html e o admin.html já estão configurados para usar a logo na aba do navegador.
+
+Para publicar:
+1. Extraia este ZIP.
+2. Envie/substitua TODO o conteúdo na raiz do repositório GitHub.
+3. Faça o commit.
+4. Aguarde o deploy automático da Vercel.
+
+Não precisa executar nenhum SQL novo no Supabase.

@@ -1,0 +1,17 @@
+CEGONHA BABY STORE - V30
+
+CORREÇÃO MOBILE - FAVORITOS -> PRODUTOS
+
+O botão Produtos da barra inferior agora chama diretamente mostrarTodosProdutosMobile().
+Essa função faz um reset completo da vitrine:
+- modoFavoritos = false
+- categoriaAtual = "todos"
+- limpa qualquer busca ativa
+- marca o filtro Todos
+- renderiza novamente todos os produtos
+- rola até a seção de categorias
+
+Também foi atualizado o cache para script.js?v=30 e style.css?v=30.
+
+Não precisa executar SQL no Supabase.
+Basta substituir os arquivos no GitHub e aguardar o deploy da Vercel.

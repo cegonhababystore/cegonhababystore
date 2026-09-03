@@ -1,0 +1,30 @@
+CEGONHA BABY STORE — V22
+AVALIAÇÕES COMPARTILHADAS NO SUPABASE
+
+O QUE MUDOU
+- Avaliações deixam de ser apenas locais e passam a ser compartilhadas entre os clientes.
+- Cada aparelho pode criar uma avaliação por produto e atualizar a própria avaliação depois.
+- A nota média e a quantidade de avaliações aparecem para todos.
+- O painel administrativo agora tem a área Avaliações.
+- O administrador pode buscar, filtrar por nota e excluir avaliações.
+- O identificador privado usado para atualizar a avaliação não é exibido na lista pública.
+
+PASSO 1 — SUPABASE
+Abra SQL Editor > New query e execute TODO o conteúdo de:
+03-avaliacoes-compartilhadas.sql
+
+Espere aparecer Success.
+
+PASSO 2 — GITHUB
+Envie/substitua os arquivos da V22 no mesmo repositório conectado à Vercel.
+Os arquivos .sql não precisam ser publicados no GitHub para o site funcionar.
+
+PASSO 3 — TESTE
+1. Abra uma roupa no site.
+2. Faça uma avaliação.
+3. Abra o site em outro celular/navegador e confira se ela aparece.
+4. No primeiro aparelho, avalie de novo o mesmo produto: a avaliação deve ser atualizada, não duplicada.
+5. Entre em /admin.html > Avaliações e confira a lista/moderação.
+
+OBSERVAÇÃO
+Avaliações antigas que existiam apenas no localStorage não são copiadas automaticamente para o banco. Quando o Supabase responder corretamente, a lista compartilhada passa a ser a fonte oficial.

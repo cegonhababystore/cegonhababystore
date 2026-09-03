@@ -1,0 +1,16 @@
+CEGONHA BABY STORE — V29
+
+Correção: navegação de Favoritos no mobile.
+
+O que foi corrigido:
+- Ao abrir Favoritos e depois tocar em Início, o catálogo completo volta a aparecer.
+- Ao abrir Favoritos e depois tocar em Produtos, o catálogo completo volta a aparecer.
+- O filtro visual volta para "Todos" ao sair de Favoritos.
+- Nenhuma alteração no Supabase é necessária.
+
+Atualização:
+1. Extraia este ZIP.
+2. Substitua os arquivos no repositório GitHub pelos arquivos desta versão.
+3. Faça o commit.
+4. Aguarde o deploy automático da Vercel.
+5. No celular, teste: Favoritos -> Produtos e Favoritos -> Início.

@@ -1,0 +1,35 @@
+CEGONHA BABY STORE — V20 COM SUPABASE
+
+Esta versão mantém todas as melhorias anteriores e adiciona conexão com a tabela public.produtos no Supabase.
+
+COMO FUNCIONA
+- O site abre imediatamente usando o catálogo local de segurança.
+- Em seguida, tenta buscar os produtos ativos no Supabase.
+- Se o banco responder, nome, descrição, preço, categoria, estoque, imagem_principal e ativo passam a vir do banco.
+- Se o Supabase ou a internet falharem, o site continua funcionando com os produtos locais atuais.
+- Favoritos, sacola e avaliações locais continuam funcionando como antes.
+
+SUPABASE
+Project URL: https://nridvmdmnejbanofavli.supabase.co
+Tabela: public.produtos
+
+IMPORTANTE SOBRE SEGURANÇA
+A Publishable Key usada no navegador é uma chave pública de baixo privilégio. NÃO coloque sb_secret_ ou service_role no site.
+A proteção real das tabelas deve continuar sendo feita com RLS e policies no Supabase.
+
+IMAGENS
+Nesta etapa, imagem_principal ainda aponta para arquivos de imagem que estão dentro desta pasta do site. Em uma etapa futura, podemos migrar as fotos para o Supabase Storage.
+
+PRÓXIMOS PASSOS SUGERIDOS
+1. Confirmar a leitura dos produtos na versão publicada.
+2. Criar painel administrativo protegido.
+3. Migrar avaliações para o banco.
+4. Criar pedidos e itens_pedido.
+5. Migrar fotos para Storage.
+
+V21 - PAINEL ADMINISTRATIVO
+- Novo arquivo admin.html com login seguro por Supabase Auth.
+- CRUD de produtos e controle rápido de estoque.
+- Upload de fotos para Supabase Storage.
+- Execute os scripts 01-configurar-painel-admin.sql e 02-tornar-usuario-admin.sql antes de usar.
+- Consulte ADMIN-LEIA-ME.txt para o passo a passo.

@@ -1,0 +1,28 @@
+CEGONHA BABY STORE - V28
+NOVOS PRODUTOS
+
+Esta versão mantém tudo da V27 e adiciona 13 novos produtos a partir das imagens enviadas.
+
+O que foi feito:
+- nomes comerciais criados com base no visual de cada peça;
+- descrições sem afirmar composição/material que não aparece nas imagens;
+- categorias definidas entre Bebês, Menina e Menino;
+- imagens originais JPEG mantidas para detalhes e zoom;
+- versões WebP leves adicionadas para os cards da vitrine;
+- busca da V27 continua funcionando;
+- nenhuma galeria de várias fotos foi adicionada.
+
+IMPORTANTE SOBRE PREÇOS:
+Os valores dos 13 produtos são PROVISÓRIOS, apenas para a vitrine não ficar sem preço.
+Troque pelos valores reais no painel admin assim que souber.
+
+PARA PUBLICAR:
+1. No Supabase, abra SQL Editor > New query.
+2. Execute o arquivo 05-novos-produtos-v28.sql.
+3. Confira se os 13 produtos apareceram na consulta final.
+4. No GitHub, substitua os arquivos da versão atual pelos arquivos desta V28.
+5. Faça commit e aguarde o deploy automático da Vercel.
+6. Atualize o site e teste no celular e no PC.
+
+OBSERVAÇÃO:
+O SQL foi feito para não duplicar produtos com o mesmo nome caso seja executado novamente.

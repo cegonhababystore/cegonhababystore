@@ -1,0 +1,17 @@
+CEGONHA BABY STORE — V27
+
+O que mudou:
+- Cards/vitrine continuam usando imagens WebP otimizadas para carregar rápido.
+- Ao abrir os detalhes do produto, o site usa a imagem JPEG original em qualidade máxima.
+- O visualizador/zoom também usa a imagem original.
+- Imagens novas hospedadas no Supabase Storage continuam funcionando normalmente.
+- Busca, pedidos, avaliações, painel admin, favoritos, sacola e demais recursos foram mantidos.
+
+Não precisa executar nenhum SQL novo.
+
+Atualização:
+1. Extraia o ZIP.
+2. Substitua os arquivos da versão anterior no GitHub pelos arquivos desta versão.
+3. Faça o commit.
+4. Aguarde o deploy automático da Vercel.
+5. Teste um produto: a vitrine deve carregar rápido e, ao abrir/usar zoom, a imagem deve aparecer com a qualidade original.
