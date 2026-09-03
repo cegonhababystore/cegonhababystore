@@ -1,0 +1,14 @@
+CEGONHA BABY STORE - V32
+
+Base: V31 completa.
+Novidade: integração preparada para Google Analytics 4 com eventos de e-commerce e WhatsApp.
+
+Arquivos novos:
+- analytics-config.js
+- analytics.js
+- ANALYTICS-ATIVAR.txt
+
+IMPORTANTE: abra analytics-config.js e informe o ID G-... do Google Analytics.
+Sem esse ID, o Analytics fica desativado e o site funciona normalmente.
+
+Não precisa executar SQL novo.

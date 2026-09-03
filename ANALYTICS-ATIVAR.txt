@@ -1,0 +1,32 @@
+CEGONHA BABY STORE - GOOGLE ANALYTICS 4 (V32)
+
+A V32 já está preparada para Google Analytics 4, mas precisa do ID de medição da sua propriedade.
+
+1) Crie/abra uma propriedade no Google Analytics.
+2) Vá em Administrador > Fluxos de dados > Web.
+3) Crie/abra o fluxo do site.
+4) Copie o ID de medição, no formato G-XXXXXXXXXX.
+5) Abra analytics-config.js.
+6) Troque:
+   G-COLE_SEU_ID_AQUI
+   pelo seu ID real.
+7) Faça commit no GitHub e aguarde a Vercel publicar.
+8) Abra o site e confira o relatório Em tempo real no Google Analytics.
+
+Eventos já configurados:
+- page_view (automático)
+- search
+- view_item
+- add_to_wishlist
+- add_to_cart
+- remove_from_cart
+- view_cart
+- begin_checkout
+- generate_lead (pedido registrado e enviado ao WhatsApp)
+- contact_product_whatsapp
+- contact_whatsapp
+
+Observação importante:
+O site NÃO envia o evento purchase ao registrar um pedido, porque o pedido ainda precisa ser confirmado pelo WhatsApp. Assim evitamos contar pedido abandonado como venda real.
+
+Nenhum SQL novo do Supabase é necessário.

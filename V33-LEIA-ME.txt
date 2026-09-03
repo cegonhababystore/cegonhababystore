@@ -1,0 +1,23 @@
+CEGONHA BABY STORE - V33
+
+Google Analytics 4 ATIVADO.
+
+ID de medição configurado:
+G-31BRRQV7QJ
+
+O site público já está preparado para registrar:
+- visitas
+- buscas
+- visualizações de produto
+- favoritos
+- adicionar/remover da sacola
+- visualização da sacola
+- início do checkout
+- pedido enviado ao WhatsApp
+- cliques de contato pelo WhatsApp
+
+IMPORTANTE:
+- Não precisa executar SQL novo no Supabase.
+- Substitua o conteúdo do repositório GitHub pelos arquivos desta versão.
+- A Vercel fará o deploy automaticamente.
+- Depois do deploy, abra o site e confira o relatório "Tempo real" no Google Analytics.

@@ -785,6 +785,7 @@ function pesquisarProdutos(valor) {
     const limpar = document.getElementById("limpar-busca-produtos");
     if (limpar) limpar.hidden = !termoBuscaAtual;
     renderizarProdutos(categoriaAtual);
+    window.CegonhaAnalytics?.registrarBusca(valor);
 }
 
 function limparBuscaProdutos() {
@@ -1004,6 +1005,7 @@ function alternarCarrinho(abrir, vindoDoHistorico = false) {
         overlay.classList.add("aberto");
         document.body.classList.add("carrinho-aberto");
         document.body.style.overflow = "hidden";
+        window.CegonhaAnalytics?.visualizarCarrinho(carrinho);
         if (!vindoDoHistorico) empilharHistoricoUI("carrinho");
         return;
     }
@@ -1033,6 +1035,8 @@ function alternarFavorito(id, event) {
         mostrarToast("Removido dos favoritos.");
     } else {
         favoritos.push(numeroId);
+        const produtoAnalytics = encontrarProduto(numeroId);
+        window.CegonhaAnalytics?.adicionarFavorito(produtoAnalytics);
         mostrarToast("Adicionado aos favoritos.");
     }
 
@@ -1068,6 +1072,7 @@ function adicionarProduto(id, nomeAntigo, precoAntigo, imagemAntiga) {
 
     salvarCarrinho();
     atualizarInterfaceCarrinho();
+    window.CegonhaAnalytics?.adicionarCarrinho(produto, 1);
     alternarCarrinho(true);
     mostrarToast(`${produto.nome} foi adicionado à sacola.`);
 }
@@ -1086,6 +1091,8 @@ function alterarQuantidade(id, diferenca) {
 }
 
 function removerProduto(id) {
+    const removido = carrinho.find(item => item.id === Number(id));
+    if (removido) window.CegonhaAnalytics?.removerCarrinho(removido, removido.quantidade);
     carrinho = carrinho.filter(item => item.id !== Number(id));
     salvarCarrinho();
     atualizarInterfaceCarrinho();
@@ -1277,6 +1284,7 @@ function enviarPedidoWhatsApp(event) {
         alert("Sua sacola está vazia!");
         return;
     }
+    window.CegonhaAnalytics?.iniciarCheckout(carrinho);
     abrirPedidoModal();
 }
 
@@ -1360,6 +1368,9 @@ async function confirmarPedidoWhatsApp(event) {
         const total = Number.isFinite(totalServidor) ? totalServidor : totalCarrinhoAtual();
         const texto = montarMensagemPedidoWhatsApp({ codigo, nome, telefone, observacao, total });
         const linkFinal = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(texto)}`;
+
+        const carrinhoAnalytics = carrinho.map(item => ({ ...item }));
+        window.CegonhaAnalytics?.gerarLeadPedido(codigo, total, carrinhoAnalytics);
 
         carrinho = [];
         salvarCarrinho();
@@ -1705,6 +1716,8 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
 
     if (!produto || !produto.nome) return;
 
+    window.CegonhaAnalytics?.visualizarProduto(produto);
+
     const modal = document.getElementById("modal-detalhes");
     const img = document.getElementById("modal-img");
     const fotoBloco = document.getElementById("modal-foto-bloco");
@@ -1742,6 +1755,7 @@ function abrirDetalhes(id, nomeAntigo, precoTextoAntigo, imagemAntiga, descricao
     if (btnWhatsModal) {
         const textoWhats = `Olá! Vim pelo site da Cegonha Baby Store e gostaria de saber mais sobre o produto: ${produto.nome}.`;
         btnWhatsModal.href = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(textoWhats)}`;
+        btnWhatsModal.onclick = () => window.CegonhaAnalytics?.contatoProduto(produto);
     }
 
     if (blocoAvaliacoes) blocoAvaliacoes.classList.remove("aberto-mobile");
